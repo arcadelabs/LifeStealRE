@@ -1,0 +1,7 @@
+name: LifeSteal
+version: '${project.version}'
+main: in.arcadelabs.lifesteal.LifeSteal
+api-version: 1.18
+depend: [ ArcadeLibs ]
+description: Just another LifeSteal SMP core plugin.
+website: https://arcadelabs.in
