@@ -1,3 +1,14 @@
 config-version: 2
 
 DefaultHealth: 20
+
+HeartRecipe:
+  FirstRow: []
+  SecondRow: []
+  ThirdRow: []
+  Properties:
+    ItemType: "PAPER"
+    Name: "Heart"
+    Lore: ["TT", "PP"]
+    CustomModel: true
+      ModelData: 123456
