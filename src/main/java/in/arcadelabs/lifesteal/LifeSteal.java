@@ -2,6 +2,7 @@ package in.arcadelabs.lifesteal;
 
 import in.arcadelabs.lifesteal.hooks.LifeStealHook;
 import in.arcadelabs.lifesteal.utils.LSUtils;
+import in.arcadelabs.lifesteal.utils.RecipeManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +23,8 @@ public final class LifeSteal extends JavaPlugin {
     utils = new LSUtils();
     LifeStealHook hook = new LifeStealHook();
     try { hook.init(); } catch (Exception e) { throw new RuntimeException(e); }
+
+    RecipeManager recipeManager = new RecipeManager();
   }
 
   @Override

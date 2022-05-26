@@ -3,12 +3,28 @@ config-version: 2
 DefaultHealth: 20
 
 HeartRecipe:
-  FirstRow: []
-  SecondRow: []
-  ThirdRow: []
   Properties:
     ItemType: "PAPER"
     Name: "Heart"
     Lore: ["TT", "PP"]
     CustomModel: true
       ModelData: 123456
+
+#  ╔═══╦═══╦═══╗
+#  ║ 0 ║ 1 ║ 2 ║
+#  ╠═══╬═══╬═══╣
+#  ║ 3 ║ 4 ║ 5 ║
+#  ╠═══╬═══╬═══╣
+#  ║ 6 ║ 7 ║ 8 ║
+#  ╚═══╩═══╩═══╝
+
+  Recipe:
+    0: "DIAMOND"
+    1: "GOLD_INGOT"
+    2: "DIAMOND"
+    3: "GOLD_INGOT"
+    4: "NETHER_STAR"
+    5: "GOLD_INGOT"
+    6: "DIAMOND"
+    7: "GOLD_INGOT"
+    8: "DIAMOND"
