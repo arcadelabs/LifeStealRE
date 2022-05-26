@@ -55,8 +55,8 @@ public class LifeStealHook {
 
   private void registerListener() {
     final Listener[] listeners = new Listener[]{
-//            new PlayerJoinListener()
-//            , new PlayerQuitListener()
+            new PlayerJoinListener(),
+            new PlayerKillListener()
     };
     Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, plugin));
   }
