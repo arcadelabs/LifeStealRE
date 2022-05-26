@@ -7,12 +7,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import static in.arcadelabs.lifesteal.LifeSteal.plugin;
-import static in.arcadelabs.lifesteal.hooks.LifeStealHook.configUtils;
+import static in.arcadelabs.lifesteal.LifeSteal.getInstance;
+import static in.arcadelabs.lifesteal.hooks.LifeStealHook.getConfigUtils;
 
 public class RecipeManager {
 
-  private final YamlDocument config = configUtils.getConfig();
+  private final YamlDocument config = getConfigUtils().getConfig();
   private final ItemStack heart;
 
   public RecipeManager() {
@@ -25,7 +25,7 @@ public class RecipeManager {
     }
     heart.setItemMeta(heartMeta);
 
-    ShapedRecipe heartRecipe = new ShapedRecipe(new NamespacedKey(plugin, "lifesteal_heart"), heart);
+    ShapedRecipe heartRecipe = new ShapedRecipe(new NamespacedKey(getInstance(), "lifesteal_heart"), heart);
     heartRecipe.shape("ABC", "DEF", "GHI");
     char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     for (int i = 0; i < recipeIngredients.length; i++) {

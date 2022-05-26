@@ -11,6 +11,8 @@ import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.Reload;
 import in.arcadelabs.lifesteal.commands.Stats;
 import in.arcadelabs.lifesteal.commands.Withdraw;
+import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
+import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
 import in.arcadelabs.lifesteal.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -19,14 +21,30 @@ import org.bukkit.plugin.PluginManager;
 import java.net.URL;
 import java.util.Arrays;
 
-import static in.arcadelabs.lifesteal.LifeSteal.plugin;
+import static in.arcadelabs.lifesteal.LifeSteal.getInstance;
 
 public class LifeStealHook {
 
-  public static Placeholder papiHook;
-  public static ConfigUtils configUtils;
-  public static SpigotMessenger messenger;
-  public static PluginManager PM = Bukkit.getPluginManager();
+  private static final PluginManager PM = Bukkit.getPluginManager();
+  private static Placeholder papiHook;
+  private static ConfigUtils configUtils;
+  private static SpigotMessenger messenger;
+
+  public static Placeholder getPapiHook() {
+    return papiHook;
+  }
+
+  public static ConfigUtils getConfigUtils() {
+    return configUtils;
+  }
+
+  public static SpigotMessenger getMessenger() {
+    return messenger;
+  }
+
+  public static PluginManager getPM() {
+    return PM;
+  }
 
   private boolean isOnPaper() {
     try {
@@ -45,10 +63,10 @@ public class LifeStealHook {
             new Withdraw()
     };
     if (isOnPaper()) {
-      PaperCommandManager pcm = new PaperCommandManager(plugin);
+      PaperCommandManager pcm = new PaperCommandManager(getInstance());
       Arrays.stream(commands).forEach(pcm::registerCommand);
     } else {
-      BukkitCommandManager bcm = new BukkitCommandManager(plugin);
+      BukkitCommandManager bcm = new BukkitCommandManager(getInstance());
       Arrays.stream(commands).forEach(bcm::registerCommand);
     }
   }
@@ -58,14 +76,14 @@ public class LifeStealHook {
             new PlayerJoinListener(),
             new PlayerKillListener()
     };
-    Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, plugin));
+    Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, getInstance()));
   }
 
   public void init() throws Exception {
 
     messenger = SpigotMessenger
             .builder()
-            .setPlugin(plugin)
+            .setPlugin(getInstance())
             .defaultToMiniMessageTranslator()
             .build();
 
@@ -77,12 +95,11 @@ public class LifeStealHook {
     registerCommands();
     registerListener();
 
-    new UpdateChecker(plugin, new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
+    new UpdateChecker(getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
             .setNotificationPermission("greetings.update")
             .enableOpNotification(true)
             .setup();
 
-    BStats metrics = new BStats(plugin, 15272);
+    BStats metrics = new BStats(getInstance(), 15272);
   }
-
 }

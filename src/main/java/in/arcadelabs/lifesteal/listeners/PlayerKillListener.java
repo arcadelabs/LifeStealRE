@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import static in.arcadelabs.lifesteal.LifeSteal.utils;
+import static in.arcadelabs.lifesteal.LifeSteal.getUtils;
 
 public class PlayerKillListener implements Listener {
 
@@ -15,14 +15,14 @@ public class PlayerKillListener implements Listener {
 
     Player victim = event.getEntity();
 
-    if (utils.getPlayerBaseHealth(victim) == 0) {
+    if (getUtils().getPlayerBaseHealth(victim) == 0) {
       victim.setGameMode(GameMode.SPECTATOR);
     } else {
       if (victim.getKiller() == null) {
-        utils.setPlayerBaseHealth(victim, utils.getPlayerBaseHealth(victim) - 2.0);
+        getUtils().setPlayerBaseHealth(victim, getUtils().getPlayerBaseHealth(victim) - 2.0);
 //      TODO - Drop heart at @killedPlayer 's position
       } else {
-        utils.transferHealth(victim, victim.getKiller());
+        getUtils().transferHealth(victim, victim.getKiller());
       }
     }
   }
