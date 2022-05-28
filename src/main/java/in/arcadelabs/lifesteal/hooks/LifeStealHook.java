@@ -13,7 +13,8 @@ import in.arcadelabs.lifesteal.commands.Stats;
 import in.arcadelabs.lifesteal.commands.Withdraw;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
-import in.arcadelabs.lifesteal.utils.ConfigUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -21,30 +22,14 @@ import org.bukkit.plugin.PluginManager;
 import java.net.URL;
 import java.util.Arrays;
 
-import static in.arcadelabs.lifesteal.LifeSteal.getInstance;
+import static in.arcadelabs.lifesteal.LifeStealPlugin.getInstance;
 
+@Getter
 public class LifeStealHook {
 
-  private static final PluginManager PM = Bukkit.getPluginManager();
-  private static Placeholder papiHook;
-  private static ConfigUtils configUtils;
-  private static SpigotMessenger messenger;
-
-  public static Placeholder getPapiHook() {
-    return papiHook;
-  }
-
-  public static ConfigUtils getConfigUtils() {
-    return configUtils;
-  }
-
-  public static SpigotMessenger getMessenger() {
-    return messenger;
-  }
-
-  public static PluginManager getPM() {
-    return PM;
-  }
+  private PluginManager PM = Bukkit.getPluginManager();
+  private Placeholder papiHook;
+  private SpigotMessenger messenger;
 
   private boolean isOnPaper() {
     try {
@@ -88,9 +73,6 @@ public class LifeStealHook {
             .build();
 
     papiHook = new Placeholder();
-    configUtils = new ConfigUtils();
-
-    configUtils.loadFiles();
 
     registerCommands();
     registerListener();

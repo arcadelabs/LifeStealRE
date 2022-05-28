@@ -1,4 +1,7 @@
-config-version: 2
+MongoDB:
+  ENABLED: false # Enable MongoDB database.
+  URI: "" # Connection URI/String to MongoDB database.
+  DATABASE: "" # Database of MongoDB database
 
 DefaultHealth: 20
 

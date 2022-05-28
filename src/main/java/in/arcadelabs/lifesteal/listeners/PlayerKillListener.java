@@ -1,13 +1,11 @@
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-
-import static in.arcadelabs.lifesteal.LifeSteal.getRecipeManager;
-import static in.arcadelabs.lifesteal.LifeSteal.getUtils;
 
 public class PlayerKillListener implements Listener {
 
@@ -16,14 +14,14 @@ public class PlayerKillListener implements Listener {
 
     Player victim = event.getEntity();
 
-    if (getUtils().getPlayerBaseHealth(victim) == 0) {
+    if (LifeStealPlugin.getInstance().getUtils().getPlayerBaseHealth(victim) == 0) {
       victim.setGameMode(GameMode.SPECTATOR);
     } else {
       if (victim.getKiller() == null) {
-        getUtils().setPlayerBaseHealth(victim, getUtils().getPlayerBaseHealth(victim) - 2.0);
-        victim.getWorld().dropItemNaturally(victim.getLocation(), getRecipeManager().getHeartItem());
+        LifeStealPlugin.getInstance().getUtils().setPlayerBaseHealth(victim, LifeStealPlugin.getInstance().getUtils().getPlayerBaseHealth(victim) - 2.0);
+        victim.getWorld().dropItemNaturally(victim.getLocation(), LifeStealPlugin.getInstance().getRecipeManager().getHeartItem());
       } else {
-        getUtils().transferHealth(victim, victim.getKiller());
+        LifeStealPlugin.getInstance().getUtils().transferHealth(victim, victim.getKiller());
       }
     }
   }

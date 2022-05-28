@@ -32,10 +32,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <outputDirectory>C:\Users\anike\OneDrive\Desktop\TGN SV\plugins</outputDirectory>
-                </configuration>
+                <version>3.2.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -71,6 +68,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -91,11 +92,27 @@
             <version>1.18.24</version>
         </dependency>
         <dependency>
-            <groupId>in.arcadelabs</groupId>
+            <groupId>com.github.arcadelabs</groupId>
             <artifactId>ArcadeLibs</artifactId>
-            <version>0.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/ArcadeLibs.jar</systemPath>
+            <version>ff9d85bc708f21d63485ccfe02a7e4b51a71c7cb</version>
+            <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.12.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
     </dependencies>
 </project>
