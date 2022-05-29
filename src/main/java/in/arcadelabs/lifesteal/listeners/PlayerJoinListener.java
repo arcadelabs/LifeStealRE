@@ -15,7 +15,7 @@ public class PlayerJoinListener implements Listener {
     double defaultHealth = LifeStealPlugin.getInstance().getConfig().getDouble("DefaultHealth");
 
     if (!player.hasPlayedBefore()) {
-      LifeStealPlugin.getInstance().getUtils().setPlayerBaseHealth(player, defaultHealth);
+      LifeStealPlugin.getLifeSteal().getUtils().setPlayerBaseHealth(player, defaultHealth);
     }
   }
 }

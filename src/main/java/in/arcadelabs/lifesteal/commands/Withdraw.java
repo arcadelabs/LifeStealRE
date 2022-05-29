@@ -15,10 +15,10 @@ public class Withdraw extends BaseCommand {
   @Subcommand("withdraw")
   public void onWithdraw(CommandSender sender, double hearts) {
     Player player = (Player) sender;
-    if (hearts >= LifeStealPlugin.getInstance().getUtils().getPlayerBaseHealth(player)) {
-      LifeStealPlugin.getInstance().getLifeStealHook().getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
+    if (hearts >= LifeStealPlugin.getLifeSteal().getUtils().getPlayerBaseHealth(player)) {
+      LifeStealPlugin.getLifeSteal().getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
     } else {
-      LifeStealPlugin.getInstance().getUtils().setPlayerBaseHealth(player, LifeStealPlugin.getInstance().getUtils().getPlayerBaseHealth(player) - hearts);
+      LifeStealPlugin.getLifeSteal().getUtils().setPlayerBaseHealth(player, LifeStealPlugin.getLifeSteal().getUtils().getPlayerBaseHealth(player) - hearts);
       //      TODO - Drop heart at @player 's position
     }
   }

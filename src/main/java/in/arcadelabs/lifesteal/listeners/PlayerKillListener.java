@@ -14,14 +14,16 @@ public class PlayerKillListener implements Listener {
 
     Player victim = event.getEntity();
 
-    if (LifeStealPlugin.getInstance().getUtils().getPlayerBaseHealth(victim) == 0) {
+    if (LifeStealPlugin.getLifeSteal().getUtils().getPlayerBaseHealth(victim) == 0) {
       victim.setGameMode(GameMode.SPECTATOR);
     } else {
       if (victim.getKiller() == null) {
-        LifeStealPlugin.getInstance().getUtils().setPlayerBaseHealth(victim, LifeStealPlugin.getInstance().getUtils().getPlayerBaseHealth(victim) - 2.0);
-        victim.getWorld().dropItemNaturally(victim.getLocation(), LifeStealPlugin.getInstance().getRecipeManager().getHeartItem());
+        LifeStealPlugin.getLifeSteal().getUtils().setPlayerBaseHealth(victim,
+                LifeStealPlugin.getLifeSteal().getUtils().getPlayerBaseHealth(victim) - 2.0);
+        victim.getWorld().dropItemNaturally(victim.getLocation(),
+                LifeStealPlugin.getLifeSteal().getRecipeManager().getHeartItem());
       } else {
-        LifeStealPlugin.getInstance().getUtils().transferHealth(victim, victim.getKiller());
+        LifeStealPlugin.getLifeSteal().getUtils().transferHealth(victim, victim.getKiller());
       }
     }
   }

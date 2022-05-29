@@ -9,16 +9,16 @@ import java.io.IOException;
 @Getter
 public class JsonHandler {
 
-    private final LifeStealPlugin plugin;
-    private final File jsonFile;
+  private final LifeStealPlugin plugin;
+  private final File jsonFile;
 
-    public JsonHandler(LifeStealPlugin plugin) throws IOException {
-        this.plugin = plugin;
+  public JsonHandler(LifeStealPlugin plugin) throws IOException {
+    this.plugin = plugin;
 
-        this.jsonFile = new File(plugin.getDataFolder(), "playerdata.json");
+    this.jsonFile = new File(plugin.getDataFolder(), "playerdata.json");
 
-        if (!jsonFile.exists()) {
-            jsonFile.createNewFile();
-        }
+    if (!jsonFile.exists()) {
+      jsonFile.createNewFile();
     }
+  }
 }

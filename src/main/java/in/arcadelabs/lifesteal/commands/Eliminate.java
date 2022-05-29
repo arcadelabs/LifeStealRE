@@ -15,6 +15,6 @@ public class Eliminate extends BaseCommand {
   @Subcommand("Eliminate")
   @CommandCompletion("@players")
   public void onComplete(Player target) {
-    LifeStealPlugin.getInstance().getUtils().setPlayerBaseHealth(target, 0);
+    LifeStealPlugin.getLifeSteal().getUtils().setPlayerBaseHealth(target, 0);
   }
 }

@@ -2,10 +2,10 @@ package in.arcadelabs.lifesteal.profile;
 
 public interface ProfileStorage {
 
-    void load(Profile profile);
+  void load(Profile profile);
 
-    void save(Profile profile);
+  void save(Profile profile);
 
-    void disconnect();
+  void disconnect();
 
 }

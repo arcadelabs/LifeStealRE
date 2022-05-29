@@ -6,22 +6,24 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Profile {
 
-    private UUID uniqueID;
-    private double currentHearts;
-    private double totalHeartsGained;
-    private double totalHeartsLost;
-    private double totalHeartsConsumed;
-    private double totalHeartsWithdrawn;
-    private int deaths;
-    private int kills;
+  private UUID uniqueID;
+  private double currentHearts;
+  private double totalHeartsGained;
+  private double totalHeartsLost;
+  private double totalHeartsConsumed;
+  private double totalHeartsWithdrawn;
+  private int deaths;
+  private int kills;
 
-    public Profile(UUID uniqueID) {
-        this.uniqueID = uniqueID;
-    }
-    public String toJson() {
-        return LifeStealPlugin.getInstance().getGSON().toJson(this);
-    }
+  public Profile(UUID uniqueID) {
+    this.uniqueID = uniqueID;
+  }
+
+  public String toJson() {
+    return LifeStealPlugin.getLifeSteal().getGSON().toJson(this);
+  }
 }

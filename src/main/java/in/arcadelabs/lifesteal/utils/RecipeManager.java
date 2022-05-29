@@ -22,15 +22,15 @@ public class RecipeManager {
       heartMeta.setCustomModelData(config.getInt("HeartRecipe.Properties.ModelData"));
     }
     heartMeta.setUnbreakable(true);
-    heartMeta.getPersistentDataContainer().set(LifeStealPlugin.getInstance().getNamespacedKey(), PersistentDataType.STRING, "You can't spoof hearts, bozo.");
+    heartMeta.getPersistentDataContainer().set(LifeStealPlugin.getLifeSteal().getNamespacedKey(), PersistentDataType.STRING, "You can't spoof hearts, bozo.");
     heart.setItemMeta(heartMeta);
 
-    ShapedRecipe heartRecipe = new ShapedRecipe(LifeStealPlugin.getInstance().getNamespacedKey(), heart);
+    heartRecipe = new ShapedRecipe(LifeStealPlugin.getLifeSteal().getNamespacedKey(), heart);
     heartRecipe.shape("ABC", "DEF", "GHI");
     char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
-    for (int i = 0; i < recipeIngredients.length; i++) {
-      heartRecipe.setIngredient(recipeIngredients[i],
-              Material.valueOf((String) config.get("HeartRecipe." + i)));
+    for (char recipeIngredient : recipeIngredients) {
+      heartRecipe.setIngredient(recipeIngredient,
+              Material.valueOf((String) config.get("HeartRecipe." + recipeIngredient)));
     }
   }
 
