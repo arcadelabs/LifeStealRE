@@ -12,6 +12,7 @@ public class RecipeManager {
 
   private final ItemStack heart;
   private final FileConfiguration config = LifeStealPlugin.getInstance().getConfig();
+  private final ShapedRecipe heartRecipe;
 
   public RecipeManager() {
     heart = new ItemStack(Material.valueOf(config.getString("HeartRecipe.Properties.ItemType")));
@@ -32,6 +33,10 @@ public class RecipeManager {
       heartRecipe.setIngredient(recipeIngredient,
               Material.valueOf((String) config.get("HeartRecipe." + recipeIngredient)));
     }
+  }
+
+  public ShapedRecipe getHeartRecipe() {
+    return heartRecipe;
   }
 
   public ItemStack getHeartItem() {
