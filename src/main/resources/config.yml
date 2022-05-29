@@ -1,7 +1,7 @@
 MongoDB:
   ENABLED: false # Enable MongoDB database.
   URI: "" # Connection URI/String to MongoDB database.
-  DATABASE: "" # Database of MongoDB database
+  DATABASE: "" # Database name of MongoDB database
 
 DefaultHealth: 20
 
@@ -13,21 +13,23 @@ HeartRecipe:
     CustomModel: true
       ModelData: 123456
 
-#  ╔═══╦═══╦═══╗
-#  ║ 0 ║ 1 ║ 2 ║
-#  ╠═══╬═══╬═══╣
-#  ║ 3 ║ 4 ║ 5 ║
-#  ╠═══╬═══╬═══╣
-#  ║ 6 ║ 7 ║ 8 ║
-#  ╚═══╩═══╩═══╝
+  #Crafting table representation.
+  #  +---+---+---+
+  #  | A | B | C |
+  #  +---+---+---+
+  #  | D | E | F |
+  #  +---+---+---+
+  #  | G | H | I |
+  #  +---+---+---+
 
+  #Heart item recipe, it is a shaped recipe.
   Recipe:
-    0: "DIAMOND"
-    1: "GOLD_INGOT"
-    2: "DIAMOND"
-    3: "GOLD_INGOT"
-    4: "NETHER_STAR"
-    5: "GOLD_INGOT"
-    6: "DIAMOND"
-    7: "GOLD_INGOT"
-    8: "DIAMOND"
+    A: "DIAMOND"
+    B: "GOLD_INGOT"
+    C: "DIAMOND"
+    D: "GOLD_INGOT"
+    E: "NETHER_STAR"
+    F: "GOLD_INGOT"
+    G: "DIAMOND"
+    H: "GOLD_INGOT"
+    I: "DIAMOND"
