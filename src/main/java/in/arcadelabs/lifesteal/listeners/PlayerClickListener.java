@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,16 +30,16 @@ import java.util.Objects;
 
 public class PlayerClickListener implements Listener {
 
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+
   @EventHandler
   public void onPlayerClick(PlayerInteractEvent event) {
 
     Player player = event.getPlayer();
     if (Objects.requireNonNull(player.getInventory().getItemInMainHand().getItemMeta()).getPersistentDataContainer().has
-            (LifeStealPlugin.getLifeSteal().getNamespacedKey(), PersistentDataType.STRING)) {
-      LifeStealPlugin.getLifeSteal().getUtils().setPlayerBaseHealth(player,
-              LifeStealPlugin.getLifeSteal().getUtils().getPlayerBaseHealth(player) + 2);
-      player.getInventory().getItemInMainHand().setAmount
-              (player.getInventory().getItemInMainHand().getAmount() - 1);
+            (lifeSteal.getNamespacedKey(), PersistentDataType.STRING)) {lifeSteal.getUtils().setPlayerBaseHealth(player,
+              lifeSteal.getUtils().getPlayerBaseHealth(player) + 2);
+      player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
     }
   }
 }

@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,8 +29,9 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class RecipeManager {
 
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final ItemStack heart;
-  private final FileConfiguration config = LifeStealPlugin.getInstance().getConfig();
+  private final FileConfiguration config = lifeSteal.getConfig();
   private final ShapedRecipe heartRecipe;
 
   public RecipeManager() {
@@ -41,10 +43,11 @@ public class RecipeManager {
       heartMeta.setCustomModelData(config.getInt("HeartRecipe.Properties.ModelData"));
     }
     heartMeta.setUnbreakable(true);
-    heartMeta.getPersistentDataContainer().set(LifeStealPlugin.getLifeSteal().getNamespacedKey(), PersistentDataType.STRING, "You can't spoof hearts, bozo.");
+    heartMeta.getPersistentDataContainer().set(lifeSteal.getNamespacedKey(),
+            PersistentDataType.STRING, "You can't spoof hearts, bozo.");
     heart.setItemMeta(heartMeta);
 
-    heartRecipe = new ShapedRecipe(LifeStealPlugin.getLifeSteal().getNamespacedKey(), heart);
+    heartRecipe = new ShapedRecipe(lifeSteal.getNamespacedKey(), heart);
     heartRecipe.shape("ABC", "DEF", "GHI");
     char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     for (char recipeIngredient : recipeIngredients) {

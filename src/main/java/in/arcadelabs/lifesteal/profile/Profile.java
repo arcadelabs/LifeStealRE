@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.profile;
 
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,8 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Profile {
+
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   private UUID uniqueID;
   private double currentHearts;
@@ -42,6 +45,6 @@ public class Profile {
   }
 
   public String toJson() {
-    return LifeStealPlugin.getLifeSteal().getGSON().toJson(this);
+    return lifeSteal.getGSON().toJson(this);
   }
 }

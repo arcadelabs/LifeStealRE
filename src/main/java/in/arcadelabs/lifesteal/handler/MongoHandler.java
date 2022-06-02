@@ -24,6 +24,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,6 +37,8 @@ import java.util.logging.Logger;
 
 @Getter
 public class MongoHandler {
+
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @Getter(AccessLevel.NONE)
   private final LifeStealPlugin plugin;
@@ -56,12 +59,12 @@ public class MongoHandler {
             .uuidRepresentation(UuidRepresentation.STANDARD)
             .applyConnectionString
                     (new ConnectionString(Objects.requireNonNull
-                            (LifeStealPlugin.getLifeSteal().getConfiguration().getString("MongoDB.URI"))))
+                            (lifeSteal.getConfiguration().getString("MongoDB.URI"))))
             .applicationName("lifeSteal")
             .build());
 
     this.database = client.getDatabase
-            (Objects.requireNonNull(LifeStealPlugin.getLifeSteal().getConfiguration().getString("MongoDB.DATABASE")));
+            (Objects.requireNonNull(lifeSteal.getConfiguration().getString("MongoDB.DATABASE")));
     this.playerData = database.getCollection("lifesteal_playerData");
 
     plugin.getLogger().info((client.getClusterDescription().hasWritableServer())

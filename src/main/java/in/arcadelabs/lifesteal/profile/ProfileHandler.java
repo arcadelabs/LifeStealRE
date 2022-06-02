@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.profile;
 
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import lombok.Getter;
 
@@ -29,6 +30,8 @@ import java.util.UUID;
 @Getter
 public class ProfileHandler {
 
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+
   private final LifeStealPlugin plugin;
   private final Map<UUID, Profile> profileMap = new HashMap<>();
 
@@ -39,14 +42,14 @@ public class ProfileHandler {
   public Profile createProfile(UUID uuid) throws IOException {
     final Profile profile = new Profile(uuid);
 
-    LifeStealPlugin.getLifeSteal().getProfileStorage().load(profile);
+    lifeSteal.getProfileStorage().load(profile);
     profileMap.put(uuid, profile);
 
     return profile;
   }
 
   public void handleRemove(Profile profile) throws IOException {
-    LifeStealPlugin.getLifeSteal().getProfileStorage().save(profile);
+    lifeSteal.getProfileStorage().save(profile);
     profileMap.remove(profile.getUniqueID());
   }
 

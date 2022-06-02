@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.profile.impl;
 
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.handler.JsonHandler;
 import in.arcadelabs.lifesteal.profile.Profile;
@@ -30,6 +31,8 @@ import java.io.Reader;
 import java.io.Writer;
 
 public class JsonProfileHandler implements ProfileStorage {
+
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   private final LifeStealPlugin plugin;
   private final Writer jsonWriter;
@@ -46,9 +49,9 @@ public class JsonProfileHandler implements ProfileStorage {
   @Override
   public void load(Profile profile) {
 
-    final Profile profileFinder = LifeStealPlugin.getLifeSteal().getGSON().fromJson(jsonReader, Profile.class);
+    final Profile profileFinder = lifeSteal.getGSON().fromJson(jsonReader, Profile.class);
     if (profileFinder == null) {
-      LifeStealPlugin.getLifeSteal().getGSON().toJson(new Profile(profile.getUniqueID()));
+      lifeSteal.getGSON().toJson(new Profile(profile.getUniqueID()));
       try {
         jsonWriter.flush();
         jsonWriter.close();
@@ -74,10 +77,10 @@ public class JsonProfileHandler implements ProfileStorage {
 
   @Override
   public void save(Profile profile) {
-    final String JSON = LifeStealPlugin.getLifeSteal().getGSON().toJson(profile, Profile.class);
-    final Profile profileFinder = LifeStealPlugin.getLifeSteal().getGSON().fromJson(jsonReader, Profile.class);
+    final String JSON = lifeSteal.getGSON().toJson(profile, Profile.class);
+    final Profile profileFinder = lifeSteal.getGSON().fromJson(jsonReader, Profile.class);
     if (profileFinder == null) {
-      LifeStealPlugin.getLifeSteal().getGSON().toJson(new Profile(profile.getUniqueID()));
+      lifeSteal.getGSON().toJson(new Profile(profile.getUniqueID()));
       try {
         jsonWriter.flush();
         jsonWriter.close();
@@ -86,7 +89,7 @@ public class JsonProfileHandler implements ProfileStorage {
         ex.printStackTrace();
       }
     }
-    final Profile profileReplaced = LifeStealPlugin.getLifeSteal().getGSON().fromJson(JSON, Profile.class);
+    final Profile profileReplaced = lifeSteal.getGSON().fromJson(JSON, Profile.class);
     profile.setCurrentHearts(profileReplaced.getCurrentHearts());
     profile.setTotalHeartsGained(profileReplaced.getTotalHeartsGained());
     profile.setTotalHeartsLost(profileReplaced.getTotalHeartsLost());
