@@ -18,12 +18,17 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.lifesteal.LifeSteal;
+import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
 public class LSUtils {
+
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   public double getPlayerBaseHealth(Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
@@ -36,5 +41,18 @@ public class LSUtils {
   public void transferHealth(Player victim, Player killer) {
     setPlayerBaseHealth(killer, getPlayerBaseHealth(killer) + 1);
     setPlayerBaseHealth(victim, getPlayerBaseHealth(victim) - 1);
+  }
+
+  public LifeState getLifeState(Player player) {
+    if (Objects.requireNonNull(lifeSteal.getConfiguration().getString("LifeState")).equalsIgnoreCase("SPECTATING")
+    && player.getGameMode() == GameMode.SPECTATOR) return LifeState.SPECTATING;
+
+    if (Objects.requireNonNull(lifeSteal.getConfiguration().getString("LifeState")).equalsIgnoreCase("DEAD"))
+      return LifeState.DEAD;
+
+    if (Objects.requireNonNull(lifeSteal.getConfiguration().getString("LifeState")).equalsIgnoreCase("BANNED")
+      && player.isBanned()) return LifeState.BANNED;
+
+    return LifeState.LIVING;
   }
 }

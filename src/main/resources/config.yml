@@ -33,3 +33,10 @@ HeartRecipe:
     G: "DIAMOND"
     H: "GOLD_INGOT"
     I: "DIAMOND"
+
+# What happens after player looses all hearts.
+#Valid values are,
+#DEAD = Spectates own body npc,
+#SPECTATING = Roams around freely in spectator mode,
+#BANNED = Gets banned, only works if death bans are enabled.
+LifeState: "BANNED"
