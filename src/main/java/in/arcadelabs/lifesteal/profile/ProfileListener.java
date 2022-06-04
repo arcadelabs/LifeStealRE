@@ -18,10 +18,33 @@
 
 package in.arcadelabs.lifesteal.profile;
 
-/*
- * Profile Listener under-dev by Infinity
- * DO NOT TOUCH BEFORE ASKING
- */
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class ProfileListener {
+import java.io.IOException;
+
+public class ProfileListener implements Listener {
+
+  private final ProfileHandler profileHandler;
+
+  public ProfileListener(ProfileHandler profileHandler) {
+    this.profileHandler = profileHandler;
+  }
+
+  @EventHandler
+  public final void onAsyncPlayerJoinEvent(AsyncPlayerPreLoginEvent event) throws IOException {
+    profileHandler.createProfile(event.getUniqueId());
+  }
+
+
+  @EventHandler
+  public final void onPlayerQuitEvent(PlayerQuitEvent event) throws IOException {
+    final Player player = event.getPlayer();
+    final Profile profile = profileHandler.getProfile(player.getUniqueId());
+
+    profileHandler.handleRemove(profile);
+  }
 }
