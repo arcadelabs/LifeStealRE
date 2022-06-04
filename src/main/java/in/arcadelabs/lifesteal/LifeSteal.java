@@ -65,7 +65,8 @@ public class LifeSteal {
   private FileConfiguration config;
   private boolean useMongo;
 
-  //  Paper server check.
+
+  //<editor-fold desc="Paper server check.">
   private boolean isOnPaper() {
     try {
       Class.forName("com.destroystokyo.paper.ParticleBuilder");
@@ -74,8 +75,9 @@ public class LifeSteal {
       return false;
     }
   }
+  //</editor-fold>
 
-  //  Register commands
+  //<editor-fold desc="Register commands.">
   private void registerCommands() {
     final BaseCommand[] commands = new BaseCommand[]{
             new Eliminate(),
@@ -91,8 +93,9 @@ public class LifeSteal {
       Arrays.stream(commands).forEach(bcm::registerCommand);
     }
   }
+  //</editor-fold>
 
-  //  Register event listeners.
+  //<editor-fold desc="Register event listeners.">
   private void registerListener() {
     final Listener[] listeners = new Listener[]{
             new PlayerJoinListener(),
@@ -100,18 +103,21 @@ public class LifeSteal {
     };
     Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, LifeStealPlugin.getInstance()));
   }
+  //</editor-fold>
 
   //  Initialize everything.
   public void init() throws Exception {
 
-// Advventure lib.
+
+    //<editor-fold desc="Adventure lib.">
     messenger = SpigotMessenger
             .builder()
             .setPlugin(LifeStealPlugin.getInstance())
             .defaultToMiniMessageTranslator()
             .build();
+    //</editor-fold>
 
-//  Config init.
+    //<editor-fold desc="Config init.">
     try {
       configYML = new Config(LifeStealPlugin.getInstance(), "Config.yml", false, true);
     } catch (Exception e) {
@@ -123,11 +129,15 @@ public class LifeSteal {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Other stuff.">
     utils = new LSUtils();
     namespacedKey = new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart");
     recipeManager = new RecipeManager();
+    //</editor-fold>
 
+    //<editor-fold desc="Profile storage handler.">
     useMongo = this.getConfiguration().getBoolean("MongoDB.ENABLED");
     if (useMongo) {
       profileStorage = new MongoProfileHandler(LifeStealPlugin.getInstance());
@@ -139,25 +149,31 @@ public class LifeSteal {
         LifeStealPlugin.getInstance().getLogger().warning("CANNOT LOAD JSON");
       }
     }
+    //</editor-fold>
 
-//  PlaceholderAPI hook.
+    //<editor-fold desc="PlaceholderAPI hook.">
     papiHook = new Placeholder();
+    //</editor-fold>
 
-//  Registering stuff.
+    //<editor-fold desc="Registering stuff.">
     registerCommands();
     registerListener();
+    //</editor-fold>
 
-//  Registering recipe.
+    //<editor-fold desc="Registering recipe.">
     Bukkit.addRecipe(getRecipeManager().getHeartRecipe());
+    //</editor-fold>
 
-//  Plugin update checker.
+    //<editor-fold desc="Plugin update checker.">
     new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
             .setNotificationPermission("greetings.update")
             .enableOpNotification(true)
             .setup();
+    //</editor-fold>
 
-//  BStats metrics hook.
+    //<editor-fold desc="BStats metrics hook.">
     BStats metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
+    //</editor-fold>
   }
 
   public FileConfiguration getConfiguration() {
