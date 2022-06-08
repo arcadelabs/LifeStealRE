@@ -6,7 +6,7 @@
 
     <groupId>in.arcadelabs</groupId>
     <artifactId>LifeSteal</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>LifeSteal</name>
@@ -32,7 +32,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>2.3.1</version>
+                <configuration>
+                    <outputDirectory>C:\Users\anike\OneDrive\Desktop\TGN SV\plugins</outputDirectory>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -46,6 +49,12 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>de.leonhard.storage</pattern>
+                                    <shadedPattern>in.arcadelabs.libs.storage</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -91,13 +100,19 @@
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.arcadelabs</groupId>-->
+<!--            <artifactId>ArcadeLibs</artifactId>-->
+<!--            <version>ff9d85bc708f21d63485ccfe02a7e4b51a71c7cb</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>com.github.arcadelabs</groupId>
+            <groupId>in.arcadelabs</groupId>
             <artifactId>ArcadeLibs</artifactId>
-            <version>ff9d85bc708f21d63485ccfe02a7e4b51a71c7cb</version>
-            <scope>compile</scope>
+            <version>0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/ArcadeLibs.jar</systemPath>
         </dependency>
-
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
@@ -112,6 +127,11 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.simplix-softworks</groupId>
+            <artifactId>simplixstorage</artifactId>
+            <version>3.2.4</version>
         </dependency>
 
     </dependencies>

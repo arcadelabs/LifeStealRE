@@ -39,7 +39,6 @@ public class ProfileListener implements Listener {
     profileHandler.createProfile(event.getUniqueId());
   }
 
-
   @EventHandler
   public final void onPlayerQuitEvent(PlayerQuitEvent event) throws IOException {
     final Player player = event.getPlayer();

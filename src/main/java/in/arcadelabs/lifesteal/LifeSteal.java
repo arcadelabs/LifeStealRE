@@ -31,8 +31,10 @@ import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.Reload;
 import in.arcadelabs.lifesteal.commands.Stats;
 import in.arcadelabs.lifesteal.commands.Withdraw;
+import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
+import in.arcadelabs.lifesteal.profile.ProfileListener;
 import in.arcadelabs.lifesteal.profile.ProfileStorage;
 import in.arcadelabs.lifesteal.profile.impl.JsonProfileHandler;
 import in.arcadelabs.lifesteal.profile.impl.MongoProfileHandler;
@@ -64,6 +66,7 @@ public class LifeSteal {
   private Config configYML;
   private FileConfiguration config;
   private boolean useMongo;
+  private BStats metrics;
 
 
   //<editor-fold desc="Paper server check.">
@@ -127,10 +130,12 @@ public class LifeSteal {
     }
 
     try {
-      configYML.updateConfig("2.0", "configYML-version");
+      configYML.updateConfig("2.0", "version");
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+    config = configYML.getConfig();
     //</editor-fold>
 
     //<editor-fold desc="Other stuff.">
@@ -175,7 +180,7 @@ public class LifeSteal {
     //</editor-fold>
 
     //<editor-fold desc="BStats metrics hook.">
-    BStats metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
+    metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
     //</editor-fold>
   }
 

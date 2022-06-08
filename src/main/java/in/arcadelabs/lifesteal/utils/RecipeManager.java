@@ -52,12 +52,12 @@ public class RecipeManager {
     char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     for (char recipeIngredient : recipeIngredients) {
       heartRecipe.setIngredient(recipeIngredient,
-              Material.valueOf((String) config.get("HeartRecipe." + recipeIngredient)));
+              Material.valueOf((String) config.get("HeartRecipe.Recipe." + recipeIngredient)));
     }
   }
 
   public ShapedRecipe getHeartRecipe() {
-    return heartRecipe;
+    return this.heartRecipe;
   }
 
   public ItemStack getHeartItem() {
