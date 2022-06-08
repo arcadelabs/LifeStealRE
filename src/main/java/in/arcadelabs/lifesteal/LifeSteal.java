@@ -99,7 +99,9 @@ public class LifeSteal {
   private void registerListener() {
     final Listener[] listeners = new Listener[]{
             new PlayerJoinListener(),
-            new PlayerKillListener()
+            new PlayerKillListener(),
+            new PlayerClickListener(),
+//            new ProfileListener()
     };
     Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, LifeStealPlugin.getInstance()));
   }
