@@ -36,8 +36,10 @@ public class PlayerClickListener implements Listener {
   public void onPlayerClick(PlayerInteractEvent event) {
 
     Player player = event.getPlayer();
+    if (!(event.getAction() == Action.RIGHT_CLICK_AIR)) return;
     if (Objects.requireNonNull(player.getInventory().getItemInMainHand().getItemMeta()).getPersistentDataContainer().has
-            (lifeSteal.getNamespacedKey(), PersistentDataType.STRING)) {lifeSteal.getUtils().setPlayerBaseHealth(player,
+            (lifeSteal.getNamespacedKey(), PersistentDataType.STRING)) {
+      lifeSteal.getUtils().setPlayerBaseHealth(player,
               lifeSteal.getUtils().getPlayerBaseHealth(player) + 2);
       player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
     }
