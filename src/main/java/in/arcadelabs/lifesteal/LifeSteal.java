@@ -163,7 +163,8 @@ public class LifeSteal {
     //</editor-fold>
 
     //<editor-fold desc="Registering recipe.">
-    Bukkit.addRecipe(getRecipeManager().getHeartRecipe());
+//    Bukkit.addRecipe(getRecipeManager().getHeartRecipe());
+    LifeStealPlugin.getInstance().getServer().addRecipe(getRecipeManager().getHeartRecipe());
     //</editor-fold>
 
     //<editor-fold desc="Plugin update checker.">
