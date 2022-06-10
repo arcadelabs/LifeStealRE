@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,7 +40,7 @@ public class PlayerClickListener implements Listener {
     Player player = event.getPlayer();
     if (!(event.getAction() == Action.RIGHT_CLICK_AIR)) return;
     if (Objects.requireNonNull(player.getInventory().getItemInMainHand().getItemMeta()).getPersistentDataContainer().has
-            (lifeSteal.getNamespacedKey(), PersistentDataType.STRING)) {
+            (new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart_item"), PersistentDataType.STRING)) {
       lifeSteal.getUtils().setPlayerBaseHealth(player,
               lifeSteal.getUtils().getPlayerBaseHealth(player) + 2);
       player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
