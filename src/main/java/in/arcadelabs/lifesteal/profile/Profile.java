@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.profile;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.utils.LifeState;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,6 +40,7 @@ public class Profile {
   private double totalHeartsWithdrawn;
   private int deaths;
   private int kills;
+  private LifeState lifeState;
 
   public Profile(UUID uniqueID) {
     this.uniqueID = uniqueID;
