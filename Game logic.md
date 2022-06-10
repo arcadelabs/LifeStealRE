@@ -39,3 +39,11 @@ Considering these:
     Teams
     Curses
     Blessings
+    Decaying hearts
+
+
+Lore: ["TT", "This consumable heart will give you %s% heart points." , "PP"]
+
+Lore -> Component
+Component -> Minimessage and TagResolver -> Component
+Component -> Lore(List<String>)

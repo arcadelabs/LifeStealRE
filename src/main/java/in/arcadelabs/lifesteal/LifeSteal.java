@@ -34,12 +34,12 @@ import in.arcadelabs.lifesteal.commands.Withdraw;
 import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
-import in.arcadelabs.lifesteal.profile.ProfileListener;
 import in.arcadelabs.lifesteal.profile.ProfileStorage;
 import in.arcadelabs.lifesteal.profile.impl.JsonProfileHandler;
 import in.arcadelabs.lifesteal.profile.impl.MongoProfileHandler;
+import in.arcadelabs.lifesteal.utils.HeartItem;
 import in.arcadelabs.lifesteal.utils.LSUtils;
-import in.arcadelabs.lifesteal.utils.RecipeManager;
+import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -58,7 +58,7 @@ public class LifeSteal {
   private final PluginManager PM = Bukkit.getPluginManager();
   private final Gson GSON = new Gson();
   private LSUtils utils;
-  private RecipeManager recipeManager;
+  private HeartRecipeManager heartRecipeManager;
   private NamespacedKey namespacedKey;
   private ProfileStorage profileStorage;
   private Placeholder papiHook;
@@ -141,7 +141,7 @@ public class LifeSteal {
     //<editor-fold desc="Other stuff.">
     utils = new LSUtils();
     namespacedKey = new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart");
-    recipeManager = new RecipeManager();
+    heartRecipeManager = new HeartRecipeManager();
     //</editor-fold>
 
     //<editor-fold desc="Profile storage handler.">
@@ -169,7 +169,7 @@ public class LifeSteal {
 
     //<editor-fold desc="Registering recipe.">
 //    Bukkit.addRecipe(getRecipeManager().getHeartRecipe());
-    LifeStealPlugin.getInstance().getServer().addRecipe(getRecipeManager().getHeartRecipe());
+    LifeStealPlugin.getInstance().getServer().addRecipe(getHeartRecipeManager().getHeartRecipe());
     //</editor-fold>
 
     //<editor-fold desc="Plugin update checker.">
