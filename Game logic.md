@@ -42,8 +42,10 @@ Considering these:
     Decaying hearts
 
 
-Lore: ["TT", "This consumable heart will give you %s% heart points." , "PP"]
-
-Lore -> Component
-Component -> Minimessage and TagResolver -> Component
-Component -> Lore(List<String>)
+Player dies
+    -> Random cursed heart drop
+    -> Random blessed heart drop
+    -> Fixed cursed heart drop
+    -> Fixed blessed heart drop
+    -> Random cursed/blessed heart drop
+    -> Normal heart drop
