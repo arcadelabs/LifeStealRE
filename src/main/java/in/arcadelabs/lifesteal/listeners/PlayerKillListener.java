@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.utils.HeartItem;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,13 +35,13 @@ public class PlayerKillListener implements Listener {
   public void onPlayerKilled(PlayerDeathEvent event) {
 
     Player victim = event.getEntity();
-
+    int lostHearts = lifeSteal.getConfiguration().getInt("HeartsToLose", 1);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
       victim.setGameMode(GameMode.SPECTATOR);
     } else {
       if (victim.getKiller() == null) {
-        lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - 2.0);
-        victim.getWorld().dropItemNaturally(victim.getLocation(), lifeSteal.getRecipeManager().getHeartItem());
+        lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - lostHearts);
+        victim.getWorld().dropItemNaturally(victim.getLocation(), new HeartItem(lostHearts / 2).getHeartItemStack());
       } else {
         lifeSteal.getUtils().transferHealth(victim, victim.getKiller());
       }

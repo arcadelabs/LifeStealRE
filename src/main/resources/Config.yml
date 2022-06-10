@@ -9,8 +9,8 @@ DefaultHealth: 20
 HeartRecipe:
   Properties:
     ItemType: "PAPER"
-    Name: "Heart"
-    Lore: ["TT", "PP"]
+    Name: "<RED>Heart</RED>"
+    Lore: ["TT", "This consumable heart will give you <hp> heart points." , "PP"]
     CustomModel: true
     ModelData: 123456
 
@@ -41,3 +41,11 @@ HeartRecipe:
 #SPECTATING = Roams around freely in spectator mode,
 #BANNED = Gets banned, only works if death bans are enabled.
 LifeState: "BANNED"
+
+# State how many hearts players should lose on death.
+# 2 heart points = 1 whole heart.
+HeartsToLose: 2
+
+# State how many hearts points players gain on heart item consume.
+# 2 heart points = 1 whole heart.
+HeartsToGain: 2
