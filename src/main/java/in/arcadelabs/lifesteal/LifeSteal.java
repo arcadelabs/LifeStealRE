@@ -185,10 +185,10 @@ public class LifeSteal {
   }
 
   public FileConfiguration getConfiguration() {
-    return config = configYML.getConfig();
+    return this.config;
   }
 
   public Config getConfigYML() {
-    return configYML;
+    return this.configYML;
   }
 }
