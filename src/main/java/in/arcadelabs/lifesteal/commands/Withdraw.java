@@ -24,8 +24,12 @@ import in.arcadelabs.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.utils.HeartItem;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.withdraw")
@@ -34,13 +38,17 @@ public class Withdraw extends BaseCommand {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @Subcommand("withdraw")
-  public void onWithdraw(CommandSender sender, double hearts) {
+  public void onWithdraw(CommandSender sender, int hearts) {
     Player player = (Player) sender;
     if (hearts >= lifeSteal.getUtils().getPlayerBaseHealth(player)) {
       lifeSteal.getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
     } else {
       lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts);
-      //      TODO - Drop heart at @player 's position
+
+      Map<Integer, ItemStack> items = player.getInventory().addItem(new HeartItem(hearts).getHeartItemStack());
+      for (Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
+        player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+      }
     }
   }
 }
