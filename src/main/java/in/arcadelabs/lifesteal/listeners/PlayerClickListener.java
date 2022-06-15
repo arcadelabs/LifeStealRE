@@ -18,32 +18,33 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
-import in.arcadelabs.lifesteal.LifeSteal;
+import in.arcadelabs.lifesteal.LifeStealManager;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.utils.event.Events;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Objects;
 import org.bukkit.persistence.PersistentDataType;
 
-public class PlayerClickListener implements Listener {
+public class PlayerClickListener {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LifeStealManager lifeSteal = LifeStealPlugin.getLifeSteal();
 
-  @EventHandler
-  public void onPlayerClick(PlayerInteractEvent event) {
+  public PlayerClickListener() {
 
-    Player player = event.getPlayer();
-    if (!(event.getAction() == Action.RIGHT_CLICK_AIR)) return;
-    if (Objects.requireNonNull(player.getInventory().getItemInMainHand().getItemMeta()).getPersistentDataContainer().has
-            (new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart_item"), PersistentDataType.STRING)) {
-      lifeSteal.getUtils().setPlayerBaseHealth(player,
-              lifeSteal.getUtils().getPlayerBaseHealth(player) + 2);
-      player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
-    }
+    Events.subscribe(PlayerInteractEvent.class, event -> {
+      Player player = event.getPlayer();
+      if (!(event.getAction() == Action.RIGHT_CLICK_AIR)) return;
+      if (Objects.requireNonNull(player.getInventory().getItemInMainHand().getItemMeta()).getPersistentDataContainer().has
+          (new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart_item"), PersistentDataType.STRING)) {
+        lifeSteal.getUtils().setPlayerBaseHealth(player,
+            lifeSteal.getUtils().getPlayerBaseHealth(player) + 2);
+        player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+      }
+    }, EventPriority.HIGH);
   }
 }

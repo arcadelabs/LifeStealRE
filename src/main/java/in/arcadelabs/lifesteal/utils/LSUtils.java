@@ -18,7 +18,7 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.lifesteal.LifeSteal;
+import in.arcadelabs.lifesteal.LifeStealManager;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class LSUtils {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LifeStealManager lifeSteal = LifeStealPlugin.getLifeSteal();
 
   public double getPlayerBaseHealth(Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();

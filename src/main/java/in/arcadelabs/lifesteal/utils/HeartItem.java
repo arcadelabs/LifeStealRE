@@ -22,7 +22,7 @@ import in.arcadelabs.libs.adventure.adventure.text.Component;
 import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
 import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
 import in.arcadelabs.libs.adventure.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import in.arcadelabs.lifesteal.LifeSteal;
+import in.arcadelabs.lifesteal.LifeStealManager;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -36,7 +36,7 @@ import java.util.List;
 
 public class HeartItem {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LifeStealManager lifeSteal = LifeStealPlugin.getLifeSteal();
   private final ItemStack heart;
   private final FileConfiguration config = lifeSteal.getConfig();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
