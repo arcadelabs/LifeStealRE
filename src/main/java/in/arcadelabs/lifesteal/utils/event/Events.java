@@ -11,6 +11,10 @@ import org.bukkit.plugin.RegisteredListener;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+/**
+ * @author Lucanius
+ */
+
 @UtilityClass
 public final class Events {
 
