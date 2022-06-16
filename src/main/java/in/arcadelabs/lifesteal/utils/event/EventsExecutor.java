@@ -4,6 +4,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.EventExecutor;
 
+/**
+ * @author Lucanius
+ */
+
 @FunctionalInterface
 public interface EventsExecutor<E> extends EventExecutor {
 
