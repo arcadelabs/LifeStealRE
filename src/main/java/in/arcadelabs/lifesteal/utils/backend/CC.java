@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author Lucanius
- * @since June 12, 2022.
- * BW1058 Addon - All Rights Reserved.
  */
 @UtilityClass
 public final class CC {
