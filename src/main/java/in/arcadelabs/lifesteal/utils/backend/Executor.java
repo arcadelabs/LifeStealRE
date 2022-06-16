@@ -5,6 +5,10 @@ import in.arcadelabs.lifesteal.LifeStealPlugin;
 import lombok.experimental.UtilityClass;
 import org.bukkit.scheduler.BukkitTask;
 
+/**
+ * @author Lucanius
+ */
+
 @UtilityClass
 public final class Executor {
 
