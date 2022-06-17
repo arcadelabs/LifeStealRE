@@ -47,5 +47,16 @@ Player dies
     -> Random blessed heart drop
     -> Fixed cursed heart drop
     -> Fixed blessed heart drop
+    -> Random cursed/blessed/normal heart drop
     -> Random cursed/blessed heart drop
     -> Normal heart drop
+
+
+Heart types:
+
+    Cursed,
+    Blessed,
+    Normal
+
+A customizable recipe, returns a placeholder item
+On item craft event, we change the item to whatever configured.
