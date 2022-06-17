@@ -35,6 +35,7 @@ import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
 import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
+import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
 import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
 import in.arcadelabs.lifesteal.profile.ProfileStorage;
 import in.arcadelabs.lifesteal.profile.impl.JsonProfileHandler;
@@ -109,6 +110,7 @@ public class LifeSteal {
   //<editor-fold desc="Register event listeners.">
   private void registerListener() {
     final Listener[] listeners = new Listener[]{
+            new PlayerPotionEffectListener(),
             new PlayerResurrectListener(),
             new PlayerClickListener(),
             new PlayerJoinListener(),
