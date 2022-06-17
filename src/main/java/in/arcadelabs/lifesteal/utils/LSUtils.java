@@ -18,17 +18,24 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.libs.adventure.adventure.text.Component;
+import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
+import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
+import in.arcadelabs.libs.adventure.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class LSUtils {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
 
   public double getPlayerBaseHealth(Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
@@ -54,5 +61,31 @@ public class LSUtils {
       && player.isBanned()) return LifeState.BANNED;
 
     return LifeState.LIVING;
+  }
+
+  public List<String> formatStringList(List<String> loreList, String placeholder, int placeholderValue) {
+    List<String> formattedList = new ArrayList<>();
+    for (String list : loreList) {
+      formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list,
+              Placeholder.component(placeholder, Component.text(placeholderValue)))));
+    }
+    return formattedList;
+  }
+
+  public List<String> formatStringList(List<String> loreList) {
+    List<String> formattedList = new ArrayList<>();
+    for (String list : loreList) {
+      formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list)));
+    }
+    return formattedList;
+  }
+
+  public String formatString(String string, String placeholder, int placeholderValue) {
+      return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string,
+              Placeholder.component(placeholder, Component.text(placeholderValue))));
+  }
+
+  public String formatString(String string) {
+    return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string));
   }
 }
