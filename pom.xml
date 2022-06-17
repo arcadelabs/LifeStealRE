@@ -89,6 +89,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io/</url>
         </repository>
+        <repository>
+            <id>jeff-media-public</id>
+            <url>https://hub.jeff-media.com/nexus/repository/jeff-media-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -140,6 +144,11 @@
             <artifactId>simplixstorage</artifactId>
             <version>3.2.4</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.jeff_media</groupId>
+            <artifactId>MorePersistentDataTypes</artifactId>
+            <version>2.3.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>
