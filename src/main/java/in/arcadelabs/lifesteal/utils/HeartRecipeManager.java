@@ -21,25 +21,21 @@ package in.arcadelabs.lifesteal.utils;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ShapedRecipe;
 
 public class HeartRecipeManager {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private final ItemStack heart;
-  private final FileConfiguration config = lifeSteal.getConfig();
   private final ShapedRecipe heartRecipe;
 
   public HeartRecipeManager() {
-    heart = new HeartItem(1).getHeartItemStack();
-    heartRecipe = new ShapedRecipe(lifeSteal.getNamespacedKey(), heart);
+    LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+    heartRecipe = new ShapedRecipe(new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart_recipe"), lifeSteal.getPlaceholderHeart());
     heartRecipe.shape("ABC", "DEF", "GHI");
     char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     for (char recipeIngredient : recipeIngredients) {
       heartRecipe.setIngredient(recipeIngredient,
-              Material.valueOf((String) config.get("HeartRecipe.Recipe." + recipeIngredient)));
+              Material.valueOf((String) lifeSteal.getConfig().get("Heart.Recipe." + recipeIngredient)));
     }
   }
 

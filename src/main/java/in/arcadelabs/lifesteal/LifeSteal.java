@@ -31,20 +31,23 @@ import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.Reload;
 import in.arcadelabs.lifesteal.commands.Stats;
 import in.arcadelabs.lifesteal.commands.Withdraw;
+import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
 import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
 import in.arcadelabs.lifesteal.profile.ProfileStorage;
 import in.arcadelabs.lifesteal.profile.impl.JsonProfileHandler;
 import in.arcadelabs.lifesteal.profile.impl.MongoProfileHandler;
-import in.arcadelabs.lifesteal.utils.HeartItem;
-import in.arcadelabs.lifesteal.utils.LSUtils;
+import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
+import in.arcadelabs.lifesteal.utils.LSUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
@@ -55,18 +58,22 @@ import java.util.Arrays;
 @Getter
 public class LifeSteal {
 
+  private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
   private final PluginManager PM = Bukkit.getPluginManager();
   private final Gson GSON = new Gson();
   private LSUtils utils;
   private HeartRecipeManager heartRecipeManager;
-  private NamespacedKey namespacedKey;
   private ProfileStorage profileStorage;
   private Placeholder papiHook;
   private SpigotMessenger messenger;
   private Config configYML;
+  private Config heartYML;
   private FileConfiguration config;
+  private FileConfiguration heartConfig;
   private boolean useMongo;
   private BStats metrics;
+  private HeartItemCooker heartItemCooker;
+  private ItemStack placeholderHeart;
 
 
   //<editor-fold desc="Paper server check.">
@@ -86,13 +93,13 @@ public class LifeSteal {
             new Eliminate(),
             new Reload(),
             new Stats(),
-            new Withdraw()
+            new Withdraw(),
     };
     if (isOnPaper()) {
-      PaperCommandManager pcm = new PaperCommandManager(LifeStealPlugin.getInstance());
+      PaperCommandManager pcm = new PaperCommandManager(instance);
       Arrays.stream(commands).forEach(pcm::registerCommand);
     } else {
-      BukkitCommandManager bcm = new BukkitCommandManager(LifeStealPlugin.getInstance());
+      BukkitCommandManager bcm = new BukkitCommandManager(instance);
       Arrays.stream(commands).forEach(bcm::registerCommand);
     }
   }
@@ -104,9 +111,11 @@ public class LifeSteal {
             new PlayerJoinListener(),
             new PlayerKillListener(),
             new PlayerClickListener(),
+            new HeartCraftListener(),
+//            new HeartConsumeListener(),
 //            new ProfileListener()
     };
-    Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, LifeStealPlugin.getInstance()));
+    Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, instance));
   }
   //</editor-fold>
 
@@ -117,43 +126,69 @@ public class LifeSteal {
     //<editor-fold desc="Adventure lib.">
     messenger = SpigotMessenger
             .builder()
-            .setPlugin(LifeStealPlugin.getInstance())
+            .setPlugin(instance)
             .defaultToMiniMessageTranslator()
             .build();
     //</editor-fold>
 
     //<editor-fold desc="Config init.">
     try {
-      configYML = new Config(LifeStealPlugin.getInstance(), "Config.yml", false, true);
+      configYML = new Config(instance, "Config.yml", false, true);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     try {
-      configYML.updateConfig("2.0", "version");
+      configYML.updateConfig("3.0", "version");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    try {
+      heartYML = new Config(instance, "Hearts.yml", false, true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    try {
+      heartYML.updateConfig("3.0", "version");
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     config = configYML.getConfig();
+    heartConfig = heartYML.getConfig();
     //</editor-fold>
 
     //<editor-fold desc="Other stuff.">
     utils = new LSUtils();
-    namespacedKey = new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart");
+
+    int amount = config.getInt("HeartsToGain", 2) / 2;
+    heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
+            .setHeartName(utils.formatString(config.getString("Heart.Properties.Name"), "hp",
+                    amount))
+            .setHeartLore(utils.formatStringList(config.getStringList("Heart.Properties.Lore"),
+                    "hp", amount))
+            .setModelData(config.getInt("Heart.Properties.ModelData"))
+            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
+            .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), amount)
+            .cook();
+    placeholderHeart = heartItemCooker.getCookedItem();
     heartRecipeManager = new HeartRecipeManager();
+
+
     //</editor-fold>
 
     //<editor-fold desc="Profile storage handler.">
     useMongo = this.getConfiguration().getBoolean("MongoDB.ENABLED");
     if (useMongo) {
-      profileStorage = new MongoProfileHandler(LifeStealPlugin.getInstance());
+      profileStorage = new MongoProfileHandler(instance);
     } else {
       try {
-        profileStorage = new JsonProfileHandler(LifeStealPlugin.getInstance());
+        profileStorage = new JsonProfileHandler(instance);
       } catch (IOException e) {
         e.printStackTrace();
-        LifeStealPlugin.getInstance().getLogger().warning("CANNOT LOAD JSON");
+        instance.getLogger().warning("CANNOT LOAD JSON");
       }
     }
     //</editor-fold>
@@ -169,18 +204,18 @@ public class LifeSteal {
 
     //<editor-fold desc="Registering recipe.">
 //    Bukkit.addRecipe(getRecipeManager().getHeartRecipe());
-    LifeStealPlugin.getInstance().getServer().addRecipe(getHeartRecipeManager().getHeartRecipe());
+    instance.getServer().addRecipe(getHeartRecipeManager().getHeartRecipe());
     //</editor-fold>
 
     //<editor-fold desc="Plugin update checker.">
-    new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
+    new UpdateChecker(instance, new URL("https://docs.taggernation.com/greetings-update.yml"), 600000)
             .setNotificationPermission("greetings.update")
             .enableOpNotification(true)
             .setup();
     //</editor-fold>
 
     //<editor-fold desc="BStats metrics hook.">
-    metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
+    metrics = new BStats(instance, 15272);
     //</editor-fold>
   }
 
