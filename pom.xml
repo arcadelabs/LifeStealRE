@@ -54,6 +54,14 @@
                                     <pattern>de.leonhard.storage</pattern>
                                     <shadedPattern>in.arcadelabs.libs.storage</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.lewdev.probabilitylib</pattern>
+                                    <shadedPattern>in.arcadelabs.libs.probabilitylib</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.jeff_media.morepersistentdatatypes</pattern>
+                                    <shadedPattern>in.arcadelabs.libs.morepersistentdatatypes</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -81,6 +89,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io/</url>
         </repository>
+        <repository>
+            <id>jeff-media-public</id>
+            <url>https://hub.jeff-media.com/nexus/repository/jeff-media-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -99,6 +111,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.lewysDavies</groupId>
+            <artifactId>Java-Probability-Collection</artifactId>
+            <version>v0.8</version>
         </dependency>
         <dependency>
             <groupId>com.github.arcadelabs</groupId>
@@ -126,6 +143,11 @@
             <artifactId>simplixstorage</artifactId>
             <version>3.2.4</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.jeff_media</groupId>
+            <artifactId>MorePersistentDataTypes</artifactId>
+            <version>2.3.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

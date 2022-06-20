@@ -1,0 +1,80 @@
+version: '3.0'
+Hearts:
+  #  FIXED_BLESSED | FIXED_NORMAL | FIXED_CURSED | RANDOM_BLESSED | RANDOM_NORMAL | RANDOM_CURSED | RANDOM_ALL
+  Mode:
+    OnDeath: FIXED_NORMAL
+    OnWithdraw: FIXED_NORMAL
+    OnCraft: FIXED_NORMAL
+  Types:
+    Normal:
+      80:
+        Properties:
+          ItemType: IRON_INGOT
+          Name: '<gradient:#e01e37:#e01e37>Normal Heart</gradient>'
+          Lore:
+            - TT
+            - This consumable heart will give you <hp> heart points.
+            - PP
+          ModelData: 123456
+          HealthPoints: 2
+          Effects:
+            Regen:
+                Type: regeneration
+                Power: 99
+                Duration: 120
+                ShowParticles: false
+            Speed:
+                Type: speed
+                Power: 99
+                Duration: 120
+                ShowParticles: false
+    Blessed:
+      50:
+        Properties:
+          ItemType: PAPER
+          Name: '<gradient:#e01e37:#e01e37>Blessed Heart</gradient>'
+          Lore:
+            - TT
+            - This consumable heart will give you <hp> heart points.
+            - PP
+          ModelData: 123456
+          HealthPoints: 2
+          Effects:
+            Speed:
+                Type: speed
+                Power: 99
+                Duration: 120
+                ShowParticles: false
+    Cursed:
+      20:
+        Properties:
+          ItemType: PAPER
+          Name: '<gradient:#e01e37:#e01e37>Cursed Heart</gradient>'
+          Lore:
+            - TT
+            - This consumable heart will give you <hp> heart points.
+            - PP
+          ModelData: 123456
+          HealthPoints: 2
+          Effects:
+            Hunger:
+                Type: hunger
+                Power: 99
+                Duration: 120
+                ShowParticles: false
+      80:
+        Properties:
+          ItemType: PAPER
+          Name: '<gradient:#e01e37:#e01e37>Cursed Heart</gradient>'
+          Lore:
+            - TT
+            - This consumable heart will give you <hp> heart points.
+            - PP
+          ModelData: 123456
+          HealthPoints: 2
+          Effects:
+            Blind:
+                Type: blindness
+                Power: 99
+                Duration: 120
+                ShowParticles: false

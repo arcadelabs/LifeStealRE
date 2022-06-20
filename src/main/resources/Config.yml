@@ -1,29 +1,23 @@
-version: "2.0"
+version: "3.0"
 MongoDB:
   ENABLED: false # Enable MongoDB database.
   URI: "" # Connection URI/String to MongoDB database.
   DATABASE: "" # Database name of MongoDB database
 
 DefaultHealth: 20
+DisableTotem: true
+DisableMilkCure: true
 
-HeartRecipe:
+Heart:
   Properties:
     ItemType: "PAPER"
-    Name: "<RED>Heart</RED>"
-    Lore: ["TT", "This consumable heart will give you <hp> heart points." , "PP"]
-    CustomModel: true
+    Name: "<gradient:#e01e37:#e01e37>Heart</gradient>"
+    Lore:
+      - "<gradient:#f89999:#f6c0ba>This is a placeholder heart.</gradient>"
+      - "<gradient:#f89999:#f6c0ba>This consumable heart will give you <hp> heart points.</gradient>"
+      - "<gradient:#f89999:#f6c0ba>This will be turned into a normal, blessed or cursed heart after crafting.</gradient>"
     ModelData: 123456
-
-  #Crafting table representation.
-  #  +---+---+---+
-  #  | A | B | C |
-  #  +---+---+---+
-  #  | D | E | F |
-  #  +---+---+---+
-  #  | G | H | I |
-  #  +---+---+---+
-
-  #Heart item recipe, it is a shaped recipe.
+#Heart item recipe, it is a shaped recipe.
   Recipe:
     A: "DIAMOND"
     B: "GOLD_INGOT"
@@ -34,6 +28,14 @@ HeartRecipe:
     G: "DIAMOND"
     H: "GOLD_INGOT"
     I: "DIAMOND"
+#Crafting table representation.
+#  +---+---+---+
+#  | A | B | C |
+#  +---+---+---+
+#  | D | E | F |
+#  +---+---+---+
+#  | G | H | I |
+#  +---+---+---+
 
 # What happens after player looses all hearts.
 #Valid values are,
