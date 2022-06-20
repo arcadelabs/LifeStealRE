@@ -23,7 +23,6 @@ import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
 import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
 import in.arcadelabs.libs.adventure.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import in.arcadelabs.lifesteal.LifeSteal;
-import in.arcadelabs.lifesteal.LifeStealManager;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
@@ -37,7 +36,6 @@ public class LSUtils {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
-  private final LifeStealManager lifeSteal = LifeStealPlugin.getLifeSteal();
 
   public double getPlayerBaseHealth(Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
@@ -53,13 +51,13 @@ public class LSUtils {
   }
 
   public LifeState getLifeState(Player player) {
-    if (Objects.requireNonNull(lifeSteal.getConfiguration().getString("LifeState")).equalsIgnoreCase("SPECTATING")
+    if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("SPECTATING")
     && player.getGameMode() == GameMode.SPECTATOR) return LifeState.SPECTATING;
 
-    if (Objects.requireNonNull(lifeSteal.getConfiguration().getString("LifeState")).equalsIgnoreCase("DEAD"))
+    if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("DEAD"))
       return LifeState.DEAD;
 
-    if (Objects.requireNonNull(lifeSteal.getConfiguration().getString("LifeState")).equalsIgnoreCase("BANNED")
+    if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("BANNED")
       && player.isBanned()) return LifeState.BANNED;
 
     return LifeState.LIVING;

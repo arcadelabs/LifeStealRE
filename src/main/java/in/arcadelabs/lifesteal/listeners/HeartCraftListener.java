@@ -42,4 +42,3 @@ public class HeartCraftListener implements Listener {
     event.getInventory().setResult(replacementHeart);
   }
 }
-

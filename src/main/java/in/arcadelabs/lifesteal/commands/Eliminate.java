@@ -16,17 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package in.arcadelabs.lifesteal.listeners;
+package in.arcadelabs.lifesteal.commands;
 
+import in.arcadelabs.libs.aikar.acf.BaseCommand;
+import in.arcadelabs.libs.aikar.acf.annotation.CommandAlias;
+import in.arcadelabs.libs.aikar.acf.annotation.CommandCompletion;
+import in.arcadelabs.libs.aikar.acf.annotation.CommandPermission;
+import in.arcadelabs.libs.aikar.acf.annotation.Subcommand;
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityResurrectEvent;
+import org.bukkit.entity.Player;
 
-public class PlayerResurrectListener implements Listener {
+@CommandAlias("lifesteal|ls")
+@CommandPermission("lifesteal.eliminate")
+public class Eliminate extends BaseCommand {
 
-  @EventHandler
-  public void onPlayerResurrect(EntityResurrectEvent event) {
-    event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+
+  @Subcommand("Eliminate")
+  @CommandCompletion("@players")
+  public void onEliminate(Player target) {
+    lifeSteal.getUtils().setPlayerBaseHealth(target, 0);
   }
 }

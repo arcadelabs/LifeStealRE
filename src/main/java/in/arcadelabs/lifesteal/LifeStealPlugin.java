@@ -28,13 +28,13 @@ public final class LifeStealPlugin extends JavaPlugin {
   @Getter
   private static LifeStealPlugin instance;
   @Getter
-  private static LifeStealManager lifeSteal;
+  private static LifeSteal lifeSteal;
 
 
   @Override
   public void onEnable() {
     instance = this;
-    lifeSteal = new LifeStealManager();
+    lifeSteal = new LifeSteal();
     try {
       lifeSteal.init();
     } catch (Exception e) {
