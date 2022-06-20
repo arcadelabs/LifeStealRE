@@ -39,6 +39,12 @@ public class Withdraw extends BaseCommand {
   HeartItemManager heartItemManager;
   ItemStack replacementHeart;
 
+  /**
+   * On withdraw command.
+   *
+   * @param sender the sender
+   * @param hearts the hearts
+   */
   @Subcommand("withdraw")
   public void onWithdraw(CommandSender sender, int hearts) {
     Player player = (Player) sender;

@@ -61,6 +61,11 @@ public class HeartItemManager {
   private final ProbabilityCollection<Integer> randomNormalCol = new ProbabilityCollection<>();
   private final ProbabilityCollection<Integer> randomCurseCol = new ProbabilityCollection<>();
 
+  /**
+   * Instantiates a new Heart item manager.
+   *
+   * @param mode the mode
+   */
   public HeartItemManager(Mode mode) {
     this.mode = mode;
 
@@ -77,6 +82,11 @@ public class HeartItemManager {
     }
   }
 
+  /**
+   * Prepare ingedients for heart item manager.
+   *
+   * @return the heart item manager
+   */
   public HeartItemManager prepareIngedients() {
     switch (this.mode) {
       case FIXED_BLESSED:
@@ -127,6 +137,11 @@ public class HeartItemManager {
     return this;
   }
 
+  /**
+   * Cook heart with prepared ingredients.
+   *
+   * @return the heart item manager
+   */
   public HeartItemManager cookHeart() {
     this.heartItemCooker = new HeartItemCooker(this.heartType)
             .setHeartName(this.heartName)
@@ -141,6 +156,11 @@ public class HeartItemManager {
     return this;
   }
 
+  /**
+   * Heart item getter.
+   *
+   * @return the heart item
+   */
   public ItemStack getHeartItem() {
     return this.heartItem;
   }
@@ -149,14 +169,18 @@ public class HeartItemManager {
     FIXED_BLESSED,
     FIXED_NORMAL,
     FIXED_CURSED,
-
     RANDOM_BLESSED,
     RANDOM_NORMAL,
     RANDOM_CURSED,
-
     RANDOM_ALL
   }
 
+  /**
+   * Get Mode by it's string value.
+   *
+   * @param input the input
+   * @return the Mode enum
+   */
   public Mode getByString(String input) {
     Mode mode = Mode.FIXED_CURSED;
     switch(input) {

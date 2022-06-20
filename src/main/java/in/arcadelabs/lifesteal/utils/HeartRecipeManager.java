@@ -41,6 +41,11 @@ public class HeartRecipeManager {
     }
   }
 
+  /**
+   * Heart recipe getter.
+   *
+   * @return the heart recipe
+   */
   public ShapedRecipe getHeartRecipe() {
     return this.heartRecipe;
   }

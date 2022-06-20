@@ -33,6 +33,11 @@ public class Eliminate extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
+  /**
+   * On eliminate command.
+   *
+   * @param target the target
+   */
   @Subcommand("Eliminate")
   @CommandCompletion("@players")
   public void onEliminate(Player target) {

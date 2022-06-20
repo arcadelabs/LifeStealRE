@@ -69,6 +69,11 @@ public class LifeSteal {
   private HeartItemCooker heartItemCooker;
   private ItemStack placeholderHeart;
 
+  /**
+   * Check if server ruunning on Paper or it's forks.
+   *
+   * @return false if server running on Spigot or upstream.
+   */
   private boolean isOnPaper() {
     try {
       Class.forName("com.destroystokyo.paper.ParticleBuilder");
@@ -78,9 +83,73 @@ public class LifeSteal {
     }
   }
 
-  //<editor-fold desc="Register event listeners.">
+  /**
+   * Initializes everything.
+   *
+   * @throws Exception undefined exception
+   */
+  public void init() throws Exception {
 
-  private void registerCommands() {
+//    Initialize SpigotMessenger with MiniMessage translator.
+    messenger = SpigotMessenger
+            .builder()
+            .setPlugin(instance)
+            .defaultToMiniMessageTranslator()
+            .build();
+
+//    Initialize, update and return config.
+    try {
+      configYML = new Config(instance, "Config.yml", false, true);
+      configYML.updateConfig("3.0", "version");
+      config = configYML.getConfig();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+//    Initialize, update and return Heart config.
+    try {
+      heartYML = new Config(instance, "Hearts.yml", false, true);
+      heartYML.updateConfig("3.0", "version");
+      heartConfig = heartYML.getConfig();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+//    Initialize LifeSteal utils.
+    utils = new LSUtils();
+
+//    Cook a placeholder heart and assign it.
+    int amount = config.getInt("HeartsToGain", 2) / 2;
+    heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
+            .setHeartName(utils.formatString(config.getString("Heart.Properties.Name"), "hp",
+                    amount))
+            .setHeartLore(utils.formatStringList(config.getStringList("Heart.Properties.Lore"),
+                    "hp", amount))
+            .setModelData(config.getInt("Heart.Properties.ModelData"))
+            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
+            .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), amount)
+            .cook();
+    placeholderHeart = heartItemCooker.getCookedItem();
+
+//    Initialize Heart recipe manager.
+    heartRecipeManager = new HeartRecipeManager();
+
+//    Initialize Player placeholder fetcher.
+    papiHook = new Placeholder();
+
+//    Register Heart recipe.
+    LifeStealPlugin.getInstance().getServer().addRecipe(getHeartRecipeManager().getHeartRecipe());
+
+//    Initialize update checker.
+    new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
+            .setNotificationPermission("greetings.update")
+            .enableOpNotification(true)
+            .setup();
+
+//    Initialize BStats metrics.
+    metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
+
+//    Register commands.
     final BaseCommand[] commands = new BaseCommand[]{
             new Eliminate(),
             new Reload(),
@@ -93,13 +162,8 @@ public class LifeSteal {
       BukkitCommandManager bcm = new BukkitCommandManager(instance);
       Arrays.stream(commands).forEach(bcm::registerCommand);
     }
-  }
 
-  //</editor-fold>
-
-  //<editor-fold desc="Register event listeners.">
-
-  private void registerListener() {
+//    Register listeners.
     final Listener[] listeners = new Listener[]{
             new PlayerPotionEffectListener(),
             new PlayerResurrectListener(),
@@ -108,102 +172,8 @@ public class LifeSteal {
             new PlayerKillListener(),
             new HeartCraftListener(),
 //            new HeartConsumeListener(),
-//            new ProfileListener()
     };
     Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, instance));
-  }
 
-  //</editor-fold>
-
-  //<editor-fold desc="Initialize everything.">
-
-  public void init() throws Exception {
-
-    messenger = SpigotMessenger
-            .builder()
-            .setPlugin(instance)
-            .defaultToMiniMessageTranslator()
-            .build();
-
-    try {
-      configYML = new Config(instance, "Config.yml", false, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    try {
-      configYML.updateConfig("3.0", "version");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    try {
-      heartYML = new Config(instance, "Hearts.yml", false, true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    try {
-      heartYML.updateConfig("3.0", "version");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    config = configYML.getConfig();
-    heartConfig = heartYML.getConfig();
-    utils = new LSUtils();
-    int amount = config.getInt("HeartsToGain", 2) / 2;
-    heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
-            .setHeartName(utils.formatString(config.getString("Heart.Properties.Name"), "hp",
-                    amount))
-            .setHeartLore(utils.formatStringList(config.getStringList("Heart.Properties.Lore"),
-                    "hp", amount))
-            .setModelData(config.getInt("Heart.Properties.ModelData"))
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
-            .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), amount)
-            .cook();
-    placeholderHeart = heartItemCooker.getCookedItem();
-    heartRecipeManager = new HeartRecipeManager();
-
-    //<editor-fold desc="PlaceholderAPI hook.">
-
-    papiHook = new Placeholder();
-
-    //</editor-fold>
-
-    //<editor-fold desc="Registering recipe.">
-
-    LifeStealPlugin.getInstance().getServer().addRecipe(getHeartRecipeManager().getHeartRecipe());
-
-    //</editor-fold>
-
-    //<editor-fold desc="Plugin update checker.">
-
-    new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
-            .setNotificationPermission("greetings.update")
-            .enableOpNotification(true)
-            .setup();
-
-    //</editor-fold>
-
-    //<editor-fold desc="BStats metrics hook.">
-
-    metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
-
-    //</editor-fold>
-
-    registerCommands();
-    registerListener();
-
-  }
-
-  //</editor-fold>
-
-  public FileConfiguration getConfiguration() {
-    return this.config;
-  }
-
-  public Config getConfigYML() {
-    return this.configYML;
   }
 }

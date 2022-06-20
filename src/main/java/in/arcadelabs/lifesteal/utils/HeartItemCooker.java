@@ -32,51 +32,112 @@ public class HeartItemCooker {
   private final ItemStack heartItem;
   private final ItemMeta heartMeta;
 
+  /**
+   * Instantiates a new Heart item cooker.
+   *
+   * @param material the material
+   */
   public HeartItemCooker(Material material) {
     this.heartItem = new ItemStack(material);
     this.heartMeta = this.heartItem.getItemMeta();
   }
 
+  /**
+   * Sets heart name.
+   *
+   * @param name the name
+   * @return the heart item cooker with heart name
+   */
   public HeartItemCooker setHeartName(String name) {
     this.heartMeta.setDisplayName(name);
     return this;
   }
 
+  /**
+   * Sets heart lore.
+   *
+   * @param lore the lore
+   * @return the heart item cooker with heart lore
+   */
   public HeartItemCooker setHeartLore(List<String> lore) {
     this.heartMeta.setLore(lore);
     return this;
   }
 
+  /**
+   * Sets model data.
+   *
+   * @param modelData the model data
+   * @return the heart item cooker with model data
+   */
   public HeartItemCooker setModelData(int modelData) {
     this.heartMeta.setCustomModelData(modelData);
     return this;
   }
 
+  /**
+   * Sets persistent data container string.
+   *
+   * @param namespacedKey the namespaced key
+   * @param value         the value
+   * @return the heart item cooker with persistent data container string
+   */
   public HeartItemCooker setPDCString(NamespacedKey namespacedKey, String value) {
     this.heartMeta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, value);
     return this;
   }
 
+  /**
+   * Sets pdc double.
+   *
+   * @param namespacedKey the namespaced key
+   * @param value         the value
+   * @return the heart item cooker with persistent data container double
+   */
   public HeartItemCooker setPDCDouble(NamespacedKey namespacedKey, double value) {
     this.heartMeta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.DOUBLE, value);
     return this;
   }
 
+  /**
+   * Sets pdc boolean.
+   *
+   * @param namespacedKey the namespaced key
+   * @param value         the value
+   * @return the heart item cooker with persistent data container boolean
+   */
   public HeartItemCooker setPDCBoolean(NamespacedKey namespacedKey, boolean value) {
     this.heartMeta.getPersistentDataContainer().set(namespacedKey, DataType.BOOLEAN, value);
     return this;
   }
 
+  /**
+   * Sets pdc string list.
+   *
+   * @param namespacedKey the namespaced key
+   * @param stringList    the string list
+   * @return the heart item cooker with persistent data container string list
+   */
   public HeartItemCooker setPDCStringList(NamespacedKey namespacedKey, String... stringList) {
     this.heartMeta.getPersistentDataContainer().set(namespacedKey, DataType.STRING_ARRAY, stringList);
     return this;
   }
 
+  /**
+   * Cook heart item.
+   *
+   * @return the heart item cooker with updated values
+   */
   public HeartItemCooker cook() {
     this.heartItem.setItemMeta(this.heartMeta);
     return this;
   }
 
+  /**
+   * Cooked heart item getter.
+   *
+   * @return the cooked heart item
+   */
   public ItemStack getCookedItem() {
     return this.heartItem;
   }

@@ -37,6 +37,13 @@ public class Reload extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
+  /**
+   * On reload command.
+   *
+   * @param sender the sender
+   * @throws IOException                   the io exception
+   * @throws InvalidConfigurationException the invalid configuration exception
+   */
   @Subcommand("reload")
   @Description("Reloads the instance")
   public void onReload(CommandSender sender) throws IOException, InvalidConfigurationException {
