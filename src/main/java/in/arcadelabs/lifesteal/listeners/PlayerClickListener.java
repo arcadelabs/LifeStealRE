@@ -40,14 +40,14 @@ public class PlayerClickListener implements Listener {
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
 
   @EventHandler
-  public void onPlayerClick(PlayerInteractEvent event) {
-    Player player = event.getPlayer();
-    if (!(event.getAction() == Action.RIGHT_CLICK_AIR)) return;
-    ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
+  public void onPlayerClick(final PlayerInteractEvent event) {
+    final Player player = event.getPlayer();
+    if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
+    final ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
     if (!(heartMeta.getPersistentDataContainer()
             .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
 //    if (player.getInventory().getItemInMainHand().getType().isEdible()) return;
-    double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer()
+    final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer()
             .get(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
     lifeSteal.getUtils().setPlayerBaseHealth(player,
             lifeSteal.getUtils().getPlayerBaseHealth(player) + healthPoints);
@@ -58,11 +58,11 @@ public class PlayerClickListener implements Listener {
     final String itemIndex = heartMeta.getPersistentDataContainer().get
             (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
 
-    String effectsPath = "Hearts.Types." + itemType + "." + itemIndex + ".Properties.Effects";
-    Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getConfigurationSection(effectsPath)).getKeys(false);
+    final String effectsPath = "Hearts.Types." + itemType + "." + itemIndex + ".Properties.Effects";
+    final Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getConfigurationSection(effectsPath)).getKeys(false);
 
     for (int i = 0; i < indexSet.size(); i++) {
-      String[] indexList = indexSet.toArray(new String[0]);
+      final String[] indexList = indexSet.toArray(new String[0]);
       player.addPotionEffect(new PotionEffect(Objects.requireNonNull
               (PotionEffectType.getByName(Objects.requireNonNull(lifeSteal.getHeartConfig().getString(effectsPath + "." + indexList[i] + ".Type")))),
               lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Duration") * 20,

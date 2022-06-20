@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal;
 
-import com.google.gson.Gson;
 import in.arcadelabs.arcadelibs.config.Config;
 import in.arcadelabs.arcadelibs.metrics.BStats;
 import in.arcadelabs.arcadelibs.placeholder.Placeholder;
@@ -27,19 +26,11 @@ import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
 import in.arcadelabs.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.libs.aikar.acf.BukkitCommandManager;
 import in.arcadelabs.libs.aikar.acf.PaperCommandManager;
-import in.arcadelabs.lifesteal.commands.Eliminate;
-import in.arcadelabs.lifesteal.commands.Reload;
-import in.arcadelabs.lifesteal.commands.Withdraw;
-import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
-import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
-import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
-import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
-import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
-import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
+import in.arcadelabs.lifesteal.commands.*;
+import in.arcadelabs.lifesteal.listeners.*;
 import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
 import in.arcadelabs.lifesteal.utils.LSUtils;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -48,6 +39,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
+import com.google.gson.Gson;
+import lombok.Getter;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -55,8 +50,8 @@ import java.util.Arrays;
 public class LifeSteal {
 
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
-  private final PluginManager PM = Bukkit.getPluginManager();
-  private final Gson GSON = new Gson();
+  private final PluginManager pluginManager = Bukkit.getPluginManager();
+  private final Gson gson = new Gson();
   private LSUtils utils;
   private HeartRecipeManager heartRecipeManager;
   private Placeholder papiHook;
@@ -88,14 +83,18 @@ public class LifeSteal {
    *
    * @throws Exception undefined exception
    */
-  public void init() throws Exception {
+  public void init() {
 
 //    Initialize SpigotMessenger with MiniMessage translator.
-    messenger = SpigotMessenger
-            .builder()
-            .setPlugin(instance)
-            .defaultToMiniMessageTranslator()
-            .build();
+    try {
+      messenger = SpigotMessenger
+              .builder()
+              .setPlugin(instance)
+              .defaultToMiniMessageTranslator()
+              .build();
+    } catch (Exception e) {
+      instance.getLogger().warning(e.getLocalizedMessage());
+    }
 
 //    Initialize, update and return config.
     try {
@@ -103,7 +102,7 @@ public class LifeSteal {
       configYML.updateConfig("3.0", "version");
       config = configYML.getConfig();
     } catch (Exception e) {
-      e.printStackTrace();
+      instance.getLogger().warning(e.getLocalizedMessage());
     }
 
 //    Initialize, update and return Heart config.
@@ -112,14 +111,14 @@ public class LifeSteal {
       heartYML.updateConfig("3.0", "version");
       heartConfig = heartYML.getConfig();
     } catch (Exception e) {
-      e.printStackTrace();
+      instance.getLogger().warning(e.getLocalizedMessage());
     }
 
 //    Initialize LifeSteal utils.
     utils = new LSUtils();
 
 //    Cook a placeholder heart and assign it.
-    int amount = config.getInt("HeartsToGain", 2) / 2;
+    final int amount = config.getInt("HeartsToGain", 2) / 2;
     heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
             .setHeartName(utils.formatString(config.getString("Heart.Properties.Name"), "hp",
                     amount))
@@ -141,30 +140,34 @@ public class LifeSteal {
     LifeStealPlugin.getInstance().getServer().addRecipe(getHeartRecipeManager().getHeartRecipe());
 
 //    Initialize update checker.
-    new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
-            .setNotificationPermission("greetings.update")
-            .enableOpNotification(true)
-            .setup();
+    try {
+      new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
+              .setNotificationPermission("greetings.update")
+              .enableOpNotification(true)
+              .setup();
+    } catch (IOException e) {
+      instance.getLogger().warning(e.getLocalizedMessage());
+    }
 
 //    Initialize BStats metrics.
     metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
 
 //    Register commands.
-    final BaseCommand[] commands = new BaseCommand[]{
+    final BaseCommand[] commands = {
             new Eliminate(),
             new Reload(),
             new Withdraw(),
     };
     if (isOnPaper()) {
-      PaperCommandManager pcm = new PaperCommandManager(instance);
+      final PaperCommandManager pcm = new PaperCommandManager(instance);
       Arrays.stream(commands).forEach(pcm::registerCommand);
     } else {
-      BukkitCommandManager bcm = new BukkitCommandManager(instance);
+      final BukkitCommandManager bcm = new BukkitCommandManager(instance);
       Arrays.stream(commands).forEach(bcm::registerCommand);
     }
 
 //    Register listeners.
-    final Listener[] listeners = new Listener[]{
+    final Listener[] listeners = {
             new PlayerPotionEffectListener(),
             new PlayerResurrectListener(),
             new PlayerClickListener(),
@@ -173,7 +176,7 @@ public class LifeSteal {
             new HeartCraftListener(),
 //            new HeartConsumeListener(),
     };
-    Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, instance));
+    Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
 
   }
 }

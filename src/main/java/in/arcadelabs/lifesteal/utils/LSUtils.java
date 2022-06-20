@@ -43,7 +43,7 @@ public class LSUtils {
    * @param player the player
    * @return the player base health
    */
-  public double getPlayerBaseHealth(Player player) {
+  public double getPlayerBaseHealth(final Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
   }
 
@@ -53,7 +53,7 @@ public class LSUtils {
    * @param player the player
    * @param health the health
    */
-  public void setPlayerBaseHealth(Player player, double health) {
+  public void setPlayerBaseHealth(final Player player, final double health) {
     Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
   }
 
@@ -63,7 +63,7 @@ public class LSUtils {
    * @param victim the victim
    * @param killer the killer
    */
-  public void transferHealth(Player victim, Player killer) {
+  public void transferHealth(final Player victim, final Player killer) {
     setPlayerBaseHealth(killer, getPlayerBaseHealth(killer) + 1);
     setPlayerBaseHealth(victim, getPlayerBaseHealth(victim) - 1);
   }
@@ -74,7 +74,7 @@ public class LSUtils {
    * @param player the player
    * @return the life state
    */
-  public LifeState getLifeState(Player player) {
+  public LifeState getLifeState(final Player player) {
     if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("SPECTATING")
             && player.getGameMode() == GameMode.SPECTATOR) return LifeState.SPECTATING;
     if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("DEAD"))
@@ -92,9 +92,9 @@ public class LSUtils {
    * @param placeholderValue the placeholder value
    * @return the list
    */
-  public List<String> formatStringList(List<String> loreList, String placeholder, int placeholderValue) {
-    List<String> formattedList = new ArrayList<>();
-    for (String list : loreList) {
+  public List<String> formatStringList(final List<String> loreList, final String placeholder, final int placeholderValue) {
+    final List<String> formattedList = new ArrayList<>();
+    for (final String list : loreList) {
       formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list,
               Placeholder.component(placeholder, Component.text(placeholderValue)))));
     }
@@ -107,9 +107,9 @@ public class LSUtils {
    * @param loreList the lore list
    * @return the list
    */
-  public List<String> formatStringList(List<String> loreList) {
-    List<String> formattedList = new ArrayList<>();
-    for (String list : loreList) {
+  public List<String> formatStringList(final List<String> loreList) {
+    final List<String> formattedList = new ArrayList<>();
+    for (final String list : loreList) {
       formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list)));
     }
     return formattedList;
@@ -123,7 +123,7 @@ public class LSUtils {
    * @param placeholderValue the placeholder value
    * @return the string
    */
-  public String formatString(String string, String placeholder, int placeholderValue) {
+  public String formatString(final String string, final String placeholder, final int placeholderValue) {
     return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string,
             Placeholder.component(placeholder, Component.text(placeholderValue))));
   }
@@ -134,7 +134,7 @@ public class LSUtils {
    * @param string the string
    * @return the string
    */
-  public String formatString(String string) {
+  public String formatString(final String string) {
     return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string));
   }
 }

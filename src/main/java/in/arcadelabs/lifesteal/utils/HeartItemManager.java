@@ -66,7 +66,7 @@ public class HeartItemManager {
    *
    * @param mode the mode
    */
-  public HeartItemManager(Mode mode) {
+  public HeartItemManager(final Mode mode) {
     this.mode = mode;
 
     for (int i = 0; i < this.blessedHearts.size(); i++) {
@@ -114,11 +114,15 @@ public class HeartItemManager {
         this.type = "Cursed";
         break;
       case RANDOM_ALL:
-        ProbabilityCollection<Mode> modeCol = new ProbabilityCollection<>();
+        final ProbabilityCollection<Mode> modeCol = new ProbabilityCollection<>();
         modeCol.add(Mode.RANDOM_BLESSED, 27);
         modeCol.add(Mode.RANDOM_NORMAL, 27);
         modeCol.add(Mode.RANDOM_CURSED, 27);
         this.mode = modeCol.get();
+        this.prepareIngedients();
+        break;
+      default:
+        this.mode = Mode.FIXED_NORMAL;
         this.prepareIngedients();
         break;
     }

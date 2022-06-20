@@ -34,8 +34,8 @@ public class HeartRecipeManager {
             "lifesteal_heart_recipe"),
             lifeSteal.getPlaceholderHeart());
     heartRecipe.shape("ABC", "DEF", "GHI");
-    char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
-    for (char recipeIngredient : recipeIngredients) {
+    final char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
+    for (final char recipeIngredient : recipeIngredients) {
       heartRecipe.setIngredient(recipeIngredient,
               Material.valueOf((String) lifeSteal.getConfig().get("Heart.Recipe." + recipeIngredient)));
     }

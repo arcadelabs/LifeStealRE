@@ -34,13 +34,13 @@ public class HeartConsumeListener implements Listener {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @EventHandler
-  public void onPlayerEat(PlayerItemConsumeEvent event) {
+  public void onPlayerEat(final PlayerItemConsumeEvent event) {
 
-    Player player = event.getPlayer();
+    final Player player = event.getPlayer();
     if (!(Objects.requireNonNull(event.getItem().getItemMeta()).getPersistentDataContainer().has
             (new NamespacedKey(LifeStealPlugin.getInstance(),
                     "lifesteal_heart_item"), PersistentDataType.STRING))) return;
-    double healthPoints = Objects.requireNonNull(event.getItem().getItemMeta().getPersistentDataContainer().get
+    final double healthPoints = Objects.requireNonNull(event.getItem().getItemMeta().getPersistentDataContainer().get
             (new NamespacedKey(LifeStealPlugin.getInstance(),
                     "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
     lifeSteal.getUtils().setPlayerBaseHealth(player,

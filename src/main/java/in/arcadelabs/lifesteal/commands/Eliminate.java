@@ -40,7 +40,7 @@ public class Eliminate extends BaseCommand {
    */
   @Subcommand("Eliminate")
   @CommandCompletion("@players")
-  public void onEliminate(Player target) {
+  public void onEliminate(final Player target) {
     lifeSteal.getUtils().setPlayerBaseHealth(target, 0);
   }
 }

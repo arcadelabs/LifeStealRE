@@ -30,10 +30,10 @@ public class PlayerJoinListener implements Listener {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public void onPlayerJoin(final PlayerJoinEvent event) {
 
-    Player player = event.getPlayer();
-    double defaultHealth = lifeSteal.getConfig().getDouble("DefaultHealth");
+    final Player player = event.getPlayer();
+    final double defaultHealth = lifeSteal.getConfig().getDouble("DefaultHealth");
 
     if (!player.hasPlayedBefore()) {
       lifeSteal.getUtils().setPlayerBaseHealth(player, defaultHealth);

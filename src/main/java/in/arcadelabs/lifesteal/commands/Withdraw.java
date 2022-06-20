@@ -36,8 +36,8 @@ import java.util.Map;
 public class Withdraw extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  HeartItemManager heartItemManager;
-  ItemStack replacementHeart;
+  private HeartItemManager heartItemManager;
+  private ItemStack replacementHeart;
 
   /**
    * On withdraw command.
@@ -46,8 +46,8 @@ public class Withdraw extends BaseCommand {
    * @param hearts the hearts
    */
   @Subcommand("withdraw")
-  public void onWithdraw(CommandSender sender, int hearts) {
-    Player player = (Player) sender;
+  public void onWithdraw(final CommandSender sender, final int hearts) {
+    final Player player = (Player) sender;
     if (hearts * 2 >= lifeSteal.getUtils().getPlayerBaseHealth(player)) {
       lifeSteal.getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
     } else {
@@ -58,8 +58,8 @@ public class Withdraw extends BaseCommand {
       replacementHeart = heartItemManager.getHeartItem();
       replacementHeart.setAmount(hearts / 2);
 
-      Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
-      for (Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
+      final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
+      for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
         player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
       }
     }

@@ -38,7 +38,7 @@ public final class LifeStealPlugin extends JavaPlugin {
     try {
       lifeSteal.init();
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      instance.getLogger().warning(e.getLocalizedMessage());
     }
   }
 

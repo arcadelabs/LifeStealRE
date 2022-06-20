@@ -46,9 +46,9 @@ public class Reload extends BaseCommand {
    */
   @Subcommand("reload")
   @Description("Reloads the instance")
-  public void onReload(CommandSender sender) throws IOException, InvalidConfigurationException {
+  public void onReload(final CommandSender sender) throws IOException, InvalidConfigurationException {
     if (sender instanceof Player) {
-      Player player = (Player) sender;
+      final Player player = (Player) sender;
       lifeSteal.getConfigYML().reload();
       lifeSteal.getMessenger().sendMessage(player, "<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
       lifeSteal.getMessenger().sendConsoleMessage("<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
