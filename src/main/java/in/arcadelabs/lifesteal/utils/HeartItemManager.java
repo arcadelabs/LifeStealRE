@@ -175,37 +175,4 @@ public class HeartItemManager {
     RANDOM_ALL
   }
 
-  /**
-   * Get Mode by it's string value.
-   *
-   * @param input the input
-   * @return the Mode enum
-   */
-  public Mode getByString(String input) {
-    Mode mode = Mode.FIXED_CURSED;
-    switch(input) {
-      case "Fixed_Blessed":
-        mode = Mode.FIXED_BLESSED;
-        break;
-      case "Fixed_Normal":
-        mode = Mode.FIXED_NORMAL;
-        break;
-      case "Fixed_Cursed":
-        mode = Mode.FIXED_CURSED;
-        break;
-      case "Random_Blessed":
-        mode = Mode.RANDOM_BLESSED;
-        break;
-      case "Random_Normal":
-        mode = Mode.RANDOM_NORMAL;
-        break;
-      case "Random_Cursed":
-        mode = Mode.RANDOM_CURSED;
-        break;
-      case "Random_All":
-        mode = Mode.RANDOM_ALL;
-        break;
-    }
-    return mode;
-  }
 }
