@@ -18,24 +18,25 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
-import in.arcadelabs.lifesteal.LifeSteal;
+import in.arcadelabs.lifesteal.LifeStealManager;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.utils.HeartItemManager;
+import in.arcadelabs.lifesteal.utils.HeartItem;
+import in.arcadelabs.lifesteal.utils.event.Events;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerKillListener implements Listener {
+public class PlayerKillListener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   HeartItemManager heartItemManager;
   ItemStack replacementHeart;
+  private final LifeStealManager lifeSteal = LifeStealPlugin.getLifeSteal();
 
-  @EventHandler
-  public void onPlayerKilled(PlayerDeathEvent event) {
+  public PlayerKillListener() {
 
     Player victim = event.getEntity();
     int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
@@ -49,9 +50,19 @@ public class PlayerKillListener implements Listener {
         replacementHeart = heartItemManager.getHeartItem();
         lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - lostHearts);
         victim.getWorld().dropItemNaturally(victim.getLocation(), replacementHeart);
+    Events.subscribe(PlayerDeathEvent.class, event -> {
+      Player victim = event.getEntity();
+      int lostHearts = lifeSteal.getConfiguration().getInt("HeartsToLose", 1);
+      if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
+        victim.setGameMode(GameMode.SPECTATOR);
       } else {
-        lifeSteal.getUtils().transferHealth(victim, victim.getKiller());
+        if (victim.getKiller() == null) {
+          lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - lostHearts);
+          victim.getWorld().dropItemNaturally(victim.getLocation(), new HeartItem(lostHearts / 2).getHeartItemStack());
+        } else {
+          lifeSteal.getUtils().transferHealth(victim, victim.getKiller());
+        }
       }
-    }
+    }, EventPriority.HIGH);
   }
 }

@@ -24,7 +24,6 @@ import in.arcadelabs.arcadelibs.metrics.BStats;
 import in.arcadelabs.arcadelibs.placeholder.Placeholder;
 import in.arcadelabs.arcadelibs.updatechecker.UpdateChecker;
 import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
-import in.arcadelabs.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.libs.aikar.acf.BukkitCommandManager;
 import in.arcadelabs.libs.aikar.acf.PaperCommandManager;
 import in.arcadelabs.lifesteal.commands.Eliminate;
@@ -43,6 +42,9 @@ import in.arcadelabs.lifesteal.profile.impl.MongoProfileHandler;
 import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
 import in.arcadelabs.lifesteal.utils.LSUtils;
+import in.arcadelabs.lifesteal.utils.LSUtils;
+import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
+import in.arcadelabs.lifesteal.utils.backend.ClassRegistration;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -52,13 +54,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-
 
 @Getter
-public class LifeSteal {
+public class LifeStealManager {
 
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
   private final PluginManager PM = Bukkit.getPluginManager();
@@ -66,6 +65,7 @@ public class LifeSteal {
   private LSUtils utils;
   private HeartRecipeManager heartRecipeManager;
   private ProfileStorage profileStorage;
+  private NamespacedKey namespacedKey;
   private Placeholder papiHook;
   private SpigotMessenger messenger;
   private Config configYML;
@@ -77,8 +77,8 @@ public class LifeSteal {
   private HeartItemCooker heartItemCooker;
   private ItemStack placeholderHeart;
 
+  private ClassRegistration classRegistration;
 
-  //<editor-fold desc="Paper server check.">
   private boolean isOnPaper() {
     try {
       Class.forName("com.destroystokyo.paper.ParticleBuilder");
@@ -87,9 +87,7 @@ public class LifeSteal {
       return false;
     }
   }
-  //</editor-fold>
 
-  //<editor-fold desc="Register commands.">
   private void registerCommands() {
     final BaseCommand[] commands = new BaseCommand[]{
             new Eliminate(),
@@ -103,9 +101,14 @@ public class LifeSteal {
     } else {
       BukkitCommandManager bcm = new BukkitCommandManager(instance);
       Arrays.stream(commands).forEach(bcm::registerCommand);
+    if (isOnPaper()) {
+      PaperCommandManager pcm = new PaperCommandManager(LifeStealPlugin.getInstance());
+      pcm.registerCommand(new LifeStealCommands());
+    } else {
+      BukkitCommandManager bcm = new BukkitCommandManager(LifeStealPlugin.getInstance());
+      bcm.registerCommand(new LifeStealCommands());
     }
   }
-  //</editor-fold>
 
   //<editor-fold desc="Register event listeners.">
   private void registerListener() {
@@ -126,16 +129,13 @@ public class LifeSteal {
   //  Initialize everything.
   public void init() throws Exception {
 
-
-    //<editor-fold desc="Adventure lib.">
+    classRegistration = new ClassRegistration();
     messenger = SpigotMessenger
             .builder()
             .setPlugin(instance)
             .defaultToMiniMessageTranslator()
             .build();
-    //</editor-fold>
 
-    //<editor-fold desc="Config init.">
     try {
       configYML = new Config(instance, "Config.yml", false, true);
     } catch (Exception e) {
@@ -164,7 +164,6 @@ public class LifeSteal {
     heartConfig = heartYML.getConfig();
     //</editor-fold>
 
-    //<editor-fold desc="Other stuff.">
     utils = new LSUtils();
 
     int amount = config.getInt("HeartsToGain", 2) / 2;
@@ -198,13 +197,11 @@ public class LifeSteal {
     //</editor-fold>
 
     //<editor-fold desc="PlaceholderAPI hook.">
-    papiHook = new Placeholder();
-    //</editor-fold>
 
-    //<editor-fold desc="Registering stuff.">
+    papiHook = new Placeholder();
+
     registerCommands();
-    registerListener();
-    //</editor-fold>
+    classRegistration.init("in.arcadelabs.lifesteal.listeners");
 
     //<editor-fold desc="Registering recipe.">
 //    Bukkit.addRecipe(getRecipeManager().getHeartRecipe());
@@ -213,14 +210,17 @@ public class LifeSteal {
 
     //<editor-fold desc="Plugin update checker.">
     new UpdateChecker(instance, new URL("https://docs.taggernation.com/greetings-update.yml"), 600000)
+    LifeStealPlugin.getInstance().getServer().addRecipe(getHeartRecipeManager().getHeartRecipe());
+
+    new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
             .setNotificationPermission("greetings.update")
             .enableOpNotification(true)
             .setup();
-    //</editor-fold>
 
     //<editor-fold desc="BStats metrics hook.">
     metrics = new BStats(instance, 15272);
     //</editor-fold>
+    metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
   }
 
   public FileConfiguration getConfiguration() {

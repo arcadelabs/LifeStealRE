@@ -23,6 +23,7 @@ import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
 import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
 import in.arcadelabs.libs.adventure.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import in.arcadelabs.lifesteal.LifeSteal;
+import in.arcadelabs.lifesteal.LifeStealManager;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
@@ -36,6 +37,7 @@ public class LSUtils {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
+  private final LifeStealManager lifeSteal = LifeStealPlugin.getLifeSteal();
 
   public double getPlayerBaseHealth(Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();

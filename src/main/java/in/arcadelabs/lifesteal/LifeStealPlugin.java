@@ -28,13 +28,13 @@ public final class LifeStealPlugin extends JavaPlugin {
   @Getter
   private static LifeStealPlugin instance;
   @Getter
-  private static LifeSteal lifeSteal;
+  private static LifeStealManager lifeSteal;
 
 
   @Override
   public void onEnable() {
     instance = this;
-    lifeSteal = new LifeSteal();
+    lifeSteal = new LifeStealManager();
     try {
       lifeSteal.init();
     } catch (Exception e) {
@@ -45,7 +45,6 @@ public final class LifeStealPlugin extends JavaPlugin {
   @Override
   public void onDisable() {
     lifeSteal.getMessenger().closeMessenger();
-    lifeSteal.getProfileStorage().disconnect();
     getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
     getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
     getLogger().info(ChatColor.of("#7209b7") + "( (__  \\  / /(__)\\ ");

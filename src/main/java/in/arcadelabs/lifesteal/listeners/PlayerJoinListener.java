@@ -18,25 +18,27 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
-import in.arcadelabs.lifesteal.LifeSteal;
+import in.arcadelabs.lifesteal.LifeStealManager;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.utils.event.Events;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class PlayerJoinListener implements Listener {
+public class PlayerJoinListener {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LifeStealManager lifeSteal = LifeStealPlugin.getLifeSteal();
 
-  @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent event) {
+  public PlayerJoinListener() {
 
-    Player player = event.getPlayer();
-    double defaultHealth = lifeSteal.getConfig().getDouble("DefaultHealth");
+    Events.subscribe(PlayerJoinEvent.class, event -> {
+      Player player = event.getPlayer();
+      double defaultHealth = lifeSteal.getConfig().getDouble("DefaultHealth");
 
-    if (!player.hasPlayedBefore()) {
-      lifeSteal.getUtils().setPlayerBaseHealth(player, defaultHealth);
-    }
+      if (!player.hasPlayedBefore()) {
+        lifeSteal.getUtils().setPlayerBaseHealth(player, defaultHealth);
+      }
+    }, EventPriority.HIGH);
+
   }
 }
