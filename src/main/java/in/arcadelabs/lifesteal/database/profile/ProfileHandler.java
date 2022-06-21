@@ -123,7 +123,7 @@ public class ProfileHandler {
 
       System.out.println(sql);
       try (Connection connection = databaseHandler.getConnection()) {
-        Query query = new Query(connection, "lifesteal_data");
+        Query query = new Query(connection, sql);
         query.getStatement().setString(1, profile.getUniqueID().toString());
         query.getStatement().setString(2, LifeState.LIVING.toString());
         query.getStatement().executeUpdate();
