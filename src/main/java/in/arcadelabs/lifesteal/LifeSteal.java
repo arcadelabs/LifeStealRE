@@ -166,6 +166,10 @@ public class LifeSteal {
       Arrays.stream(commands).forEach(bcm::registerCommand);
     }
 
+//    commandManager.getCommandCompletions().registerAsyncCompletion("test", c ->
+//                    Arrays.asList("foo123", "bar123", "baz123")
+//https://github.com/aikar/commands/blob/master/example/src/main/java/co/aikar/acfexample/ACFExample.java
+
 //    Register listeners.
     final Listener[] listeners = {
             new PlayerPotionEffectListener(),

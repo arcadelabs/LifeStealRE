@@ -25,22 +25,22 @@ import in.arcadelabs.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 @CommandAlias("lifesteal|ls")
-@CommandPermission("lifesteal.eliminate")
-public class Eliminate extends BaseCommand {
+@CommandPermission("lifesteal.gethearts")
+public class GiveHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   /**
-   * On eliminate command.
+   * On give hearts command.
    *
-   * @param target the target
+   * @param sender the sender
+   * @param hearts the hearts
    */
-  @Subcommand("eliminate")
+  @Subcommand("gethearts")
   @CommandCompletion("@players")
-  public void onEliminate(final Player target) {
-    lifeSteal.getUtils().setPlayerBaseHealth(target, 0);
+  public void onGiveHearts(final CommandSender sender, final int hearts) {
   }
 }

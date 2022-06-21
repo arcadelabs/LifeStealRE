@@ -33,6 +33,7 @@ import java.util.Map;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.withdraw")
+@SuppressWarnings("all")
 public class Withdraw extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
