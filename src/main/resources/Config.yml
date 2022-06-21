@@ -1,8 +1,10 @@
 version: "3.0"
-MongoDB:
-  ENABLED: false # Enable MongoDB database.
-  URI: "" # Connection URI/String to MongoDB database.
-  DATABASE: "" # Database name of MongoDB database
+DATABASE:
+  ADDRESS:
+  PORT:
+  DATABASE:
+  USERNAME:
+  PASSWORD:
 
 DefaultHealth: 20
 DisableTotem: true
