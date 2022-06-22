@@ -36,6 +36,8 @@ public class LSUtils {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
+  private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
+  private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToGain", 2);
 
   /**
    * Gets player base health.
@@ -64,8 +66,8 @@ public class LSUtils {
    * @param killer the killer
    */
   public void transferHealth(final Player victim, final Player killer) {
-    setPlayerBaseHealth(killer, getPlayerBaseHealth(killer) + 1);
-    setPlayerBaseHealth(victim, getPlayerBaseHealth(victim) - 1);
+    setPlayerBaseHealth(killer, getPlayerBaseHealth(killer) + gainHearts);
+    setPlayerBaseHealth(victim, getPlayerBaseHealth(victim) - looseHearts);
   }
 
   /**
