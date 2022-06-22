@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ForkJoinPool;
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -138,7 +139,7 @@ public class ProfileHandler {
   }
 
   public void handleQuit(UUID uniqueID) {
-    LifeStealPlugin.getInstance().getServer().getScheduler().runTaskAsynchronously(LifeStealPlugin.getInstance(), task -> {
+    ForkJoinPool.commonPool().execute(() -> {
       try {
         this.saveProfile(profileMap.get(uniqueID));
       } catch (SQLException e) {
@@ -147,6 +148,7 @@ public class ProfileHandler {
     });
     profileMap.remove(uniqueID);
   }
+
 
   public void saveAll() throws SQLException {
     for (Profile profile : profileMap.values()) {
