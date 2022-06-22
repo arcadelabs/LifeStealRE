@@ -35,7 +35,9 @@ public class HeartCraftListener implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onCraftEvent(final CraftItemEvent event) {
     if (!(Objects.equals(event.getRecipe().getResult(), LifeStealPlugin.getLifeSteal().getPlaceholderHeart()))) return;
-    heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal().getHeartConfig().getString("Hearts.Mode.OnCraft")))
+    if (event.isShiftClick()) event.setCancelled(true);
+    heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
+            .getHeartConfig().getString("Hearts.Mode.OnCraft")))
             .prepareIngedients()
             .cookHeart();
     replacementHeart = heartItemManager.getHeartItem();
