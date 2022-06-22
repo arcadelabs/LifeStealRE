@@ -51,14 +51,6 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
-                                    <pattern>de.leonhard.storage</pattern>
-                                    <shadedPattern>in.arcadelabs.libs.storage</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.lewdev.probabilitylib</pattern>
-                                    <shadedPattern>in.arcadelabs.libs.probabilitylib</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>com.jeff_media.morepersistentdatatypes</pattern>
                                     <shadedPattern>in.arcadelabs.libs.morepersistentdatatypes</shadedPattern>
                                 </relocation>
@@ -113,35 +105,10 @@
             <version>1.18.24</version>
         </dependency>
         <dependency>
-            <groupId>com.github.lewysDavies</groupId>
-            <artifactId>Java-Probability-Collection</artifactId>
-            <version>v0.8</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.arcadelabs</groupId>
             <artifactId>ArcadeLibs</artifactId>
             <version>ff9d85bc708f21d63485ccfe02a7e4b51a71c7cb</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.11</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.simplix-softworks</groupId>
-            <artifactId>simplixstorage</artifactId>
-            <version>3.2.4</version>
         </dependency>
         <dependency>
             <groupId>com.jeff_media</groupId>

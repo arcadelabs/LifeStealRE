@@ -26,11 +26,21 @@ import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
 import in.arcadelabs.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.libs.aikar.acf.BukkitCommandManager;
 import in.arcadelabs.libs.aikar.acf.PaperCommandManager;
-import in.arcadelabs.lifesteal.commands.*;
-import in.arcadelabs.lifesteal.listeners.*;
+import in.arcadelabs.lifesteal.commands.Eliminate;
+import in.arcadelabs.lifesteal.commands.GiveHearts;
+import in.arcadelabs.lifesteal.commands.Reload;
+import in.arcadelabs.lifesteal.commands.SetHearts;
+import in.arcadelabs.lifesteal.commands.Withdraw;
+import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
+import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
+import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
+import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
+import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
+import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
 import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
 import in.arcadelabs.lifesteal.utils.LSUtils;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -38,9 +48,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
-
-import com.google.gson.Gson;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,7 +58,6 @@ public class LifeSteal {
 
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
   private final PluginManager pluginManager = Bukkit.getPluginManager();
-  private final Gson gson = new Gson();
   private LSUtils utils;
   private HeartRecipeManager heartRecipeManager;
   private Placeholder papiHook;
@@ -99,7 +105,7 @@ public class LifeSteal {
 //    Initialize, update and return config.
     try {
       configYML = new Config(instance, "Config.yml", false, true);
-      configYML.updateConfig("3.0", "version");
+//      configYML.updateConfig("3.0", "version");
       config = configYML.getConfig();
     } catch (Exception e) {
       instance.getLogger().warning(e.getLocalizedMessage());
@@ -108,7 +114,7 @@ public class LifeSteal {
 //    Initialize, update and return Heart config.
     try {
       heartYML = new Config(instance, "Hearts.yml", false, true);
-      heartYML.updateConfig("3.0", "version");
+//      heartYML.updateConfig("3.0", "version");
       heartConfig = heartYML.getConfig();
     } catch (Exception e) {
       instance.getLogger().warning(e.getLocalizedMessage());

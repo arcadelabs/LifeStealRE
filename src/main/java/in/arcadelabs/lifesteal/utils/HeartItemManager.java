@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import com.lewdev.probabilitylib.ProbabilityCollection;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.Material;
