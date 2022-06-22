@@ -53,7 +53,7 @@ public class Withdraw extends BaseCommand {
       lifeSteal.getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
     } else {
       lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts * 2);
-      heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnCraft")))
+      heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
               .prepareIngedients()
               .cookHeart();
       replacementHeart = heartItemManager.getHeartItem();
