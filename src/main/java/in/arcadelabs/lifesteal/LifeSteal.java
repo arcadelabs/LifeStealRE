@@ -155,7 +155,9 @@ public class LifeSteal {
 //    Register commands.
     final BaseCommand[] commands = {
             new Eliminate(),
+            new GiveHearts(),
             new Reload(),
+            new SetHearts(),
             new Withdraw(),
     };
     if (isOnPaper()) {
