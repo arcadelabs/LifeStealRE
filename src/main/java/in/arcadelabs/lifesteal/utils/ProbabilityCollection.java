@@ -45,10 +45,9 @@ import java.util.TreeSet;
  * </p>
  * </ul>
  *
+ * @param <E> Type of elements
  * @author Lewys Davies
  * @version 0.8
- *
- * @param <E> Type of elements
  */
 @SuppressWarnings("unused")
 public final class ProbabilityCollection<E> {
@@ -103,7 +102,6 @@ public final class ProbabilityCollection<E> {
    * Add an object to this collection
    *
    * @param probability share. Must be greater than 0.
-   *
    * @throws IllegalArgumentException if object is null
    * @throws IllegalArgumentException if probability <= 0
    */
@@ -127,7 +125,6 @@ public final class ProbabilityCollection<E> {
    * Remove a object from this collection
    *
    * @return True if object was removed, else False.
-   *
    * @throws IllegalArgumentException if object is null
    */
   public boolean remove(E object) {
@@ -171,7 +168,6 @@ public final class ProbabilityCollection<E> {
    * Get a random object from this collection, based on probability.
    *
    * @return <E> Random object
-   *
    * @throws IllegalStateException if this collection is empty
    */
   public E get() {
@@ -195,13 +191,12 @@ public final class ProbabilityCollection<E> {
   /**
    * Used internally to store information about a object's state in a collection.
    * Specifically, the probability and index within the collection.
-   *
+   * <p>
    * Indexes refer to the start position of this element's "block" of space. The
    * space between element "block"s represents their probability of being selected
    *
-   * @author Lewys Davies
-   *
    * @param <T> Type of element
+   * @author Lewys Davies
    */
   public final static class ProbabilitySetElement<T> {
     private final T object;

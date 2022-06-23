@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal;
 
-import in.arcadelabs.arcadelibs.config.Config;
 import in.arcadelabs.arcadelibs.metrics.BStats;
 import in.arcadelabs.arcadelibs.placeholder.Placeholder;
 import in.arcadelabs.arcadelibs.updatechecker.UpdateChecker;
@@ -26,6 +25,12 @@ import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
 import in.arcadelabs.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.libs.aikar.acf.BukkitCommandManager;
 import in.arcadelabs.libs.aikar.acf.PaperCommandManager;
+import in.arcadelabs.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.libs.boostedyaml.dvs.versioning.BasicVersioning;
+import in.arcadelabs.libs.boostedyaml.settings.dumper.DumperSettings;
+import in.arcadelabs.libs.boostedyaml.settings.general.GeneralSettings;
+import in.arcadelabs.libs.boostedyaml.settings.loader.LoaderSettings;
+import in.arcadelabs.libs.boostedyaml.settings.updater.UpdaterSettings;
 import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.GiveHearts;
 import in.arcadelabs.lifesteal.commands.Reload;
@@ -44,14 +49,15 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Getter
 public class LifeSteal {
@@ -62,10 +68,8 @@ public class LifeSteal {
   private HeartRecipeManager heartRecipeManager;
   private Placeholder papiHook;
   private SpigotMessenger messenger;
-  private Config configYML;
-  private Config heartYML;
-  private FileConfiguration config;
-  private FileConfiguration heartConfig;
+  private YamlDocument config;
+  private YamlDocument heartConfig;
   private BStats metrics;
   private HeartItemCooker heartItemCooker;
   private ItemStack placeholderHeart;
@@ -104,18 +108,24 @@ public class LifeSteal {
 
 //    Initialize, update and return config.
     try {
-      configYML = new Config(instance, "Config.yml", false, true);
-//      configYML.updateConfig("3.0", "version");
-      config = configYML.getConfig();
+      config = YamlDocument.create(new File("Config.yml"),
+              Objects.requireNonNull(instance.getResource("Config.yml")),
+              GeneralSettings.DEFAULT,
+              LoaderSettings.builder().setAutoUpdate(true).build(),
+              DumperSettings.DEFAULT,
+              UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
     } catch (Exception e) {
       instance.getLogger().warning(e.getLocalizedMessage());
     }
 
 //    Initialize, update and return Heart config.
     try {
-      heartYML = new Config(instance, "Hearts.yml", false, true);
-//      heartYML.updateConfig("3.0", "version");
-      heartConfig = heartYML.getConfig();
+      heartConfig = YamlDocument.create(new File("Hearts.yml"),
+              Objects.requireNonNull(instance.getResource("Hearts.yml")),
+              GeneralSettings.DEFAULT,
+              LoaderSettings.builder().setAutoUpdate(true).build(),
+              DumperSettings.DEFAULT,
+              UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
     } catch (Exception e) {
       instance.getLogger().warning(e.getLocalizedMessage());
     }
