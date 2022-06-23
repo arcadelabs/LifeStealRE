@@ -18,11 +18,11 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -32,10 +32,21 @@ public class HeartItemManager {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
-  private final FileConfiguration heartConfig = lifeSteal.getHeartConfig();
+  private final YamlDocument heartConfig = lifeSteal.getHeartConfig();
+  private final Set<String> blessedHearts
+          = this.heartConfig.getSection("Hearts.Types.Blessed").getRoutesAsStrings(false);
+  private final String[] blessedRarity = this.blessedHearts.toArray(new String[0]);
+  private final Set<String> normalHearts
+          = this.heartConfig.getSection("Hearts.Types.Normal").getRoutesAsStrings(false);
+  private final String[] normalRarity = this.normalHearts.toArray(new String[0]);
+  private final Set<String> cursedHearts
+          = this.heartConfig.getSection("Hearts.Types.Cursed").getRoutesAsStrings(false);
+  private final String[] cursedRarity = this.cursedHearts.toArray(new String[0]);
+  private final ProbabilityCollection<Integer> randomBlessCol = new ProbabilityCollection<>();
+  private final ProbabilityCollection<Integer> randomNormalCol = new ProbabilityCollection<>();
+  private final ProbabilityCollection<Integer> randomCurseCol = new ProbabilityCollection<>();
   private HeartItemCooker heartItemCooker;
   private ItemStack heartItem;
-
   private Material heartType;
   private String heartName;
   private List<String> heartLore;
@@ -44,21 +55,6 @@ public class HeartItemManager {
   private Mode mode;
   private String type;
   private String index;
-
-  private final Set<String> blessedHearts
-          = this.heartConfig.getConfigurationSection("Hearts.Types.Blessed").getKeys(false);
-  private final Set<String> normalHearts
-          = this.heartConfig.getConfigurationSection("Hearts.Types.Normal").getKeys(false);
-  private final Set<String> cursedHearts
-          = this.heartConfig.getConfigurationSection("Hearts.Types.Cursed").getKeys(false);
-
-  private final String[] blessedRarity = this.blessedHearts.toArray(new String[0]);
-  private final String[] normalRarity = this.normalHearts.toArray(new String[0]);
-  private final String[] cursedRarity = this.cursedHearts.toArray(new String[0]);
-
-  private final ProbabilityCollection<Integer> randomBlessCol = new ProbabilityCollection<>();
-  private final ProbabilityCollection<Integer> randomNormalCol = new ProbabilityCollection<>();
-  private final ProbabilityCollection<Integer> randomCurseCol = new ProbabilityCollection<>();
 
   /**
    * Instantiates a new Heart item manager.

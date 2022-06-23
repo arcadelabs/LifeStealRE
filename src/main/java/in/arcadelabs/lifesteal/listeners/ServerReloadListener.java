@@ -16,12 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package in.arcadelabs.lifesteal.utils;
+package in.arcadelabs.lifesteal.listeners;
 
-public enum LifeState {
+import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 
-  LIVING,
-  DEAD,
-  SPECTATING,
-  BANNED
+public class ServerReloadListener implements Listener {
+
+  @EventHandler
+  public void onServerReload(final ServerLoadEvent event) {
+    if (event.getType() != ServerLoadEvent.LoadType.RELOAD) return;
+    for (Player player : Bukkit.getOnlinePlayers()) {
+      player.discoverRecipe(LifeStealPlugin.getLifeSteal().getHeartRecipeManager().getHeartRecipe().getKey());
+    }
+  }
 }

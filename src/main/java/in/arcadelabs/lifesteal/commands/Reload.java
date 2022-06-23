@@ -26,7 +26,6 @@ import in.arcadelabs.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -42,18 +41,17 @@ public class Reload extends BaseCommand {
    *
    * @param sender the sender
    * @throws IOException                   the io exception
-   * @throws InvalidConfigurationException the invalid configuration exception
    */
   @Subcommand("reload")
   @Description("Reloads the instance")
-  public void onReload(final CommandSender sender) throws IOException, InvalidConfigurationException {
+  public void onReload(final CommandSender sender) throws IOException {
     if (sender instanceof Player) {
       final Player player = (Player) sender;
-      lifeSteal.getConfigYML().reload();
+      lifeSteal.getConfig().reload();
       lifeSteal.getMessenger().sendMessage(player, "<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
       lifeSteal.getMessenger().sendConsoleMessage("<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
     } else {
-      lifeSteal.getConfigYML().reload();
+      lifeSteal.getConfig().reload();
       lifeSteal.getMessenger().sendConsoleMessage("<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
     }
   }
