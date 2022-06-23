@@ -43,6 +43,7 @@ public class PlayerClickListener implements Listener {
   public void onPlayerClick(final PlayerInteractEvent event) {
     final Player player = event.getPlayer();
     if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
+    if (!(player.getInventory().getItemInMainHand().hasItemMeta())) return;
     final ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
     if (!(heartMeta.getPersistentDataContainer()
             .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
@@ -59,7 +60,7 @@ public class PlayerClickListener implements Listener {
             (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
 
     final String effectsPath = "Hearts.Types." + itemType + "." + itemIndex + ".Properties.Effects";
-    final Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getConfigurationSection(effectsPath)).getKeys(false);
+    final Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getSection(effectsPath)).getRoutesAsStrings(false);
 
     for (int i = 0; i < indexSet.size(); i++) {
       final String[] indexList = indexSet.toArray(new String[0]);
