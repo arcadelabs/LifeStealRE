@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal;
 
-import com.google.gson.Gson;
 import in.arcadelabs.arcadelibs.config.Config;
 import in.arcadelabs.arcadelibs.metrics.BStats;
 import in.arcadelabs.arcadelibs.placeholder.Placeholder;
@@ -31,13 +30,13 @@ import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.Reload;
 import in.arcadelabs.lifesteal.commands.Withdraw;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
-import in.arcadelabs.lifesteal.database.profile.ProfileHandler;
+import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
 import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
 import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
-import in.arcadelabs.lifesteal.listeners.PlayerProfileListener;
+import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
 import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
@@ -61,7 +60,7 @@ public class LifeSteal {
   private final PluginManager PM = Bukkit.getPluginManager();
 
   private DatabaseHandler databaseHandler;
-  private ProfileHandler profileHandler;
+  private ProfileManager profileManager;
 
   private LSUtils utils;
   private HeartRecipeManager heartRecipeManager;
@@ -113,7 +112,7 @@ public class LifeSteal {
     }
 
     databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
-    profileHandler = new ProfileHandler();
+    profileManager = new ProfileManager();
 
 //    Initialize, update and return Heart config.
     try {
@@ -180,7 +179,7 @@ public class LifeSteal {
             new PlayerJoinListener(),
             new PlayerKillListener(),
             new HeartCraftListener(),
-            new PlayerProfileListener()
+            new ProfileListener()
 //            new HeartConsumeListener(),
     };
     Arrays.stream(listeners).forEach(listener -> PM.registerEvents(listener, instance));

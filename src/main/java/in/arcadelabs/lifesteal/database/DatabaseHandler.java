@@ -3,6 +3,8 @@ package in.arcadelabs.lifesteal.database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import lombok.Getter;
@@ -15,13 +17,26 @@ public class DatabaseHandler {
 
   private String address, database, username, password;
   private int port;
-  private boolean ssl;
+  private boolean ssl, dbEnabled;
 
   public DatabaseHandler(LifeStealPlugin lifeStealPlugin) {
     this.loadCredentials();
-
     HikariConfig hikariConfig = new HikariConfig();
-    hikariConfig.setJdbcUrl("jdbc:mysql://" + address + ":" + port + "/" + database);
+
+    if (dbEnabled) {
+      hikariConfig.setJdbcUrl("jdbc:mysql://" + address + ":" + port + "/" + database);
+    } else {
+      File database = new File(LifeStealPlugin.getInstance().getDataFolder(), "database.db");
+      if (!database.exists()) {
+        try {
+          database.createNewFile();
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      }
+      hikariConfig.setJdbcUrl("jdbc:sqlite:" + database);
+      hikariConfig.setDriverClassName("org.sqlite.JDBC");
+    }
 
     hikariConfig.addDataSourceProperty("characterEncoding", "utf8");
     hikariConfig.addDataSourceProperty("useUnicode", true);
@@ -45,6 +60,7 @@ public class DatabaseHandler {
 
   private void loadCredentials() {
     FileConfiguration configuration = LifeStealPlugin.getLifeSteal().getConfig();
+    this.dbEnabled = configuration.getBoolean("DATABASE.ENABLED");
     this.address = configuration.getString("DATABASE.ADDRESS");
     this.port = configuration.getInt("DATABASE.PORT");
     this.database = configuration.getString("DATABASE.DATABASE");

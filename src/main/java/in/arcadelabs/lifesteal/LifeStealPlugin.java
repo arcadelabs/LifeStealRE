@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal;
 
+import java.sql.SQLException;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -44,11 +45,22 @@ public final class LifeStealPlugin extends JavaPlugin {
 
   @Override
   public void onDisable() {
+
+    try {
+      lifeSteal.getProfileManager().saveAll();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    getServer().getScheduler().cancelTasks(this);
     lifeSteal.getMessenger().closeMessenger();
+
+    lifeSteal.getDatabaseHandler().disconnect();
+
     getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
     getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
     getLogger().info(ChatColor.of("#7209b7") + "( (__  \\  / /(__)\\ ");
     getLogger().info(ChatColor.of("#560bad") + " \\___) (__)(__)(__)... on the other side");
     getLogger().info(ChatColor.of("#560bad") + " ");
+
   }
 }

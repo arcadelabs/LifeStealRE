@@ -15,27 +15,29 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ForkJoinPool;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 @Getter
-public class ProfileHandler {
+public class ProfileManager {
 
   @Getter(AccessLevel.NONE)
-  private final DatabaseHandler databaseHandler = LifeStealPlugin.getLifeSteal().getDatabaseHandler();
+  private final DatabaseHandler databaseHandler =
+      LifeStealPlugin.getLifeSteal().getDatabaseHandler();
 
   private final Map<UUID, Profile> profileMap = new HashMap<>();
-  private final ProfileThread profileThread;
 
-  public ProfileHandler() {
+  public ProfileManager() {
 
-    String query = new CreateTableQuery("lifesteal_data")
-        .ifNotExists()
-        .column("uniqueID", "VARCHAR(36)")
-        .column("lifeState", "VARCHAR(20)")
-        .primaryKey("uniqueID")
-        .build();
+    String query =
+        new CreateTableQuery("lifesteal_data")
+            .ifNotExists()
+            .column("uniqueID", "VARCHAR(36)")
+            .column("lifeState", "VARCHAR(20)")
+            .primaryKey("uniqueID")
+            .build();
 
     System.out.println(query);
 
@@ -45,17 +47,10 @@ public class ProfileHandler {
     } catch (SQLException ex) {
       ex.printStackTrace();
     }
-
-    profileThread = new ProfileThread();
-    profileThread.start();
-
   }
 
   public boolean hasProfile(UUID uuid) {
-    String sql = new SelectQuery("lifesteal_data")
-        .column("*")
-        .where("uniqueID = ?")
-        .build();
+    String sql = new SelectQuery("lifesteal_data").column("*").where("uniqueID = ?").build();
 
     System.out.println(sql);
 
@@ -74,10 +69,7 @@ public class ProfileHandler {
     Profile profile = new Profile(uuid);
 
     if (this.hasProfile(uuid)) {
-      String sql = new SelectQuery("lifesteal_data")
-          .column("*")
-          .where("uniqueID = ?")
-          .build();
+      String sql = new SelectQuery("lifesteal_data").column("*").where("uniqueID = ?").build();
 
       System.out.println(sql);
 
@@ -101,10 +93,11 @@ public class ProfileHandler {
 
   public Profile saveProfile(Profile profile) throws SQLException {
     if (hasProfile(profile.getUniqueID())) {
-      String sql = new UpdateQuery("lifesteal_data")
-          .set("lifeState", profile.getLifeState().toString())
-          .where("uniqueID = ?")
-          .build();
+      String sql =
+          new UpdateQuery("lifesteal_data")
+              .set("lifeState", profile.getLifeState().toString())
+              .where("uniqueID = ?")
+              .build();
 
       System.out.println(sql);
 
@@ -117,10 +110,7 @@ public class ProfileHandler {
         e.printStackTrace();
       }
     } else {
-      String sql = new InsertQuery("lifesteal_data")
-          .value("uniqueID")
-          .value("lifeState")
-          .build();
+      String sql = new InsertQuery("lifesteal_data").value("uniqueID").value("lifeState").build();
 
       System.out.println(sql);
       try (Connection connection = databaseHandler.getConnection()) {
@@ -138,21 +128,32 @@ public class ProfileHandler {
     profileMap.put(uniqueID, profile);
   }
 
-  public void handleQuit(UUID uniqueID) {
-    ForkJoinPool.commonPool().execute(() -> {
-      try {
-        this.saveProfile(profileMap.get(uniqueID));
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    });
-    profileMap.remove(uniqueID);
+  public void handleQuit(UUID uuid) {
+    LifeStealPlugin.getInstance()
+        .getServer()
+        .getScheduler()
+        .runTaskAsynchronously(
+            LifeStealPlugin.getInstance(),
+            () -> {
+              try {
+                saveProfile(profileMap.get(uuid));
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+            });
+    profileMap.remove(uuid);
   }
-
 
   public void saveAll() throws SQLException {
     for (Profile profile : profileMap.values()) {
       this.saveProfile(profile);
+    }
+  }
+
+  public void forceLoad() throws SQLException {
+    for (Player player : Bukkit.getOnlinePlayers()) {
+      Profile profile = this.getProfile(player.getUniqueId());
+      profileMap.put(player.getUniqueId(), profile);
     }
   }
 }
