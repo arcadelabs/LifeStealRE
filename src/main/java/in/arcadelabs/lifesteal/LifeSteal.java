@@ -36,6 +36,7 @@ import in.arcadelabs.lifesteal.commands.GiveHearts;
 import in.arcadelabs.lifesteal.commands.Reload;
 import in.arcadelabs.lifesteal.commands.SetHearts;
 import in.arcadelabs.lifesteal.commands.Withdraw;
+import in.arcadelabs.lifesteal.listeners.HeartConsumeListener;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
 import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
@@ -47,6 +48,7 @@ import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
 import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
+import in.arcadelabs.lifesteal.utils.Interaction;
 import in.arcadelabs.lifesteal.utils.LSUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -79,6 +81,7 @@ public class LifeSteal {
   private BStats metrics;
   private HeartItemCooker heartItemCooker;
   private ItemStack placeholderHeart;
+  private Interaction interaction;
 
   /**
    * Check if server ruunning on Paper or it's forks.
@@ -112,9 +115,13 @@ public class LifeSteal {
       instance.getLogger().warning(e.getLocalizedMessage());
     }
 
+//    Initialize interaction.
+    interaction = new Interaction(instance.getLogger(),
+            config.getBoolean("Clean-Console"));
+
 //    Initialize, update and return config.
     try {
-      config = YamlDocument.create(new File("Config.yml"),
+      config = YamlDocument.create(new File(instance.getDataFolder(), "Config.yml"),
               Objects.requireNonNull(instance.getResource("Config.yml")),
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
@@ -129,7 +136,7 @@ public class LifeSteal {
 
 //    Initialize, update and return Heart config.
     try {
-      heartConfig = YamlDocument.create(new File("Hearts.yml"),
+      heartConfig = YamlDocument.create(new File(instance.getDataFolder(), "Hearts.yml"),
               Objects.requireNonNull(instance.getResource("Hearts.yml")),
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
@@ -201,12 +208,13 @@ public class LifeSteal {
     final Listener[] listeners = {
             new PlayerPotionEffectListener(),
             new PlayerResurrectListener(),
+            new HeartConsumeListener(),
             new PlayerClickListener(),
             new PlayerJoinListener(),
             new PlayerKillListener(),
             new HeartCraftListener(),
             new ProfileListener()
-//            new HeartConsumeListener(),
+            new HeartConsumeListener(),
     };
     Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
 

@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.libs.adventure.adventure.key.Key;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.NamespacedKey;
@@ -28,11 +29,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
-import java.util.Set;
+import java.util.logging.Level;
 
 public class PlayerClickListener implements Listener {
 
@@ -42,34 +41,25 @@ public class PlayerClickListener implements Listener {
   @EventHandler
   public void onPlayerClick(final PlayerInteractEvent event) {
     final Player player = event.getPlayer();
+
     if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
     if (!(player.getInventory().getItemInMainHand().hasItemMeta())) return;
     final ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
-    if (!(heartMeta.getPersistentDataContainer()
+
+    if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
             .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
-//    if (player.getInventory().getItemInMainHand().getType().isEdible()) return;
-    final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer()
-            .get(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
-    lifeSteal.getUtils().setPlayerBaseHealth(player,
-            lifeSteal.getUtils().getPlayerBaseHealth(player) + healthPoints);
-    player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
-
-    final String itemType = heartMeta.getPersistentDataContainer().get
-            (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
-    final String itemIndex = heartMeta.getPersistentDataContainer().get
-            (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
-
-    final String effectsPath = "Hearts.Types." + itemType + "." + itemIndex + ".Properties.Effects";
-    final Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getSection(effectsPath)).getRoutesAsStrings(false);
-
-    for (int i = 0; i < indexSet.size(); i++) {
-      final String[] indexList = indexSet.toArray(new String[0]);
-      player.addPotionEffect(new PotionEffect(Objects.requireNonNull
-              (PotionEffectType.getByName(Objects.requireNonNull(lifeSteal.getHeartConfig().getString(effectsPath + "." + indexList[i] + ".Type")))),
-              lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Duration") * 20,
-              lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Power"),
-              lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false),
-              lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false)));
+    if (player.getInventory().getItemInMainHand().getType().isEdible()) {
+      if (player.getFoodLevel() == 20) player.setFoodLevel(19);
+      instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
+    } else {
+      final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer()
+              .get(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
+      lifeSteal.getUtils().setPlayerBaseHealth(player,
+              lifeSteal.getUtils().getPlayerBaseHealth(player) + healthPoints);
+      player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+      lifeSteal.getUtils().spawnParticles(player, "heart");
+      lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
+      lifeSteal.getInteraction().retuurn(Level.FINE, "Gratz, you just consumed 1 heart!", player, Key.key("block.metal.fall"));
     }
   }
 }

@@ -25,12 +25,20 @@ import in.arcadelabs.libs.adventure.adventure.text.serializer.legacy.LegacyCompo
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.GameMode;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class LSUtils {
 
@@ -138,5 +146,55 @@ public class LSUtils {
    */
   public String formatString(final String string) {
     return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string));
+  }
+
+  /**
+   * Give heart item's effects.
+   *
+   * @param target    the target player
+   * @param heartMeta the heart item meta
+   * @param instance  the plugin instance
+   */
+  public void giveHeartEffects(final Player target, final ItemMeta heartMeta, final JavaPlugin instance) {
+    final String itemType = heartMeta.getPersistentDataContainer().get
+            (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
+    final String itemIndex = heartMeta.getPersistentDataContainer().get
+            (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
+    final String effectsPath = "Hearts.Types." + itemType + "." + itemIndex + ".Properties.Effects";
+    final Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getSection(effectsPath)).getRoutesAsStrings(false);
+
+    for (int i = 0; i < indexSet.size(); i++) {
+      final String[] indexList = indexSet.toArray(new String[0]);
+      target.addPotionEffect(new PotionEffect(Objects.requireNonNull
+              (PotionEffectType.getByName(Objects.requireNonNull(lifeSteal.getHeartConfig().getString(effectsPath + "." + indexList[i] + ".Type")))),
+              lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Duration") * 20,
+              lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Power"),
+              lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false),
+              lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false)));
+    }
+  }
+
+  /**
+   * Spawn particle effects.
+   *
+   * @param player the player
+   * @param type   the type
+   */
+  public void spawnParticles(final Player player, String type) {
+//    Will work on this more later.
+    switch (type) {
+      case "heart":
+        if (player.isPermissionSet("lifesteal.particles.heart")) {
+          ParticleEffect.HEART.display(player.getLocation().add(0, 2, 0));
+          ParticleEffect.HEART.display(player.getLocation().subtract(1, 0, 0));
+          ParticleEffect.HEART.display(player.getLocation().add(1, 0, 0));
+          ParticleEffect.HEART.display(player.getLocation().subtract(0, 0, 1));
+          ParticleEffect.HEART.display(player.getLocation().add(0, 0, 1));
+        }
+      case "soul":
+        if (player.isPermissionSet("lifesteal.particles.soul")) {
+          ParticleEffect.SOUL.display(player.getLocation().add(0, 2, 0));
+        }
+    }
   }
 }
