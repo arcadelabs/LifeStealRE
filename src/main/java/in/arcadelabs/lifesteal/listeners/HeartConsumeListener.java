@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.libs.adventure.adventure.key.Key;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.NamespacedKey;
@@ -25,25 +26,34 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
+import java.util.logging.Level;
 
-@Deprecated
 public class HeartConsumeListener implements Listener {
+
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
 
   @EventHandler
   public void onPlayerEat(final PlayerItemConsumeEvent event) {
-
     final Player player = event.getPlayer();
-    if (!(Objects.requireNonNull(event.getItem().getItemMeta()).getPersistentDataContainer().has
-            (new NamespacedKey(LifeStealPlugin.getInstance(),
-                    "lifesteal_heart_item"), PersistentDataType.STRING))) return;
-    final double healthPoints = Objects.requireNonNull(event.getItem().getItemMeta().getPersistentDataContainer().get
+
+    if (!(event.getItem().hasItemMeta())) return;
+    final ItemMeta heartMeta = event.getItem().getItemMeta();
+
+    if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
+            .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
+    final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
             (new NamespacedKey(LifeStealPlugin.getInstance(),
                     "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
+
     lifeSteal.getUtils().setPlayerBaseHealth(player,
             lifeSteal.getUtils().getPlayerBaseHealth(player) + healthPoints);
+    lifeSteal.getUtils().spawnParticles(player, "heart");
+    lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
+    lifeSteal.getInteraction().retuurn(Level.FINE, "Gratz, you just consumed 1 heart!", player, Key.key("block.metal.fall"));
   }
 }

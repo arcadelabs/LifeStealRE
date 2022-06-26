@@ -33,7 +33,7 @@ import java.util.Map;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.withdraw")
-@SuppressWarnings("all")
+//@SuppressWarnings("all")
 public class Withdraw extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
@@ -55,13 +55,13 @@ public class Withdraw extends BaseCommand {
       lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts * 2);
       heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
               .prepareIngedients()
-              .cookHeart();
+              .cookHeart(hearts * 2);
       replacementHeart = heartItemManager.getHeartItem();
-      replacementHeart.setAmount(hearts / 2);
 
       final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
       for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
         player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+        lifeSteal.getUtils().spawnParticles(player, "soul");
       }
     }
   }
