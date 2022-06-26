@@ -156,6 +156,26 @@ public class HeartItemManager {
   }
 
   /**
+   * Cook heart with prepared ingerdients + given hp value.
+   *
+   * @param healthPoints the health points
+   * @return the heart item manager
+   */
+  public HeartItemManager cookHeart(final int healthPoints) {
+    this.heartItemCooker = new HeartItemCooker(this.heartType)
+            .setHeartName(this.heartName)
+            .setHeartLore(this.heartLore)
+            .setModelData(this.modelData)
+            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
+            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemtype"), this.type)
+            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemindex"), this.index)
+            .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), healthPoints)
+            .cook();
+    this.heartItem = this.heartItemCooker.getCookedItem();
+    return this;
+  }
+
+  /**
    * Heart item getter.
    *
    * @return the heart item
