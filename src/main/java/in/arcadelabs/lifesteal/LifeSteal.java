@@ -36,11 +36,14 @@ import in.arcadelabs.lifesteal.commands.GiveHearts;
 import in.arcadelabs.lifesteal.commands.Reload;
 import in.arcadelabs.lifesteal.commands.SetHearts;
 import in.arcadelabs.lifesteal.commands.Withdraw;
+import in.arcadelabs.lifesteal.database.DatabaseHandler;
+import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
 import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
 import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
+import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
 import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
@@ -63,7 +66,10 @@ import java.util.Objects;
 public class LifeSteal {
 
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
-  private final PluginManager pluginManager = Bukkit.getPluginManager();
+  private final PluginManager PM = Bukkit.getPluginManager();
+
+  private DatabaseHandler databaseHandler;
+  private ProfileManager profileManager;
   private LSUtils utils;
   private HeartRecipeManager heartRecipeManager;
   private Placeholder papiHook;
@@ -117,6 +123,9 @@ public class LifeSteal {
     } catch (Exception e) {
       instance.getLogger().warning(e.getLocalizedMessage());
     }
+
+    databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
+    profileManager = new ProfileManager();
 
 //    Initialize, update and return Heart config.
     try {
@@ -196,6 +205,7 @@ public class LifeSteal {
             new PlayerJoinListener(),
             new PlayerKillListener(),
             new HeartCraftListener(),
+            new ProfileListener()
 //            new HeartConsumeListener(),
     };
     Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
