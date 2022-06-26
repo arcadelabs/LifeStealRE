@@ -19,18 +19,19 @@
 package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 
-public class PlayerPotionEffectListener implements Listener {
+public class ServerReloadListener implements Listener {
 
   @EventHandler
-  public void onPotionEffectEvent(final EntityPotionEffectEvent event) {
-    if (event.getCause() == EntityPotionEffectEvent.Cause.MILK) {
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
-    } else if (event.getCause() == EntityPotionEffectEvent.Cause.TOTEM) {
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure"));
+  public void onServerReload(final ServerLoadEvent event) {
+    if (event.getType() != ServerLoadEvent.LoadType.RELOAD) return;
+    for (Player player : Bukkit.getOnlinePlayers()) {
+      player.discoverRecipe(LifeStealPlugin.getLifeSteal().getHeartRecipeManager().getHeartRecipe().getKey());
     }
   }
 }

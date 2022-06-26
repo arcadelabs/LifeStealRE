@@ -26,7 +26,7 @@ import org.bukkit.event.entity.EntityResurrectEvent;
 public class PlayerResurrectListener implements Listener {
 
   @EventHandler
-  public void onPlayerResurrect(EntityResurrectEvent event) {
+  public void onPlayerResurrect(final EntityResurrectEvent event) {
     event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
   }
 }

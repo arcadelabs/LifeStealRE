@@ -1,4 +1,4 @@
-version: '3.0'
+version: 3
 Hearts:
   #  FIXED_BLESSED | FIXED_NORMAL | FIXED_CURSED | RANDOM_BLESSED | RANDOM_NORMAL | RANDOM_CURSED | RANDOM_ALL
   Mode:
@@ -20,12 +20,12 @@ Hearts:
           Effects:
             Regen:
                 Type: regeneration
-                Power: 99
+                Power: 2
                 Duration: 120
                 ShowParticles: false
             Speed:
                 Type: speed
-                Power: 99
+                Power: 2
                 Duration: 120
                 ShowParticles: false
     Blessed:
@@ -42,7 +42,7 @@ Hearts:
           Effects:
             Speed:
                 Type: speed
-                Power: 99
+                Power: 2
                 Duration: 120
                 ShowParticles: false
     Cursed:
@@ -59,7 +59,7 @@ Hearts:
           Effects:
             Hunger:
                 Type: hunger
-                Power: 99
+                Power: 2
                 Duration: 120
                 ShowParticles: false
       80:
@@ -75,6 +75,6 @@ Hearts:
           Effects:
             Blind:
                 Type: blindness
-                Power: 99
+                Power: 2
                 Duration: 120
                 ShowParticles: false

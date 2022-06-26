@@ -18,12 +18,11 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import com.lewdev.probabilitylib.ProbabilityCollection;
+import in.arcadelabs.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -33,10 +32,21 @@ public class HeartItemManager {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
-  private final FileConfiguration heartConfig = lifeSteal.getHeartConfig();
+  private final YamlDocument heartConfig = lifeSteal.getHeartConfig();
+  private final Set<String> blessedHearts
+          = this.heartConfig.getSection("Hearts.Types.Blessed").getRoutesAsStrings(false);
+  private final String[] blessedRarity = this.blessedHearts.toArray(new String[0]);
+  private final Set<String> normalHearts
+          = this.heartConfig.getSection("Hearts.Types.Normal").getRoutesAsStrings(false);
+  private final String[] normalRarity = this.normalHearts.toArray(new String[0]);
+  private final Set<String> cursedHearts
+          = this.heartConfig.getSection("Hearts.Types.Cursed").getRoutesAsStrings(false);
+  private final String[] cursedRarity = this.cursedHearts.toArray(new String[0]);
+  private final ProbabilityCollection<Integer> randomBlessCol = new ProbabilityCollection<>();
+  private final ProbabilityCollection<Integer> randomNormalCol = new ProbabilityCollection<>();
+  private final ProbabilityCollection<Integer> randomCurseCol = new ProbabilityCollection<>();
   private HeartItemCooker heartItemCooker;
   private ItemStack heartItem;
-
   private Material heartType;
   private String heartName;
   private List<String> heartLore;
@@ -46,27 +56,12 @@ public class HeartItemManager {
   private String type;
   private String index;
 
-  private final Set<String> blessedHearts
-          = this.heartConfig.getConfigurationSection("Hearts.Types.Blessed").getKeys(false);
-  private final Set<String> normalHearts
-          = this.heartConfig.getConfigurationSection("Hearts.Types.Normal").getKeys(false);
-  private final Set<String> cursedHearts
-          = this.heartConfig.getConfigurationSection("Hearts.Types.Cursed").getKeys(false);
-
-  private final String[] blessedRarity = this.blessedHearts.toArray(new String[0]);
-  private final String[] normalRarity = this.normalHearts.toArray(new String[0]);
-  private final String[] cursedRarity = this.cursedHearts.toArray(new String[0]);
-
-  private final ProbabilityCollection<Integer> randomBlessCol = new ProbabilityCollection<>();
-  private final ProbabilityCollection<Integer> randomNormalCol = new ProbabilityCollection<>();
-  private final ProbabilityCollection<Integer> randomCurseCol = new ProbabilityCollection<>();
-
   /**
    * Instantiates a new Heart item manager.
    *
    * @param mode the mode
    */
-  public HeartItemManager(Mode mode) {
+  public HeartItemManager(final Mode mode) {
     this.mode = mode;
 
     for (int i = 0; i < this.blessedHearts.size(); i++) {
@@ -114,11 +109,15 @@ public class HeartItemManager {
         this.type = "Cursed";
         break;
       case RANDOM_ALL:
-        ProbabilityCollection<Mode> modeCol = new ProbabilityCollection<>();
+        final ProbabilityCollection<Mode> modeCol = new ProbabilityCollection<>();
         modeCol.add(Mode.RANDOM_BLESSED, 27);
         modeCol.add(Mode.RANDOM_NORMAL, 27);
         modeCol.add(Mode.RANDOM_CURSED, 27);
         this.mode = modeCol.get();
+        this.prepareIngedients();
+        break;
+      default:
+        this.mode = Mode.FIXED_NORMAL;
         this.prepareIngedients();
         break;
     }
@@ -175,37 +174,4 @@ public class HeartItemManager {
     RANDOM_ALL
   }
 
-  /**
-   * Get Mode by it's string value.
-   *
-   * @param input the input
-   * @return the Mode enum
-   */
-  public Mode getByString(String input) {
-    Mode mode = Mode.FIXED_CURSED;
-    switch(input) {
-      case "Fixed_Blessed":
-        mode = Mode.FIXED_BLESSED;
-        break;
-      case "Fixed_Normal":
-        mode = Mode.FIXED_NORMAL;
-        break;
-      case "Fixed_Cursed":
-        mode = Mode.FIXED_CURSED;
-        break;
-      case "Random_Blessed":
-        mode = Mode.RANDOM_BLESSED;
-        break;
-      case "Random_Normal":
-        mode = Mode.RANDOM_NORMAL;
-        break;
-      case "Random_Cursed":
-        mode = Mode.RANDOM_CURSED;
-        break;
-      case "Random_All":
-        mode = Mode.RANDOM_ALL;
-        break;
-    }
-    return mode;
-  }
 }

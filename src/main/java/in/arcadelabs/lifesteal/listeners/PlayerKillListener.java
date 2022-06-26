@@ -31,14 +31,14 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerKillListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  HeartItemManager heartItemManager;
-  ItemStack replacementHeart;
+  private HeartItemManager heartItemManager;
+  private ItemStack replacementHeart;
 
   @EventHandler
-  public void onPlayerKilled(PlayerDeathEvent event) {
+  public void onPlayerKilled(final PlayerDeathEvent event) {
 
-    Player victim = event.getEntity();
-    int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
+    final Player victim = event.getEntity();
+    final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
       victim.setGameMode(GameMode.SPECTATOR);
     } else {

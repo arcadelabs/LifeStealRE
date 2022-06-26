@@ -29,13 +29,15 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Objects;
 
 public class HeartCraftListener implements Listener {
-  HeartItemManager heartItemManager;
-  ItemStack replacementHeart;
+  private HeartItemManager heartItemManager;
+  private ItemStack replacementHeart;
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onCraftEvent(CraftItemEvent event) {
+  public void onCraftEvent(final CraftItemEvent event) {
     if (!(Objects.equals(event.getRecipe().getResult(), LifeStealPlugin.getLifeSteal().getPlaceholderHeart()))) return;
-    heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal().getHeartConfig().getString("Hearts.Mode.OnCraft")))
+    if (event.isShiftClick()) event.setCancelled(true);
+    heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
+            .getHeartConfig().getString("Hearts.Mode.OnCraft")))
             .prepareIngedients()
             .cookHeart();
     replacementHeart = heartItemManager.getHeartItem();

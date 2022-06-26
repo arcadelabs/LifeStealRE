@@ -16,27 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package in.arcadelabs.lifesteal.listeners;
+package in.arcadelabs.lifesteal.commands;
 
+import in.arcadelabs.libs.aikar.acf.BaseCommand;
+import in.arcadelabs.libs.aikar.acf.annotation.CommandAlias;
+import in.arcadelabs.libs.aikar.acf.annotation.CommandCompletion;
+import in.arcadelabs.libs.aikar.acf.annotation.CommandPermission;
+import in.arcadelabs.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-public class PlayerJoinListener implements Listener {
+@CommandAlias("lifesteal|ls")
+@CommandPermission("lifesteal.sethearts")
+public class SetHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
-  @EventHandler
-  public void onPlayerJoin(final PlayerJoinEvent event) {
-
-    final Player player = event.getPlayer();
-    final double defaultHealth = lifeSteal.getConfig().getDouble("DefaultHealth");
-
-    if (!player.hasPlayedBefore()) {
-      lifeSteal.getUtils().setPlayerBaseHealth(player, defaultHealth);
-    }
+  /**
+   * On set hearts command.
+   *
+   * @param target the target
+   * @param hearts the hearts
+   */
+  @Subcommand("sethearts")
+  @CommandCompletion("@players")
+  public void onSetHearts(final Player target, final int hearts) {
+    lifeSteal.getUtils().setPlayerBaseHealth(target, hearts);
   }
 }
