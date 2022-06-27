@@ -2,13 +2,14 @@ package in.arcadelabs.lifesteal.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import in.arcadelabs.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import lombok.Getter;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import lombok.Getter;
-import org.bukkit.configuration.file.FileConfiguration;
 
 @Getter
 public class DatabaseHandler {
@@ -59,7 +60,7 @@ public class DatabaseHandler {
   }
 
   private void loadCredentials() {
-    FileConfiguration configuration = LifeStealPlugin.getLifeSteal().getConfig();
+    YamlDocument configuration = LifeStealPlugin.getLifeSteal().getConfig();
     this.dbEnabled = configuration.getBoolean("DATABASE.ENABLED");
     this.address = configuration.getString("DATABASE.ADDRESS");
     this.port = configuration.getInt("DATABASE.PORT");
