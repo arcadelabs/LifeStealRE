@@ -36,18 +36,19 @@ import in.arcadelabs.lifesteal.commands.GiveHearts;
 import in.arcadelabs.lifesteal.commands.Reload;
 import in.arcadelabs.lifesteal.commands.SetHearts;
 import in.arcadelabs.lifesteal.commands.Withdraw;
-import in.arcadelabs.lifesteal.listeners.HeartConsumeListener;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
+import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.database.profile.ProfileManager;
+import in.arcadelabs.lifesteal.listeners.HeartConsumeListener;
 import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
 import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
 import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
 import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
-import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
 import in.arcadelabs.lifesteal.utils.HeartItemCooker;
 import in.arcadelabs.lifesteal.utils.HeartRecipeManager;
+import in.arcadelabs.lifesteal.utils.I18n;
 import in.arcadelabs.lifesteal.utils.Interaction;
 import in.arcadelabs.lifesteal.utils.LSUtils;
 import lombok.Getter;
@@ -62,14 +63,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.logging.Level;
 
 @Getter
 public class LifeSteal {
 
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
-  private final PluginManager PM = Bukkit.getPluginManager();
+  private final PluginManager pluginManager = Bukkit.getPluginManager();
 
+  private I18n i18n;
   private DatabaseHandler databaseHandler;
   private ProfileManager profileManager;
   private LSUtils utils;
@@ -82,6 +86,7 @@ public class LifeSteal {
   private HeartItemCooker heartItemCooker;
   private ItemStack placeholderHeart;
   private Interaction interaction;
+  private String locale;
 
   /**
    * Check if server ruunning on Paper or it's forks.
@@ -115,9 +120,7 @@ public class LifeSteal {
       instance.getLogger().warning(e.getLocalizedMessage());
     }
 
-//    Initialize interaction.
-    interaction = new Interaction(instance.getLogger(),
-            config.getBoolean("Clean-Console"));
+//    Initialize LifeSteal utils.
 
 //    Initialize, update and return config.
     try {
@@ -126,13 +129,32 @@ public class LifeSteal {
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
-              UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
+              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+      locale = config.getString("Language");
+      i18n = new I18n(Locale.forLanguageTag(locale));
+      utils = new LSUtils();
+      i18n.translate(Level.FINE, "ConfigLoad");
     } catch (Exception e) {
+      locale = "en";
+      i18n.translate(Level.WARNING, "ConfigLoadError");
       instance.getLogger().warning(e.getLocalizedMessage());
     }
 
-    databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
-    profileManager = new ProfileManager();
+    try {
+      databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
+      i18n.translate(Level.FINE, "DatabaseLoad");
+    } catch (Exception e) {
+      i18n.translate(Level.WARNING, "DatabaseLoadError");
+      instance.getLogger().warning(e.getLocalizedMessage());
+    }
+
+    try {
+      profileManager = new ProfileManager();
+      i18n.translate(Level.FINE, "ProfilesLoad");
+    } catch (Exception e) {
+      i18n.translate(Level.WARNING, "ProfilesLoadError");
+      instance.getLogger().warning(e.getLocalizedMessage());
+    }
 
 //    Initialize, update and return Heart config.
     try {
@@ -141,13 +163,17 @@ public class LifeSteal {
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
-              UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
+              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+      i18n.translate(Level.FINE, "HeartConfigLoad");
     } catch (Exception e) {
+      i18n.translate(Level.WARNING, "HeartConfigLoadError");
       instance.getLogger().warning(e.getLocalizedMessage());
     }
 
-//    Initialize LifeSteal utils.
-    utils = new LSUtils();
+
+//    Initialized interaction.
+    interaction = new Interaction(instance.getLogger(), config.getBoolean("Clean-Console"));
+
 
 //    Cook a placeholder heart and assign it.
     final int amount = config.getInt("HeartsToGain", 2) / 2;
@@ -195,9 +221,11 @@ public class LifeSteal {
     if (isOnPaper()) {
       final PaperCommandManager pcm = new PaperCommandManager(instance);
       Arrays.stream(commands).forEach(pcm::registerCommand);
+      i18n.translate(Level.FINE, "CommandsLoad");
     } else {
       final BukkitCommandManager bcm = new BukkitCommandManager(instance);
       Arrays.stream(commands).forEach(bcm::registerCommand);
+      i18n.translate(Level.FINEST, "CommandsAsyncLoad");
     }
 
 //    commandManager.getCommandCompletions().registerAsyncCompletion("test", c ->
@@ -213,10 +241,10 @@ public class LifeSteal {
             new PlayerJoinListener(),
             new PlayerKillListener(),
             new HeartCraftListener(),
-            new ProfileListener()
+            new ProfileListener(),
             new HeartConsumeListener(),
     };
     Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
-
+    i18n.translate(Level.FINE, "ListenersLoad");
   }
 }
