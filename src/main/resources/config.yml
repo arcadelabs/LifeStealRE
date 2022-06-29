@@ -1,4 +1,4 @@
-version: 3
+Version: 3
 
 DATABASE:
   ENABLED:
@@ -47,6 +47,8 @@ Heart:
 #SPECTATING = Roams around freely in spectator mode,
 #BANNED = Gets banned, only works if death bans are enabled.
 LifeState: "BANNED"
+
+Ban-Command-URI: 'ban %player% 3d [LifeSteal] - Eliminated. -s'
 
 # State how many hearts players should lose on death.
 # 2 heart points = 1 whole heart.

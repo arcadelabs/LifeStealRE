@@ -149,6 +149,16 @@ public class LSUtils {
   }
 
   /**
+   * Format Component with Minimessage.
+   *
+   * @param component the component
+   * @return the string
+   */
+  public String formatString(final Component component) {
+    return this.legecySerializer.serialize(component);
+  }
+
+  /**
    * Give heart item's effects.
    *
    * @param target    the target player

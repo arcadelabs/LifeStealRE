@@ -18,10 +18,12 @@
 
 package in.arcadelabs.lifesteal;
 
-import java.sql.SQLException;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 @Getter
 public final class LifeStealPlugin extends JavaPlugin {
@@ -38,8 +40,11 @@ public final class LifeStealPlugin extends JavaPlugin {
     lifeSteal = new LifeSteal();
     try {
       lifeSteal.init();
+      lifeSteal.getI18n().translate(Level.FINEST, "LifestealLoad");
     } catch (Exception e) {
-      instance.getLogger().warning(e.getLocalizedMessage());
+      this.getLogger().warning("There was an error while loading LifeSteal, gotta be a hooman error, blame Aniket#7102.");
+      this.getLogger().warning(e.getLocalizedMessage());
+      e.printStackTrace();
     }
   }
 
