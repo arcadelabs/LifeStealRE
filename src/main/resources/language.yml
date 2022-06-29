@@ -1,0 +1,15 @@
+Version: 2
+
+LifestealLoad: <gradient:e01e37:f52486>LifeSteal enabled successfully!</gradient>
+ConfigLoad: <gradient:e01e37:f52486>config.yml loaded gracefully.</gradient>
+HeartConfigLoad: <gradient:e01e37:f52486>hearts.yml also loaded gracefully, maybe...</gradient>
+DatabaseLoad: <gradient:e01e37:f52486>Database seems to be loaded just fine...</gradient>
+ProfilesLoad: <gradient:e01e37:f52486>Profiles are loaded, I hope.</gradient>
+ListenersLoad: <gradient:e01e37:f52486>All the listeners are active now, and they're better at listeneing than you were.</gradient>
+CommandsLoad: <gradient:e01e37:f52486>Commands are registered, go get em commander!</gradient>
+CommandsAsyncLoad: <gradient:e01e37:f52486>Commands are registered asynchronously, get em gracefully commander!</gradient>
+
+ConfigLoadError: <gradient:e01e37:641220>Error(s) occured while loading config.yml</gradient>
+HeartConfigLoadError: <gradient:e01e37:641220>Error(s) occured while loading hearts.yml</gradient>
+DatabaseLoadError: <gradient:e01e37:641220>Error(s) occured while connecting to database, blame Infinity#1392 :p</gradient>
+ProfilesLoadError: <gradient:e01e37:641220>Error(s) occured while loading profiles, blame Infinity#1392 :p</gradient>

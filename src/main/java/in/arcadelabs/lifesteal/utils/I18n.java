@@ -18,49 +18,45 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.libs.adventure.adventure.text.Component;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
+import in.arcadelabs.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.libs.boostedyaml.dvs.versioning.BasicVersioning;
+import in.arcadelabs.libs.boostedyaml.settings.dumper.DumperSettings;
+import in.arcadelabs.libs.boostedyaml.settings.general.GeneralSettings;
+import in.arcadelabs.libs.boostedyaml.settings.loader.LoaderSettings;
+import in.arcadelabs.libs.boostedyaml.settings.updater.UpdaterSettings;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class I18n {
-  private final ResourceBundle defaultBundle, userBundle;
   private final LifeStealPlugin instance;
   private final LifeSteal lifeSteal;
-  private final Locale defualtLocale;
-//  private final File langEn, langEs, langFr;
+  private final YamlDocument language;
 
-  public I18n(Locale userSpecified) {
-    defualtLocale = Locale.ENGLISH;
+  public I18n() throws IOException {
     instance = LifeStealPlugin.getInstance();
     lifeSteal = LifeStealPlugin.getLifeSteal();
 
-//    langEn = new File(instance.getDataFolder(), "languages/lang_en.properties");
-//    langEs = new File(instance.getDataFolder(), "languages/lang_es.properties");
-//    langFr = new File(instance.getDataFolder(), "languages/lang_fr.properties");
-//    Doesn't work, I dunno what was I thinking while making this lol
-
-    defaultBundle = ResourceBundle.getBundle("languages/lang", defualtLocale);
-    userBundle = ResourceBundle.getBundle("languages/lang", userSpecified);
+      language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
+              Objects.requireNonNull(instance.getResource("language.yml")),
+              GeneralSettings.DEFAULT,
+              LoaderSettings.builder().setAutoUpdate(true).build(),
+              DumperSettings.DEFAULT,
+              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
   }
 
-  public void translate(Level level, String message) {
+  public void translate(Level level, String key) {
     try {
-      instance.getLogger().log(level, lifeSteal.getUtils().formatString(userBundle.getString(message)));
-    } catch (MissingResourceException exception) {
-      Component component = MiniMessage.builder().build().deserialize
-              ("Missing locale key \"<key>\" in <localeFile>",
-                      Placeholder.component("key", Component.text(exception.getKey())),
-                      Placeholder.component("localeFile", Component.text(userBundle.getLocale().toString())));
-      instance.getLogger().warning(lifeSteal.getUtils().formatString(component));
+      instance.getLogger().log(level, lifeSteal.getUtils().formatString(language.getString(key)));
+    } catch (NullPointerException exception) {
+      instance.getLogger().warning(lifeSteal.getUtils().formatString(
+              "<red>Missing " + key + " language key in language.yml</red>"
+      ));
       instance.getLogger().warning(exception.getLocalizedMessage());
-      instance.getLogger().log(level, lifeSteal.getUtils().formatString(defaultBundle.getString(message)));
     }
   }
 }

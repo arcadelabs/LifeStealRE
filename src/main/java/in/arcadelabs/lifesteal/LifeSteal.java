@@ -63,7 +63,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -86,7 +85,6 @@ public class LifeSteal {
   private HeartItemCooker heartItemCooker;
   private ItemStack placeholderHeart;
   private Interaction interaction;
-  private String locale;
 
   /**
    * Check if server ruunning on Paper or it's forks.
@@ -124,18 +122,16 @@ public class LifeSteal {
 
 //    Initialize, update and return config.
     try {
-      config = YamlDocument.create(new File(instance.getDataFolder(), "Config.yml"),
-              Objects.requireNonNull(instance.getResource("Config.yml")),
+      config = YamlDocument.create(new File(instance.getDataFolder(), "config.yml"),
+              Objects.requireNonNull(instance.getResource("config.yml")),
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      locale = config.getString("Language");
-      i18n = new I18n(Locale.forLanguageTag(locale));
+      i18n = new I18n();
       utils = new LSUtils();
       i18n.translate(Level.FINE, "ConfigLoad");
     } catch (Exception e) {
-      locale = "en";
       i18n.translate(Level.WARNING, "ConfigLoadError");
       instance.getLogger().warning(e.getLocalizedMessage());
     }
@@ -158,8 +154,8 @@ public class LifeSteal {
 
 //    Initialize, update and return Heart config.
     try {
-      heartConfig = YamlDocument.create(new File(instance.getDataFolder(), "Hearts.yml"),
-              Objects.requireNonNull(instance.getResource("Hearts.yml")),
+      heartConfig = YamlDocument.create(new File(instance.getDataFolder(), "hearts.yml"),
+              Objects.requireNonNull(instance.getResource("hearts.yml")),
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
