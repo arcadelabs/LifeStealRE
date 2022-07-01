@@ -224,10 +224,6 @@ public class LifeSteal {
       i18n.translate(Level.FINEST, "CommandsAsyncLoad");
     }
 
-//    commandManager.getCommandCompletions().registerAsyncCompletion("test", c ->
-//                    Arrays.asList("foo123", "bar123", "baz123")
-//https://github.com/aikar/commands/blob/master/example/src/main/java/co/aikar/acfexample/ACFExample.java
-
 //    Register listeners.
     final Listener[] listeners = {
             new PlayerPotionEffectListener(),
@@ -238,7 +234,6 @@ public class LifeSteal {
             new PlayerKillListener(),
             new HeartCraftListener(),
             new ProfileListener(),
-            new HeartConsumeListener(),
     };
     Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
     i18n.translate(Level.FINE, "ListenersLoad");

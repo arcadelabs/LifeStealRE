@@ -55,6 +55,8 @@ public class HeartItemManager {
   private Mode mode;
   private String type;
   private String index;
+  private String[] consumeMessages;
+  private String consumeSound;
 
   /**
    * Instantiates a new Heart item manager.
@@ -132,6 +134,11 @@ public class HeartItemManager {
             ("Hearts.Types." + type + "." + index + ".Properties.ModelData");
     this.healthPoints = heartConfig.getDouble
             ("Hearts.Types." + type + "." + index + ".Properties.HealthPoints");
+    this.consumeMessages = lifeSteal.getUtils().formatStringList(heartConfig.getStringList
+            ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage")).toArray(new String[0]);
+    this.consumeSound = lifeSteal.getUtils().formatString(heartConfig.getString
+            ("Hearts.Types." + type + "." + index + ".Properties.ConsumeSound"));
+
 
     return this;
   }
@@ -150,6 +157,8 @@ public class HeartItemManager {
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemtype"), this.type)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemindex"), this.index)
             .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), this.healthPoints)
+            .setPDCStringList(new NamespacedKey(instance, "lifesteal_heart_consumemessage"), this.consumeMessages)
+            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_consumesound"), this.consumeSound)
             .cook();
     this.heartItem = this.heartItemCooker.getCookedItem();
     return this;
@@ -170,6 +179,8 @@ public class HeartItemManager {
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemtype"), this.type)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemindex"), this.index)
             .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), healthPoints)
+            .setPDCStringList(new NamespacedKey(instance, "lifesteal_heart_consumemessage"), this.consumeMessages)
+            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_consumesound"), this.consumeSound)
             .cook();
     this.heartItem = this.heartItemCooker.getCookedItem();
     return this;

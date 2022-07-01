@@ -30,10 +30,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.withdraw")
-//@SuppressWarnings("all")
 public class Withdraw extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
@@ -61,8 +61,11 @@ public class Withdraw extends BaseCommand {
       final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
       for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
         player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
-        lifeSteal.getUtils().spawnParticles(player, "soul");
       }
+      lifeSteal.getUtils().spawnParticles(player, "soul");
+      lifeSteal.getInteraction().retuurn(Level.FINE,
+              lifeSteal.getUtils().formatString(lifeSteal.getI18n().getKey("Messages.HeartWithdraw"), "hearts", hearts), player,
+              lifeSteal.getI18n().getKey("Sounds.HeartWithdraw"));
     }
   }
 }

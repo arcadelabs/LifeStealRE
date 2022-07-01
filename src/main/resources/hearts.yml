@@ -1,4 +1,4 @@
-Version: 3
+Version: 4
 Hearts:
   #  FIXED_BLESSED | FIXED_NORMAL | FIXED_CURSED | RANDOM_BLESSED | RANDOM_NORMAL | RANDOM_CURSED | RANDOM_ALL
   Mode:
@@ -28,6 +28,11 @@ Hearts:
                 Power: 2
                 Duration: 120
                 ShowParticles: false
+          ConsumeMessage:
+            - ===================
+            - You consumed a normal heart!
+            - ===================
+          ConsumeSound: entity.player.burp
     Blessed:
       50:
         Properties:
@@ -45,6 +50,11 @@ Hearts:
                 Power: 2
                 Duration: 120
                 ShowParticles: false
+          ConsumeMessage:
+            - ===================
+            - You consumed a blessed heart!
+            - ===================
+          ConsumeSound: entity.player.burp
     Cursed:
       20:
         Properties:
@@ -62,6 +72,11 @@ Hearts:
                 Power: 2
                 Duration: 120
                 ShowParticles: false
+          ConsumeMessage:
+            - ===================
+            - You consumed a cursed heart!
+            - ===================
+          ConsumeSound: entity.player.burp
       80:
         Properties:
           ItemType: PAPER
@@ -78,3 +93,8 @@ Hearts:
                 Power: 2
                 Duration: 120
                 ShowParticles: false
+          ConsumeMessage:
+            - ===================
+            - You consumed a cursed heart!
+            - ===================
+          ConsumeSound: entity.player.burp

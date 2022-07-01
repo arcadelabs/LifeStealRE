@@ -42,5 +42,6 @@ public class Eliminate extends BaseCommand {
   @CommandCompletion("@players")
   public void onEliminate(final Player target) {
     lifeSteal.getUtils().setPlayerBaseHealth(target, 0);
+    lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCommand", target);
   }
 }

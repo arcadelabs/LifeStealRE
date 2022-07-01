@@ -18,7 +18,7 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
-import in.arcadelabs.libs.adventure.adventure.key.Key;
+import com.jeff_media.morepersistentdatatypes.DataType;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.NamespacedKey;
@@ -52,14 +52,20 @@ public class PlayerClickListener implements Listener {
       if (player.getFoodLevel() == 20) player.setFoodLevel(19);
       instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
     } else {
-      final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer()
-              .get(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
-      lifeSteal.getUtils().setPlayerBaseHealth(player,
-              lifeSteal.getUtils().getPlayerBaseHealth(player) + healthPoints);
+
+      final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
+              (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
+      final String[] consumeMessages = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
+              (new NamespacedKey(instance, "lifesteal_heart_consumemessage"), DataType.STRING_ARRAY));
+      final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
+              (new NamespacedKey(instance, "lifesteal_heart_consumemessage"), PersistentDataType.STRING));
+
+      lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
+              + healthPoints);
       player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
       lifeSteal.getUtils().spawnParticles(player, "heart");
       lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
-      lifeSteal.getInteraction().retuurn(Level.FINE, "Gratz, you just consumed 1 heart!", player, Key.key("block.metal.fall"));
+      lifeSteal.getInteraction().retuurn(Level.FINE, consumeMessages, player, consumeSound);
     }
   }
 }

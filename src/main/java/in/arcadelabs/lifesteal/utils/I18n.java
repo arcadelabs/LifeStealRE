@@ -59,4 +59,8 @@ public class I18n {
       instance.getLogger().warning(exception.getLocalizedMessage());
     }
   }
+
+  public String getKey(String path) {
+    return language.getString(path);
+  }
 }

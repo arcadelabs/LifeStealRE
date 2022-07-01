@@ -18,11 +18,13 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
-import in.arcadelabs.lifesteal.LifeSteal;
-import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.libs.adventure.adventure.key.Key;
 import in.arcadelabs.libs.adventure.adventure.sound.Sound;
+import in.arcadelabs.libs.adventure.adventure.text.Component;
+import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
+import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
+import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
+import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
@@ -30,8 +32,7 @@ import java.util.logging.Logger;
 
 public class Interaction {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private final SpigotMessenger messenger = lifeSteal.getMessenger();
+  private final SpigotMessenger messenger;
   private final Logger logger;
   private final boolean cleanConsole;
 
@@ -42,6 +43,7 @@ public class Interaction {
    * @param cleanConsole clean console boolean
    */
   public Interaction(final Logger logger, final boolean cleanConsole) {
+    this.messenger = LifeStealPlugin.getLifeSteal().getMessenger();
     this.logger = logger;
     this.cleanConsole = cleanConsole;
   }
@@ -60,6 +62,27 @@ public class Interaction {
   }
 
   /**
+   * Broadcast message feedback.
+   *
+   * @param level     the level
+   * @param component the component
+   */
+  public void broadcast(final Level level, final Component component) {
+      messenger.broadcast(component);
+    if (!cleanConsole) return;
+    logger.log(level, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
+  }
+
+  public void broadcast(final String key, final Player player) {
+    Component component = MiniMessage.builder().build().deserialize(
+            LifeStealPlugin.getLifeSteal().getI18n().getKey("Messages.Elimination.ByDamagingBlocks"),
+            Placeholder.component("player", Component.text(player.getDisplayName())));
+    messenger.broadcast(component);
+    if (!cleanConsole) return;
+    logger.log(Level.INFO, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
+  }
+
+  /**
    * Returns message feedback..
    *
    * @param level    the logging level
@@ -67,10 +90,27 @@ public class Interaction {
    * @param player   the player
    * @param soundKey the sound key
    */
-  public void retuurn(final Level level, final String message, final Player player, final Key soundKey) {
-    messenger.playSound(player, Sound.sound(soundKey, Sound.Source.PLAYER, 1f, 1f));
+  public void retuurn(final Level level, final String message, final Player player, final String soundKey) {
+    messenger.playSound(player, Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
     messenger.sendMessage(player, message);
     if (!cleanConsole) return;
     logger.log(level, message);
+  }
+
+  /**
+   * Returns message feedback..
+   *
+   * @param level    the logging level
+   * @param messages  the messages
+   * @param player   the player
+   * @param soundKey the sound key
+   */
+  public void retuurn(final Level level, final String[] messages, final Player player, final String soundKey) {
+    messenger.playSound(player, Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
+    for (final String message : messages) {
+      messenger.sendMessage(player, message);
+      if (!cleanConsole) return;
+      logger.log(level, message);
+    }
   }
 }
