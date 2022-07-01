@@ -37,6 +37,7 @@ Messages:
     ByMagmaBlock: <gradient:e01e37:f52486><player> discovered the floor is <st>lava</st>magma, instant elimination HAH!</gradient>
     ByCramming: <gradient:e01e37:f52486><player> tried catching a Mumbai local, thus, eliminated.</gradient>
     ByFreeze: <gradient:e01e37:f52486><player> freezed to elimination.</gradient>
+    Other: <gradient:e01e37:f52486><player> got eliminated.</gradient>
 
   ConfigLoadError: <gradient:e01e37:641220>Error(s) occured while loading config.yml</gradient>
   HeartConfigLoadError: <gradient:e01e37:641220>Error(s) occured while loading hearts.yml</gradient>

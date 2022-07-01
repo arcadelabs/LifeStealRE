@@ -42,65 +42,7 @@ public class PlayerKillListener implements Listener {
     final Player victim = event.getEntity();
     final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
-      if (victim.getKiller() == null) {
-        switch (Objects.requireNonNull(victim.getLastDamageCause()).getCause()) {
-          case CONTACT:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByDamagingBlocks", victim);
-          case ENTITY_ATTACK:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByMob", victim);
-          case ENTITY_SWEEP_ATTACK:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByMob", victim);
-          case PROJECTILE:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByProjectile", victim);
-          case SUFFOCATION:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.BySuffocation", victim);
-          case FALL:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByFallDamage", victim);
-          case FIRE:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByBurn", victim);
-          case FIRE_TICK:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByBurn", victim);
-          case LAVA:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByLava", victim);
-          case DROWNING:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByDrowning", victim);
-          case BLOCK_EXPLOSION:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByExplosion", victim);
-          case ENTITY_EXPLOSION:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCreeper", victim);
-          case SUICIDE:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.BySuicide", victim);
-          case VOID:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByVoid", victim);
-          case LIGHTNING:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByLightning", victim);
-          case STARVATION:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByStarvation", victim);
-          case POISON:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByPoison", victim);
-          case MAGIC:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByMagic", victim);
-          case WITHER:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByWither", victim);
-          case FALLING_BLOCK:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByFallingBlock", victim);
-          case THORNS:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByThorns", victim);
-          case DRAGON_BREATH:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByDragonBreath", victim);
-          case FLY_INTO_WALL:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByKineticEnergy", victim);
-          case HOT_FLOOR:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByMagmaBlock", victim);
-          case CRAMMING:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCramming", victim);
-          case FREEZE:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByFreeze", victim);
-          default:
-            lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCommand", victim);
-        }
-      } else {
-        lifeSteal.getInteraction().broadcast("Messages.Elimination.ByPlayer", victim);}
+      lifeSteal.getUtils().broadcastElimination(Objects.requireNonNull(victim.getLastDamageCause()).getCause(), victim);
       victim.setGameMode(GameMode.SPECTATOR);
     } else {
       if (victim.getKiller() == null) {

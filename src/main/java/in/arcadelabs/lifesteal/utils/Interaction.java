@@ -73,9 +73,15 @@ public class Interaction {
     logger.log(level, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
   }
 
+  /**
+   * Broadcast message feedback.
+   *
+   * @param key    the key
+   * @param player the player
+   */
   public void broadcast(final String key, final Player player) {
     Component component = MiniMessage.builder().build().deserialize(
-            LifeStealPlugin.getLifeSteal().getI18n().getKey("Messages.Elimination.ByDamagingBlocks"),
+            LifeStealPlugin.getLifeSteal().getI18n().getKey(key),
             Placeholder.component("player", Component.text(player.getDisplayName())));
     messenger.broadcast(component);
     if (!cleanConsole) return;
