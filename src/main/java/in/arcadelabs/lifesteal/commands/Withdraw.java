@@ -24,7 +24,7 @@ import in.arcadelabs.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import in.arcadelabs.lifesteal.utils.HeartItemManager;
+import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

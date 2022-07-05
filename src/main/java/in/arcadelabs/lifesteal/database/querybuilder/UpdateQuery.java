@@ -1,4 +1,4 @@
-package in.arcadelabs.lifesteal.utils.querybuilder;
+package in.arcadelabs.lifesteal.database.querybuilder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

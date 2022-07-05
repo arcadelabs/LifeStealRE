@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package in.arcadelabs.lifesteal.utils;
+package in.arcadelabs.lifesteal.hearts;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
@@ -26,17 +26,18 @@ import org.bukkit.inventory.ShapedRecipe;
 
 public class HeartRecipeManager {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LifeSteal lifeSteal;
   private final ShapedRecipe heartRecipe;
 
   public HeartRecipeManager() {
-    heartRecipe = new ShapedRecipe(new NamespacedKey(LifeStealPlugin.getInstance(),
+    this.lifeSteal = LifeStealPlugin.getLifeSteal();
+    this.heartRecipe = new ShapedRecipe(new NamespacedKey(LifeStealPlugin.getInstance(),
             "lifesteal_heart_recipe"),
             lifeSteal.getPlaceholderHeart());
-    heartRecipe.shape("ABC", "DEF", "GHI");
+    this.heartRecipe.shape("ABC", "DEF", "GHI");
     final char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     for (final char recipeIngredient : recipeIngredients) {
-      heartRecipe.setIngredient(recipeIngredient,
+      this.heartRecipe.setIngredient(recipeIngredient,
               Material.valueOf((String) lifeSteal.getConfig().get("Heart.Recipe." + recipeIngredient)));
     }
   }

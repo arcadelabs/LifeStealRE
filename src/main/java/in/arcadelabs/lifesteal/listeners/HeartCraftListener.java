@@ -19,7 +19,7 @@
 package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import in.arcadelabs.lifesteal.utils.HeartItemManager;
+import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

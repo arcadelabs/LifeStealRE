@@ -16,11 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package in.arcadelabs.lifesteal.utils;
+package in.arcadelabs.lifesteal.hearts;
 
 import in.arcadelabs.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.utils.ProbabilityCollection;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -30,21 +31,18 @@ import java.util.Set;
 
 public class HeartItemManager {
 
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
-  private final YamlDocument heartConfig = lifeSteal.getHeartConfig();
-  private final Set<String> blessedHearts
-          = this.heartConfig.getSection("Hearts.Types.Blessed").getRoutesAsStrings(false);
-  private final String[] blessedRarity = this.blessedHearts.toArray(new String[0]);
-  private final Set<String> normalHearts
-          = this.heartConfig.getSection("Hearts.Types.Normal").getRoutesAsStrings(false);
-  private final String[] normalRarity = this.normalHearts.toArray(new String[0]);
-  private final Set<String> cursedHearts
-          = this.heartConfig.getSection("Hearts.Types.Cursed").getRoutesAsStrings(false);
-  private final String[] cursedRarity = this.cursedHearts.toArray(new String[0]);
-  private final ProbabilityCollection<Integer> randomBlessCol = new ProbabilityCollection<>();
-  private final ProbabilityCollection<Integer> randomNormalCol = new ProbabilityCollection<>();
-  private final ProbabilityCollection<Integer> randomCurseCol = new ProbabilityCollection<>();
+  private final LifeSteal lifeSteal;
+  private final LifeStealPlugin instance;
+  private final YamlDocument heartConfig;
+  private final Set<String> blessedHearts;
+  private final Set<String> normalHearts;
+  private final Set<String> cursedHearts;
+  private final String[] blessedRarity;
+  private final String[] normalRarity;
+  private final String[] cursedRarity;
+  private final ProbabilityCollection<Integer> randomBlessCol;
+  private final ProbabilityCollection<Integer> randomNormalCol;
+  private final ProbabilityCollection<Integer> randomCurseCol;
   private HeartItemCooker heartItemCooker;
   private ItemStack heartItem;
   private Material heartType;
@@ -64,6 +62,19 @@ public class HeartItemManager {
    * @param mode the mode
    */
   public HeartItemManager(final Mode mode) {
+    this.lifeSteal = LifeStealPlugin.getLifeSteal();
+    this.instance = LifeStealPlugin.getInstance();
+    this.heartConfig = this.lifeSteal.getHeartConfig();
+    this.blessedHearts = this.heartConfig.getSection("Hearts.Types.Blessed").getRoutesAsStrings(false);
+    this.normalHearts  = this.heartConfig.getSection("Hearts.Types.Normal").getRoutesAsStrings(false);
+    this.cursedHearts  = this.heartConfig.getSection("Hearts.Types.Cursed").getRoutesAsStrings(false);
+    this.blessedRarity = this.blessedHearts.toArray(new String[0]);
+    this.normalRarity = this.normalHearts.toArray(new String[0]);
+    this.cursedRarity = this.cursedHearts.toArray(new String[0]);
+    this.randomBlessCol = new ProbabilityCollection<>();
+    this.randomNormalCol = new ProbabilityCollection<>();
+    this.randomCurseCol = new ProbabilityCollection<>();
+
     this.mode = mode;
 
     for (int i = 0; i < this.blessedHearts.size(); i++) {

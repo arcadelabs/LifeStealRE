@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package in.arcadelabs.lifesteal.utils;
+package in.arcadelabs.lifesteal.hearts;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import org.bukkit.Material;
