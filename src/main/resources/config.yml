@@ -1,7 +1,9 @@
-Version: 3
+Version: 5
+
+Clean-Console: false
 
 DATABASE:
-  ENABLED:
+  ENABLED: false
   ADDRESS:
   PORT:
   DATABASE:
@@ -33,13 +35,13 @@ Heart:
     H: "GOLD_INGOT"
     I: "DIAMOND"
 #Crafting table representation.
-#  +---+---+---+
-#  | A | B | C |
-#  +---+---+---+
-#  | D | E | F |
-#  +---+---+---+
-#  | G | H | I |
-#  +---+---+---+
+#  ╔═══╦═══╦═══╗
+#  ║ A ║ B ║ C ║
+#  ╠═══╬═══╬═══╣
+#  ║ D ║ E ║ F ║
+#  ╠═══╬═══╬═══╣
+#  ║ G ║ H ║ I ║
+#  ╚═══╩═══╩═══╝
 
 # What happens after player looses all hearts.
 #Valid values are,

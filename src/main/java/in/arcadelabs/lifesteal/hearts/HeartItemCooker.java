@@ -18,14 +18,15 @@
 
 package in.arcadelabs.lifesteal.hearts;
 
-import com.jeff_media.morepersistentdatatypes.DataType;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class HeartItemCooker {
@@ -40,6 +41,11 @@ public class HeartItemCooker {
   public HeartItemCooker(final Material material) {
     this.heartItem = new ItemStack(material);
     this.heartMeta = this.heartItem.getItemMeta();
+  }
+
+  public HeartItemCooker(final Material material, final Map<String, Object> textureMap) {
+    this.heartItem = new ItemStack(material);
+    this.heartMeta = (ItemMeta) ConfigurationSerialization.deserializeObject(textureMap);
   }
 
   /**
@@ -96,30 +102,6 @@ public class HeartItemCooker {
    */
   public HeartItemCooker setPDCDouble(final NamespacedKey namespacedKey, final double value) {
     this.heartMeta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.DOUBLE, value);
-    return this;
-  }
-
-  /**
-   * Sets pdc boolean.
-   *
-   * @param namespacedKey the namespaced key
-   * @param value         the value
-   * @return the heart item cooker with persistent data container boolean
-   */
-  public HeartItemCooker setPDCBoolean(final NamespacedKey namespacedKey, final boolean value) {
-    this.heartMeta.getPersistentDataContainer().set(namespacedKey, DataType.BOOLEAN, value);
-    return this;
-  }
-
-  /**
-   * Sets pdc string list.
-   *
-   * @param namespacedKey the namespaced key
-   * @param stringList    the string list
-   * @return the heart item cooker with persistent data container string list
-   */
-  public HeartItemCooker setPDCStringList(final NamespacedKey namespacedKey, final String... stringList) {
-    this.heartMeta.getPersistentDataContainer().set(namespacedKey, DataType.STRING_ARRAY, stringList);
     return this;
   }
 

@@ -27,6 +27,7 @@ import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,7 +58,7 @@ public class Interaction {
    */
   public void retuurn(final Level level, final String message, final Player player) {
     messenger.sendMessage(player, message);
-    if (!cleanConsole) return;
+    if (cleanConsole) return;
     logger.log(level, message);
   }
 
@@ -69,7 +70,7 @@ public class Interaction {
    */
   public void broadcast(final Level level, final Component component) {
       messenger.broadcast(component);
-    if (!cleanConsole) return;
+    if (cleanConsole) return;
     logger.log(level, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
   }
 
@@ -84,7 +85,7 @@ public class Interaction {
             LifeStealPlugin.getLifeSteal().getI18n().getKey(key),
             Placeholder.component("player", Component.text(player.getDisplayName())));
     messenger.broadcast(component);
-    if (!cleanConsole) return;
+    if (cleanConsole) return;
     logger.log(Level.INFO, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
   }
 
@@ -99,7 +100,7 @@ public class Interaction {
   public void retuurn(final Level level, final String message, final Player player, final String soundKey) {
     messenger.playSound(player, Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
     messenger.sendMessage(player, message);
-    if (!cleanConsole) return;
+    if (cleanConsole) return;
     logger.log(level, message);
   }
 
@@ -111,12 +112,12 @@ public class Interaction {
    * @param player   the player
    * @param soundKey the sound key
    */
-  public void retuurn(final Level level, final String[] messages, final Player player, final String soundKey) {
+  public void retuurn(final Level level, final List<String> messages, final Player player, final String soundKey) {
     messenger.playSound(player, Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
     for (final String message : messages) {
       messenger.sendMessage(player, message);
-      if (!cleanConsole) return;
-      logger.log(level, message);
+      if (cleanConsole) return;
+      this.logger.log(level, message);
     }
   }
 }

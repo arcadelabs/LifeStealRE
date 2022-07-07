@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
-import com.jeff_media.morepersistentdatatypes.DataType;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.NamespacedKey;
@@ -29,6 +28,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -49,14 +49,18 @@ public class HeartConsumeListener implements Listener {
 
     final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
             (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
-    final String[] consumeMessages = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-            (new NamespacedKey(instance, "lifesteal_heart_consumemessage"), DataType.STRING_ARRAY));
+    final String type = heartMeta.getPersistentDataContainer().get
+            (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
+    final String index = heartMeta.getPersistentDataContainer().get
+            (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
     final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-            (new NamespacedKey(instance, "lifesteal_heart_consumemessage"), PersistentDataType.STRING));
+            (new NamespacedKey(instance, "lifesteal_heart_consumesound"), PersistentDataType.STRING));
+    final List<String> consumeMessages = lifeSteal.getHeartConfig().getStringList
+            ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage");
 
     lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
             + healthPoints);
     lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
-    lifeSteal.getInteraction().retuurn(Level.FINE, consumeMessages, player, consumeSound);
+    lifeSteal.getInteraction().retuurn(Level.INFO, consumeMessages, player, consumeSound);
   }
 }

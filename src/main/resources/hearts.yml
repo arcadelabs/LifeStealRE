@@ -1,4 +1,4 @@
-Version: 4
+Version: 5
 Hearts:
   #  FIXED_BLESSED | FIXED_NORMAL | FIXED_CURSED | RANDOM_BLESSED | RANDOM_NORMAL | RANDOM_CURSED | RANDOM_ALL
   Mode:
@@ -10,11 +10,15 @@ Hearts:
       80:
         Properties:
           ItemType: IRON_INGOT
-          Name: '<gradient:#e01e37:#e01e37>Normal Heart</gradient>'
+          Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Normal Heart'
           Lore:
-            - TT
-            - This consumable heart will give you <hp> heart points.
-            - PP
+            - '<gradient:#e01e37:#f72585>═════════════════════════'
+            - '<gradient:#f6c0ba:#f89999> A normal heart which'
+            - '<gradient:#f6c0ba:#f89999> gives neutral effects'
+            - ''
+            - '<gradient:#f9b4ed:#f89999> ◇ Effects:'
+            - '<red>  ◆ Regeneration <blue>2 <gray>| <green>120s'
+            - '<gradient:#f72585:#e01e37>═════════════════════════'
           ModelData: 123456
           HealthPoints: 2
           Effects:
@@ -23,26 +27,29 @@ Hearts:
                 Power: 2
                 Duration: 120
                 ShowParticles: false
-            Speed:
-                Type: speed
-                Power: 2
-                Duration: 120
-                ShowParticles: false
           ConsumeMessage:
-            - ===================
-            - You consumed a normal heart!
-            - ===================
+            - '<gradient:#e01e37:#f72585>═══════════════════════════════'
+            - '<gradient:#f6c0ba:#f89999>You consumed a normal heart! +♥'
+            - '<gradient:#f72585:#e01e37>═══════════════════════════════'
           ConsumeSound: entity.player.burp
     Blessed:
       50:
         Properties:
-          ItemType: PAPER
-          Name: '<gradient:#e01e37:#e01e37>Blessed Heart</gradient>'
+          ItemType: PLAYER_HEAD
+          Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Blessed Heart'
           Lore:
-            - TT
-            - This consumable heart will give you <hp> heart points.
-            - PP
+            - '<gradient:#e01e37:#f72585>═════════════════════════'
+            - '<gradient:#f6c0ba:#f89999> A blessed heart which'
+            - '<gradient:#f6c0ba:#f89999> gives positive effects'
+            - ''
+            - '<gradient:#f9b4ed:#f89999> ◇ Effects:'
+            - '<yellow>  ◆ Speed <blue>2 <gray>| <green>120s'
+            - '<red>  ◆ Regeneration <blue>2 <gray>| <green>120s'
+            - '<gradient:#f72585:#e01e37>═════════════════════════'
           ModelData: 123456
+#          https://minecraft-heads.com/custom-heads/search?searchword=heart
+#          Go down and check for 'value' fiels and copy paste that down below.
+          SkullTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmQzNmMzMjkxZmUwMmQxNDJjNGFmMjhkZjJmNTViYjAzOTdlMTk4NTU0ZTgzNDU5OTBkYmJjZDRjMTQwMzE2YiJ9fX0="
           HealthPoints: 2
           Effects:
             Speed:
@@ -50,20 +57,29 @@ Hearts:
                 Power: 2
                 Duration: 120
                 ShowParticles: false
+            Regen:
+              Type: regeneration
+              Power: 2
+              Duration: 120
+              ShowParticles: false
           ConsumeMessage:
-            - ===================
-            - You consumed a blessed heart!
-            - ===================
+            - '<gradient:#e01e37:#f72585>═══════════════════════════════'
+            - '<gradient:#f6c0ba:#f89999>You consumed a blessed heart! +♥'
+            - '<gradient:#f72585:#e01e37>═══════════════════════════════'
           ConsumeSound: entity.player.burp
     Cursed:
       20:
         Properties:
           ItemType: PAPER
-          Name: '<gradient:#e01e37:#e01e37>Cursed Heart</gradient>'
+          Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Cursed Heart'
           Lore:
-            - TT
-            - This consumable heart will give you <hp> heart points.
-            - PP
+            - '<gradient:#e01e37:#f72585>═════════════════════════'
+            - '<gradient:#f6c0ba:#f89999> A cursed heart which'
+            - '<gradient:#f6c0ba:#f89999> gives negative effects'
+            - ''
+            - '<gradient:#f9b4ed:#f89999> ◇ Effects:'
+            - '<dark_green>  ◆ Hunger <blue>2 <gray>| <green>120s'
+            - '<gradient:#f72585:#e01e37>═════════════════════════'
           ModelData: 123456
           HealthPoints: 2
           Effects:
@@ -73,18 +89,22 @@ Hearts:
                 Duration: 120
                 ShowParticles: false
           ConsumeMessage:
-            - ===================
-            - You consumed a cursed heart!
-            - ===================
+            - '<gradient:#e01e37:#f72585>═══════════════════════════════'
+            - '<gradient:#f6c0ba:#f89999>You consumed a cursed heart! +♥'
+            - '<gradient:#f72585:#e01e37>═══════════════════════════════'
           ConsumeSound: entity.player.burp
       80:
         Properties:
           ItemType: PAPER
-          Name: '<gradient:#e01e37:#e01e37>Cursed Heart</gradient>'
+          Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Cursed Heart'
           Lore:
-            - TT
-            - This consumable heart will give you <hp> heart points.
-            - PP
+            - '<gradient:#e01e37:#f72585>═════════════════════════'
+            - '<gradient:#f6c0ba:#f89999> A cursed heart which'
+            - '<gradient:#f6c0ba:#f89999> gives negative effects'
+            - ''
+            - '<gradient:#f9b4ed:#f89999> ◇ Effects:'
+            - '<dark_purple>  ◆ Blindness <blue>2 <gray>| <green>120s'
+            - '<gradient:#f72585:#e01e37>═════════════════════════'
           ModelData: 123456
           HealthPoints: 2
           Effects:
@@ -94,7 +114,7 @@ Hearts:
                 Duration: 120
                 ShowParticles: false
           ConsumeMessage:
-            - ===================
-            - You consumed a cursed heart!
-            - ===================
+            - '<gradient:#e01e37:#f72585>═══════════════════════════════'
+            - '<gradient:#f6c0ba:#f89999>You consumed a cursed heart! +♥'
+            - '<gradient:#f72585:#e01e37>═══════════════════════════════'
           ConsumeSound: entity.player.burp

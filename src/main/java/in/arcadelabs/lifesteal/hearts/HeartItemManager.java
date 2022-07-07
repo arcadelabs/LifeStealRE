@@ -45,6 +45,7 @@ public class HeartItemManager {
   private final ProbabilityCollection<Integer> randomCurseCol;
   private HeartItemCooker heartItemCooker;
   private ItemStack heartItem;
+  private String skullData;
   private Material heartType;
   private String heartName;
   private List<String> heartLore;
@@ -53,7 +54,6 @@ public class HeartItemManager {
   private Mode mode;
   private String type;
   private String index;
-  private String[] consumeMessages;
   private String consumeSound;
 
   /**
@@ -66,8 +66,8 @@ public class HeartItemManager {
     this.instance = LifeStealPlugin.getInstance();
     this.heartConfig = this.lifeSteal.getHeartConfig();
     this.blessedHearts = this.heartConfig.getSection("Hearts.Types.Blessed").getRoutesAsStrings(false);
-    this.normalHearts  = this.heartConfig.getSection("Hearts.Types.Normal").getRoutesAsStrings(false);
-    this.cursedHearts  = this.heartConfig.getSection("Hearts.Types.Cursed").getRoutesAsStrings(false);
+    this.normalHearts = this.heartConfig.getSection("Hearts.Types.Normal").getRoutesAsStrings(false);
+    this.cursedHearts = this.heartConfig.getSection("Hearts.Types.Cursed").getRoutesAsStrings(false);
     this.blessedRarity = this.blessedHearts.toArray(new String[0]);
     this.normalRarity = this.normalHearts.toArray(new String[0]);
     this.cursedRarity = this.cursedHearts.toArray(new String[0]);
@@ -145,11 +145,10 @@ public class HeartItemManager {
             ("Hearts.Types." + type + "." + index + ".Properties.ModelData");
     this.healthPoints = heartConfig.getDouble
             ("Hearts.Types." + type + "." + index + ".Properties.HealthPoints");
-    this.consumeMessages = lifeSteal.getUtils().formatStringList(heartConfig.getStringList
-            ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage")).toArray(new String[0]);
-    this.consumeSound = lifeSteal.getUtils().formatString(heartConfig.getString
-            ("Hearts.Types." + type + "." + index + ".Properties.ConsumeSound"));
-
+    this.consumeSound = heartConfig.getString
+            ("Hearts.Types." + type + "." + index + ".Properties.ConsumeSound");
+    if (this.heartType == Material.PLAYER_HEAD) this.skullData = heartConfig.getString
+            ("Hearts.Types." + type + "." + index + ".Properties.SkullTexture");
 
     return this;
   }
@@ -160,7 +159,12 @@ public class HeartItemManager {
    * @return the heart item manager
    */
   public HeartItemManager cookHeart() {
-    this.heartItemCooker = new HeartItemCooker(this.heartType)
+    if (this.heartType == Material.PLAYER_HEAD) {
+      this.heartItemCooker = new HeartItemCooker(this.heartType, lifeSteal.getSkullMaker().createSkullMap(this.skullData));
+    } else {
+      this.heartItemCooker = new HeartItemCooker(this.heartType);
+    }
+    this.heartItemCooker
             .setHeartName(this.heartName)
             .setHeartLore(this.heartLore)
             .setModelData(this.modelData)
@@ -168,7 +172,6 @@ public class HeartItemManager {
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemtype"), this.type)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemindex"), this.index)
             .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), this.healthPoints)
-            .setPDCStringList(new NamespacedKey(instance, "lifesteal_heart_consumemessage"), this.consumeMessages)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_consumesound"), this.consumeSound)
             .cook();
     this.heartItem = this.heartItemCooker.getCookedItem();
@@ -182,7 +185,12 @@ public class HeartItemManager {
    * @return the heart item manager
    */
   public HeartItemManager cookHeart(final int healthPoints) {
-    this.heartItemCooker = new HeartItemCooker(this.heartType)
+    if (this.heartType == Material.PLAYER_HEAD) {
+      this.heartItemCooker = new HeartItemCooker(this.heartType, lifeSteal.getSkullMaker().createSkullMap(this.skullData));
+    } else {
+      this.heartItemCooker = new HeartItemCooker(this.heartType);
+    }
+    this.heartItemCooker
             .setHeartName(this.heartName)
             .setHeartLore(this.heartLore)
             .setModelData(this.modelData)
@@ -190,7 +198,6 @@ public class HeartItemManager {
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemtype"), this.type)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemindex"), this.index)
             .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), healthPoints)
-            .setPDCStringList(new NamespacedKey(instance, "lifesteal_heart_consumemessage"), this.consumeMessages)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_consumesound"), this.consumeSound)
             .cook();
     this.heartItem = this.heartItemCooker.getCookedItem();
