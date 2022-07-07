@@ -7,9 +7,11 @@ Hearts:
     OnCraft: FIXED_NORMAL
   Types:
     Normal:
+#      This index number down here represents rarity of the item.
       80:
         Properties:
-          ItemType: IRON_INGOT
+#          If item type is any edible food, heart will atke effect when player eats it, not when player simply right clicls.
+          ItemType: APPLE
           Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Normal Heart'
           Lore:
             - '<gradient:#e01e37:#f72585>═════════════════════════'
@@ -19,6 +21,7 @@ Hearts:
             - '<gradient:#f9b4ed:#f89999> ◇ Effects:'
             - '<red>  ◆ Regeneration <blue>2 <gray>| <green>120s'
             - '<gradient:#f72585:#e01e37>═════════════════════════'
+#            For resourcepack usage.
           ModelData: 123456
           HealthPoints: 2
           Effects:

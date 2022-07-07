@@ -50,19 +50,6 @@ public class Interaction {
   }
 
   /**
-   * Returns message feedback.
-   *
-   * @param level   the logging level
-   * @param message the message
-   * @param player  the player
-   */
-  public void retuurn(final Level level, final String message, final Player player) {
-    messenger.sendMessage(player, message);
-    if (cleanConsole) return;
-    logger.log(level, message);
-  }
-
-  /**
    * Broadcast message feedback.
    *
    * @param level     the level
@@ -87,6 +74,19 @@ public class Interaction {
     messenger.broadcast(component);
     if (cleanConsole) return;
     logger.log(Level.INFO, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
+  }
+
+  /**
+   * Returns message feedback.
+   *
+   * @param level   the logging level
+   * @param message the message
+   * @param player  the player
+   */
+  public void retuurn(final Level level, final String message, final Player player) {
+    messenger.sendMessage(player, message);
+    if (cleanConsole) return;
+    logger.log(level, message);
   }
 
   /**

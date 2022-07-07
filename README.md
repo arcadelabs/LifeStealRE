@@ -14,7 +14,8 @@ Lifesteal is a survival gamemode concept made by some MCYT content creators, whe
 
 Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
-### Features:
+### Features,
+- HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages, and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an heart that doesn't work as long as it shows the errors in gradients.
 - Customizable heart recipe.
 - Blessed, normal and cursed heart types.
 - Unlimited amount of 100% customizable hearts.
@@ -25,9 +26,15 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 - Milk cures negetive effects can be disabled.
 - Hearts can have custom texture model ID which resource packs will use to replace the textures.
 - 100% Customizable messages and sounds.
-- Heart consume animations and particle effects (work in progress, don't expect proper functionality.)
-- Profile system (statistics etc.) [WIP]
+- Heart consume animations and particle effects (work in progress, don't expect proper functionality.) [<span style="color:red">WIP</span>]
+- Profile system (statistics etc.) [<span style="color:red">WIP</span>]
 - MySQL and SQLite database support.
-- Player elimination, ban/spectator/spectate body [WIP]
+- Player elimination, ban/spectator/spectate body [<span style="color:red">WIP</span>]
 - And tons of other stuff that I'm gonna send screenshot of because me lazy...
 - ![image](https://user-images.githubusercontent.com/69498033/177811484-f9ef5fbc-3881-4d1e-b988-dd414502fb0d.png)
+I blured some stuff out because they're upcoming more exciting features 😈
+
+### Final thoughts,
+This is my (@RealRONiN)'s 2nd public project (first one is Greetings and it's private for god knows what reasons.), 
+and it's still in development, I'd say it's about 40% done for now, please report any bugs or issues you face in issues section.
+For developers who're reviewing the code right now (on my humble request I'm guessing), please don't yell at me for forgetting to add null checks and other important stuff in almost everywhere, also please don't judge my obsession with gradients in configs. 
