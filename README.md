@@ -26,10 +26,10 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 - Milk cures negetive effects can be disabled.
 - Hearts can have custom texture model ID which resource packs will use to replace the textures.
 - 100% Customizable messages and sounds.
-- Heart consume animations and particle effects (work in progress, don't expect proper functionality.) [<span style="color:red">WIP</span>]
-- Profile system (statistics etc.) [<span style="color:red">WIP</span>]
+- Heart consume animations and particle effects (work in progress, don't expect proper functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
+- Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - MySQL and SQLite database support.
-- Player elimination, ban/spectator/spectate body [<span style="color:red">WIP</span>]
+- Player elimination, ban/spectator/spectate body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - And tons of other stuff that I'm gonna send screenshot of because me lazy...
 - ![image](https://user-images.githubusercontent.com/69498033/177811484-f9ef5fbc-3881-4d1e-b988-dd414502fb0d.png)
 I blured some stuff out because they're upcoming more exciting features 😈
