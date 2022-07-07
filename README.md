@@ -2,7 +2,7 @@
 <div align="center">
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/arcadelabs/LifeSteal?style=for-the-badge) 
-![GitHub watchers](https://img.shields.io/github/watchers/arcadelabs/LifeSteal?style=for-the-badge) 
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/arcadelabs/LifeSteal?style=for-the-badge)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/arcadelabs/LifeSteal?include_prereleases&style=for-the-badge) 
 ![GitHub downloads](https://img.shields.io/github/downloads/arcadelabs/LifeSteal/total?style=for-the-badge) 
 ![GitHub issues](https://img.shields.io/github/issues/arcadelabs/LifeSteal?style=for-the-badge)
