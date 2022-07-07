@@ -17,11 +17,14 @@ DisableMilkCure: true
 Heart:
   Properties:
     ItemType: "PAPER"
-    Name: "<gradient:#e01e37:#e01e37>Heart</gradient>"
+    Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Heart'
     Lore:
-      - "<gradient:#f89999:#f6c0ba>This is a placeholder heart.</gradient>"
-      - "<gradient:#f89999:#f6c0ba>This consumable heart will give you <hp> heart points.</gradient>"
-      - "<gradient:#f89999:#f6c0ba>This will be turned into a normal, blessed or cursed heart after crafting.</gradient>"
+      - '<gradient:#e01e37:#f72585>══════════════════════════════════════'
+      - '<gradient:#f89999:#f6c0ba><b>This is a placeholder heart.'
+      - ''
+      - '<gradient:#f89999:#f6c0ba>This will be turned into a normal,'
+      - '<gradient:#f89999:#f6c0ba>blessed or cursed heart after crafting.'
+      - '<gradient:#f72585:#e01e37>══════════════════════════════════════'
     ModelData: 123456
 #Heart item recipe, it is a shaped recipe.
   Recipe:
