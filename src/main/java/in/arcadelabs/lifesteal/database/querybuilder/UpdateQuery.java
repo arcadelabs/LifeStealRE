@@ -5,6 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * This class is not the property of ArcadeLabs.
+ * Original Source : https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries
+ */
+
 public class UpdateQuery {
 
     private String table;
