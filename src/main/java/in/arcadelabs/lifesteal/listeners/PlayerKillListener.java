@@ -28,8 +28,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Objects;
-
 public class PlayerKillListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
@@ -42,7 +40,8 @@ public class PlayerKillListener implements Listener {
     final Player victim = event.getEntity();
     final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
-      lifeSteal.getUtils().broadcastElimination(Objects.requireNonNull(victim.getLastDamageCause()).getCause(), victim);
+      lifeSteal.getInteraction().broadcast(
+              lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause(), victim), victim);
       victim.setGameMode(GameMode.SPECTATOR);
     } else {
       if (victim.getKiller() == null) {
