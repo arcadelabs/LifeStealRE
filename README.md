@@ -2,7 +2,6 @@
 <div align="center">
 
 ![Status](https://img.shields.io/badge/STATUS-BETA-3a0ca3?style=for-the-badge)
-![Discord](https://img.shields.io/discord/913747614967689247?color=5865f2&label=Discord&style=for-the-badge)
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/arcadelabs/LifeSteal?style=for-the-badge)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/arcadelabs/LifeSteal?include_prereleases&style=for-the-badge) 
 ![GitHub downloads](https://img.shields.io/github/downloads/arcadelabs/LifeSteal/total?style=for-the-badge) 
@@ -29,7 +28,7 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 - 100% Customizable messages and sounds.
 - Heart consume animations and particle effects (work in progress, don't expect proper functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- MySQL and SQLite database support.
+- MySQL and SQLite database support. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - Player elimination, ban/spectator/spectate body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - And tons of other stuff that I'm gonna send screenshot of because me lazy...
 - ![image](https://user-images.githubusercontent.com/69498033/177811484-f9ef5fbc-3881-4d1e-b988-dd414502fb0d.png)
