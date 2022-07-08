@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.Profile;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -27,6 +28,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 public class PlayerKillListener implements Listener {
 
@@ -54,6 +58,12 @@ public class PlayerKillListener implements Listener {
                 .cookHeart();
         replacementHeart = heartItemManager.getHeartItem();
         lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - lostHearts);
+        try {
+          Profile victimProfile = lifeSteal.getProfileManager().getProfile(victim.getUniqueId());
+          victimProfile.setLostHearts(victimProfile.getLostHearts() - 1);
+        } catch (SQLException e) {
+          lifeSteal.getInstance().getLogger().log(Level.WARNING, e.toString());
+        }
         victim.getWorld().dropItemNaturally(victim.getLocation(), replacementHeart);
       } else {
         lifeSteal.getUtils().transferHealth(victim, victim.getKiller());
