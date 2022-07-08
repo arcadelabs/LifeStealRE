@@ -40,8 +40,12 @@ public class PlayerKillListener implements Listener {
     final Player victim = event.getEntity();
     final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
+      if (victim.getKiller() == null) {
       lifeSteal.getInteraction().broadcast(
-              lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause(), victim), victim);
+              lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
+      } else {
+        lifeSteal.getInteraction().broadcast(lifeSteal.getI18n().getKey("Messages.Elimination.ByPlayer"), victim);
+      }
       victim.setGameMode(GameMode.SPECTATOR);
     } else {
       if (victim.getKiller() == null) {
