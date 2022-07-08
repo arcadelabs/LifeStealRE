@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import lombok.Getter;
 
+/*
+ * This class is not the property of ArcadeLabs.
+ * Original Source : https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries
+ */
 
 @Getter
 public class Query {
