@@ -23,7 +23,7 @@ public class ProfileListener implements Listener {
         .getServer()
         .getPluginManager()
         .isPluginEnabled(LifeStealPlugin.getInstance()))) {
-      event.disallow(Result.KICK_OTHER, "SERVER UNDER LOADING PROCESS!");
+      event.disallow(Result.KICK_OTHER, "Server still loading, please join after some time");
     }
     try {
       Profile profile =
