@@ -1,7 +1,8 @@
 <h1 align="center"><img height="35" src="https://cdnb.artstation.com/p/assets/images/images/016/235/721/original/christopher-haugen-heart-rotate4.gif"> Lifesteal++ <img height="35" src="https://cdnb.artstation.com/p/assets/images/images/016/235/721/original/christopher-haugen-heart-rotate4.gif"></h1>
 <div align="center">
 
-![GitHub Repo stars](https://img.shields.io/github/stars/arcadelabs/LifeSteal?style=for-the-badge) 
+![Status](https://img.shields.io/badge/STATUS-BETA-3a0ca3?style=for-the-badge)
+![Discord](https://img.shields.io/discord/913747614967689247?color=5865f2&label=Discord&style=for-the-badge)
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/arcadelabs/LifeSteal?style=for-the-badge)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/arcadelabs/LifeSteal?include_prereleases&style=for-the-badge) 
 ![GitHub downloads](https://img.shields.io/github/downloads/arcadelabs/LifeSteal/total?style=for-the-badge) 
@@ -33,6 +34,13 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 - And tons of other stuff that I'm gonna send screenshot of because me lazy...
 - ![image](https://user-images.githubusercontent.com/69498033/177811484-f9ef5fbc-3881-4d1e-b988-dd414502fb0d.png)
 I blured some stuff out because they're upcoming more exciting features 😈
+
+### Servers using LifeSteal++ ,
+
+![bStats Players](https://img.shields.io/bstats/players/15272?style=for-the-badge)
+![bStats Servers](https://img.shields.io/bstats/servers/15272?style=for-the-badge)
+<br>
+_Contact me to include your server name and IP here._
 
 ### Final thoughts,
 This is my (@RealRONiN)'s 2nd public project (first one is Greetings and it's private for god knows what reasons.), 
