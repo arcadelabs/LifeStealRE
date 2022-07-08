@@ -56,9 +56,7 @@ public final class LifeStealPlugin extends JavaPlugin {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    getServer().getScheduler().cancelTasks(this);
     lifeSteal.getMessenger().closeMessenger();
-
     lifeSteal.getDatabaseHandler().disconnect();
 
     getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");

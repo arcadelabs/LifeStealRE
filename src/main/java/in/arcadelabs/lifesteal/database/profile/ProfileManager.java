@@ -123,37 +123,9 @@ public class ProfileManager {
     return profile;
   }
 
-  public void handleJoin(UUID uniqueID) throws SQLException {
-    Profile profile = this.getProfile(uniqueID);
-    profileMap.put(uniqueID, profile);
-  }
-
-  public void handleQuit(UUID uuid) {
-    LifeStealPlugin.getInstance()
-        .getServer()
-        .getScheduler()
-        .runTaskAsynchronously(
-            LifeStealPlugin.getInstance(),
-            () -> {
-              try {
-                saveProfile(profileMap.get(uuid));
-              } catch (SQLException e) {
-                e.printStackTrace();
-              }
-            });
-    profileMap.remove(uuid);
-  }
-
   public void saveAll() throws SQLException {
     for (Profile profile : profileMap.values()) {
       this.saveProfile(profile);
-    }
-  }
-
-  public void forceLoad() throws SQLException {
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      Profile profile = this.getProfile(player.getUniqueId());
-      profileMap.put(player.getUniqueId(), profile);
     }
   }
 }

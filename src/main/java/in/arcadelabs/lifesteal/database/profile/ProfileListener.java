@@ -2,6 +2,9 @@ package in.arcadelabs.lifesteal.database.profile;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import java.sql.SQLException;
+import java.util.Objects;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,12 +23,17 @@ public class ProfileListener implements Listener {
         .getServer()
         .getPluginManager()
         .isPluginEnabled(LifeStealPlugin.getInstance()))) {
-      event.disallow(Result.KICK_OTHER, "Your account could not be loaded...");
+      event.disallow(Result.KICK_OTHER, "SERVER UNDER LOADING PROCESS!");
     }
     try {
+      Profile profile =
+          LifeStealPlugin.getLifeSteal()
+              .getProfileManager()
+              .getProfile(event.getPlayer().getUniqueId());
       LifeStealPlugin.getLifeSteal()
           .getProfileManager()
-          .handleJoin(event.getPlayer().getUniqueId());
+          .getProfileMap()
+          .put(profile.getUniqueID(), profile);
     } catch (SQLException e) {
       event.disallow(Result.KICK_OTHER, "Your account could not be loaded...");
       e.printStackTrace();
@@ -34,6 +42,26 @@ public class ProfileListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerQuit(PlayerQuitEvent event) {
-    LifeStealPlugin.getLifeSteal().getProfileManager().handleQuit(event.getPlayer().getUniqueId());
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            LifeStealPlugin.getInstance(),
+            () -> {
+              try {
+                LifeStealPlugin.getLifeSteal()
+                    .getProfileManager()
+                    .saveProfile(
+                        LifeStealPlugin.getLifeSteal()
+                            .getProfileManager()
+                            .getProfileMap()
+                            .get(event.getPlayer().getUniqueId()));
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+
+              LifeStealPlugin.getLifeSteal()
+                  .getProfileManager()
+                  .getProfileMap()
+                  .remove(event.getPlayer().getPlayer().getUniqueId());
+            });
   }
 }
