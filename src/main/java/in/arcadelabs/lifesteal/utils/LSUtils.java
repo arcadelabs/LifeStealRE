@@ -209,37 +209,33 @@ public class LSUtils {
     }
   }
 
-  public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause, final Player victim) {
-    if (victim.getKiller() == null) {
+  public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause) {
       switch (damageCause) {
-        case CONTACT -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByDamagingBlocks"); }
-        case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByMob"); }
-        case PROJECTILE -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByProjectile"); }
-        case SUFFOCATION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.BySuffocation"); }
-        case FALL -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByFallDamage"); }
-        case FIRE, FIRE_TICK -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByBurn"); }
-        case LAVA -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByLava"); }
-        case DROWNING -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByDrowning"); }
-        case BLOCK_EXPLOSION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByExplosion"); }
-        case ENTITY_EXPLOSION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByCreeper"); }
-        case SUICIDE -> { return lifeSteal.getI18n().getKey("Messages.Elimination.BySuicide"); }
-        case VOID -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByVoid"); }
-        case LIGHTNING -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByLightning"); }
-        case STARVATION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByStarvation"); }
-        case POISON -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByPoison"); }
-        case MAGIC -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByMagic"); }
-        case WITHER -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByWither"); }
-        case FALLING_BLOCK -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByFallingBlock"); }
-        case THORNS -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByThorns"); }
-        case DRAGON_BREATH -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByDragonBreath"); }
-        case FLY_INTO_WALL -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByKineticEnergy"); }
-        case HOT_FLOOR -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByMagmaBlock"); }
-        case CRAMMING -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByCramming"); }
-        case FREEZE -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByFreeze"); }
-        default -> { return lifeSteal.getI18n().getKey("Messages.Elimination.Other"); }
+        case CONTACT -> { return "Messages.Elimination.ByDamagingBlocks"; }
+        case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> { return "Messages.Elimination.ByMob"; }
+        case PROJECTILE -> { return "Messages.Elimination.ByProjectile"; }
+        case SUFFOCATION -> { return "Messages.Elimination.BySuffocation"; }
+        case FALL -> { return "Messages.Elimination.ByFallDamage"; }
+        case FIRE, FIRE_TICK -> { return "Messages.Elimination.ByBurn"; }
+        case LAVA -> { return "Messages.Elimination.ByLava"; }
+        case DROWNING -> { return "Messages.Elimination.ByDrowning"; }
+        case BLOCK_EXPLOSION -> { return "Messages.Elimination.ByExplosion"; }
+        case ENTITY_EXPLOSION -> { return "Messages.Elimination.ByCreeper"; }
+        case SUICIDE -> { return "Messages.Elimination.BySuicide"; }
+        case VOID -> { return "Messages.Elimination.ByVoid"; }
+        case LIGHTNING -> { return "Messages.Elimination.ByLightning"; }
+        case STARVATION -> { return "Messages.Elimination.ByStarvation"; }
+        case POISON -> { return "Messages.Elimination.ByPoison"; }
+        case MAGIC -> { return "Messages.Elimination.ByMagic"; }
+        case WITHER -> { return "Messages.Elimination.ByWither"; }
+        case FALLING_BLOCK -> { return "Messages.Elimination.ByFallingBlock"; }
+        case THORNS -> { return "Messages.Elimination.ByThorns"; }
+        case DRAGON_BREATH -> { return "Messages.Elimination.ByDragonBreath"; }
+        case FLY_INTO_WALL -> { return "Messages.Elimination.ByKineticEnergy"; }
+        case HOT_FLOOR -> { return "Messages.Elimination.ByMagmaBlock"; }
+        case CRAMMING -> { return "Messages.Elimination.ByCramming"; }
+        case FREEZE -> { return "Messages.Elimination.ByFreeze"; }
+        default -> { return "Messages.Elimination.Other"; }
       }
-    } else {
-      { return lifeSteal.getI18n().getKey("Messages.Elimination.ByPlayer"); }
-    }
   }
 }
