@@ -209,89 +209,37 @@ public class LSUtils {
     }
   }
 
-  public void broadcastElimination(final EntityDamageEvent.DamageCause damageCause, final Player victim) {
+  public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause, final Player victim) {
     if (victim.getKiller() == null) {
       switch (damageCause) {
-        case CONTACT:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByDamagingBlocks", victim);
-          break;
-        case ENTITY_ATTACK:
-        case ENTITY_SWEEP_ATTACK:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByMob", victim);
-          break;
-        case PROJECTILE:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByProjectile", victim);
-          break;
-        case SUFFOCATION:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.BySuffocation", victim);
-          break;
-        case FALL:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByFallDamage", victim);
-          break;
-        case FIRE:
-        case FIRE_TICK:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByBurn", victim);
-          break;
-        case LAVA:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByLava", victim);
-          break;
-        case DROWNING:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByDrowning", victim);
-          break;
-        case BLOCK_EXPLOSION:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByExplosion", victim);
-          break;
-        case ENTITY_EXPLOSION:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCreeper", victim);
-          break;
-        case SUICIDE:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.BySuicide", victim);
-          break;
-        case VOID:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByVoid", victim);
-          break;
-        case LIGHTNING:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByLightning", victim);
-          break;
-        case STARVATION:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByStarvation", victim);
-          break;
-        case POISON:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByPoison", victim);
-          break;
-        case MAGIC:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByMagic", victim);
-          break;
-        case WITHER:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByWither", victim);
-          break;
-        case FALLING_BLOCK:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByFallingBlock", victim);
-          break;
-        case THORNS:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByThorns", victim);
-          break;
-        case DRAGON_BREATH:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByDragonBreath", victim);
-          break;
-        case FLY_INTO_WALL:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByKineticEnergy", victim);
-          break;
-        case HOT_FLOOR:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByMagmaBlock", victim);
-          break;
-        case CRAMMING:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCramming", victim);
-          break;
-        case FREEZE:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.ByFreeze", victim);
-          break;
-        default:
-          lifeSteal.getInteraction().broadcast("Messages.Elimination.Other", victim);
-          break;
+        case CONTACT -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByDamagingBlocks"); }
+        case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByMob"); }
+        case PROJECTILE -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByProjectile"); }
+        case SUFFOCATION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.BySuffocation"); }
+        case FALL -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByFallDamage"); }
+        case FIRE, FIRE_TICK -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByBurn"); }
+        case LAVA -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByLava"); }
+        case DROWNING -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByDrowning"); }
+        case BLOCK_EXPLOSION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByExplosion"); }
+        case ENTITY_EXPLOSION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByCreeper"); }
+        case SUICIDE -> { return lifeSteal.getI18n().getKey("Messages.Elimination.BySuicide"); }
+        case VOID -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByVoid"); }
+        case LIGHTNING -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByLightning"); }
+        case STARVATION -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByStarvation"); }
+        case POISON -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByPoison"); }
+        case MAGIC -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByMagic"); }
+        case WITHER -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByWither"); }
+        case FALLING_BLOCK -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByFallingBlock"); }
+        case THORNS -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByThorns"); }
+        case DRAGON_BREATH -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByDragonBreath"); }
+        case FLY_INTO_WALL -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByKineticEnergy"); }
+        case HOT_FLOOR -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByMagmaBlock"); }
+        case CRAMMING -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByCramming"); }
+        case FREEZE -> { return lifeSteal.getI18n().getKey("Messages.Elimination.ByFreeze"); }
+        default -> { return lifeSteal.getI18n().getKey("Messages.Elimination.Other"); }
       }
     } else {
-      lifeSteal.getInteraction().broadcast("Messages.Elimination.ByPlayer", victim);
+      { return lifeSteal.getI18n().getKey("Messages.Elimination.ByPlayer"); }
     }
   }
 }
