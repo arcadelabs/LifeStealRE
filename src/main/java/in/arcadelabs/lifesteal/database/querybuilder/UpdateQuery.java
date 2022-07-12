@@ -5,16 +5,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/*
- * This class is not the property of ArcadeLabs.
- * Original Source : https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries
- */
+/**
+ * Creates a table
+ * @author Mrtenz
+ * <a href="https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries">...</a>
+ **/
 
 public class UpdateQuery {
 
-    private String table;
-    private LinkedHashMap<String, String> values = new LinkedHashMap<String, String>();
-    private List<String> wheres = new ArrayList<String>();
+    private final String table;
+    private final LinkedHashMap<String, String> values = new LinkedHashMap<>();
+    private final List<String> wheres = new ArrayList<>();
 
     /**
      * Create an update query.

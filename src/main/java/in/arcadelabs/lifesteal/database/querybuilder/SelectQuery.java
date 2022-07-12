@@ -3,16 +3,17 @@ package in.arcadelabs.lifesteal.database.querybuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * This class is not the property of ArcadeLabs.
- * Original Source : https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries
- */
+/**
+ * Creates a table
+ * @author Mrtenz
+ * <a href="https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries">...</a>
+ **/
 
 public class SelectQuery {
 
-    private String table;
-    private List<String> columns = new ArrayList<String>();
-    private List<String> wheres = new ArrayList<String>();
+    private final String table;
+    private final List<String> columns = new ArrayList<>();
+    private final List<String> wheres = new ArrayList<>();
     private String orderBy;
     private boolean orderByAscending = false;
     private int limitOffset = 0;

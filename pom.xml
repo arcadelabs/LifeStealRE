@@ -49,12 +49,6 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-<!--                            <relocations>-->
-<!--                                <relocation>-->
-<!--                                    <pattern>com.jeff_media.morepersistentdatatypes</pattern>-->
-<!--                                    <shadedPattern>in.arcadelabs.libs.morepersistentdatatypes</shadedPattern>-->
-<!--                                </relocation>-->
-<!--                            </relocations>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -97,19 +91,9 @@
         </dependency>
         <dependency>
             <groupId>com.github.arcadelabs</groupId>
-            <artifactId>ArcadeLibs</artifactId>
-            <version>ff9d85bc708f21d63485ccfe02a7e4b51a71c7cb</version>
+            <artifactId>LabAide</artifactId>
+            <version>pre-3</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>xyz.xenondevs</groupId>
-            <artifactId>particle</artifactId>
-            <version>1.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>5.0.1</version>
         </dependency>
     </dependencies>
 </project>

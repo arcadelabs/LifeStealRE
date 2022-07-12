@@ -2,7 +2,7 @@ package in.arcadelabs.lifesteal.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import in.arcadelabs.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import lombok.Getter;
 

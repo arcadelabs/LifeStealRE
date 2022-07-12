@@ -18,10 +18,10 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.libs.adventure.adventure.text.Component;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
-import in.arcadelabs.libs.adventure.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.Component;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.MiniMessage;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.GameMode;

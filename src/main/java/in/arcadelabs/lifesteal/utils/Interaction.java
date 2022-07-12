@@ -18,12 +18,12 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.libs.adventure.adventure.key.Key;
-import in.arcadelabs.libs.adventure.adventure.sound.Sound;
-import in.arcadelabs.libs.adventure.adventure.text.Component;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
-import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
+import in.arcadelabs.labaide.libs.adventurelib.impl.SpigotMessenger;
+import in.arcadelabs.labaide.libs.kyori.adventure.key.Key;
+import in.arcadelabs.labaide.libs.kyori.adventure.sound.Sound;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.Component;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.MiniMessage;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
 

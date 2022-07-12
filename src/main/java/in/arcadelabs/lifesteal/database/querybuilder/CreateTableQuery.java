@@ -7,13 +7,13 @@ import java.util.List;
  * Creates a table
  * @author Mrtenz
  * <a href="https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries">...</a>
- * */
+ **/
 
 public class CreateTableQuery {
 
-    private String table;
+    private final String table;
     private boolean ifNotExists = false;
-    private List<String> columns = new ArrayList<String>();
+    private final List<String> columns = new ArrayList<>();
     private String primaryKey;
 
     /**

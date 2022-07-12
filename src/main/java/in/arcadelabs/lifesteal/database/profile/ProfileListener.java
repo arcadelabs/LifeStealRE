@@ -1,9 +1,6 @@
 package in.arcadelabs.lifesteal.database.profile;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import java.sql.SQLException;
-import java.util.Objects;
-import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.sql.SQLException;
 
 public class ProfileListener implements Listener {
 

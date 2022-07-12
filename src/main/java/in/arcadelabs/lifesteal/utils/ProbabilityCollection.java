@@ -114,7 +114,7 @@ public final class ProbabilityCollection<E> {
       throw new IllegalArgumentException("Probability must be greater than 0");
     }
 
-    ProbabilitySetElement<E> entry = new ProbabilitySetElement<E>(object, probability);
+    ProbabilitySetElement<E> entry = new ProbabilitySetElement<>(object, probability);
     entry.setIndex(this.totalProbability + 1);
 
     this.collection.add(entry);
@@ -206,7 +206,7 @@ public final class ProbabilityCollection<E> {
     /**
      * @param probability share within the collection
      */
-    protected ProbabilitySetElement(T object, int probability) {
+    private ProbabilitySetElement(T object, int probability) {
       this.object = object;
       this.probability = probability;
     }

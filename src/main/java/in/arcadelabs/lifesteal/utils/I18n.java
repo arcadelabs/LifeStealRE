@@ -18,12 +18,12 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.libs.boostedyaml.YamlDocument;
-import in.arcadelabs.libs.boostedyaml.dvs.versioning.BasicVersioning;
-import in.arcadelabs.libs.boostedyaml.settings.dumper.DumperSettings;
-import in.arcadelabs.libs.boostedyaml.settings.general.GeneralSettings;
-import in.arcadelabs.libs.boostedyaml.settings.loader.LoaderSettings;
-import in.arcadelabs.libs.boostedyaml.settings.updater.UpdaterSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.labaide.libs.boostedyaml.dvs.versioning.BasicVersioning;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.dumper.DumperSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.general.GeneralSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.loader.LoaderSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.updater.UpdaterSettings;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 

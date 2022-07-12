@@ -1,14 +1,16 @@
 package in.arcadelabs.lifesteal.database.querybuilder;
 
+import lombok.Getter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import lombok.Getter;
 
-/*
- * This class is not the property of ArcadeLabs.
- * Original Source : https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries
- */
+/**
+ * Creates a table
+ * @author Mrtenz
+ * <a href="https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries">...</a>
+ **/
 
 @Getter
 public class Query {

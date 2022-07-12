@@ -2,10 +2,11 @@ package in.arcadelabs.lifesteal.database.querybuilder;
 
 import java.util.Collection;
 
-/*
- * This class is not the property of ArcadeLabs.
- * Original Source : https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries
- */
+/**
+ * Creates a table
+ * @author Mrtenz
+ * <a href="https://github.com/Mrtenz/MySQLAPI/tree/master/src/main/java/me/mrten/mysqlapi/queries">...</a>
+ **/
 
 public class QueryUtils {
 
@@ -14,7 +15,7 @@ public class QueryUtils {
      *
      * @param collection the collection to be separated
      * @param separator  the separator
-     * @return
+     * @return saperated string
      */
     public static String separate(Collection<String> collection, String separator) {
         StringBuilder builder = new StringBuilder();
