@@ -1,3 +1,21 @@
+/*
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package in.arcadelabs.lifesteal.database.profile;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
@@ -24,25 +42,25 @@ public class ProfileManager {
 
   @Getter(AccessLevel.NONE)
   private final DatabaseHandler databaseHandler =
-      LifeStealPlugin.getLifeSteal().getDatabaseHandler();
+          LifeStealPlugin.getLifeSteal().getDatabaseHandler();
 
   private final Map<UUID, Profile> profileMap = new HashMap<>();
 
   public ProfileManager() {
 
     String query =
-        new CreateTableQuery("lifesteal_data")
-            .ifNotExists()
-            .column("uniqueID", "VARCHAR(36)")
-            .column("lifeState", "VARCHAR(20)")
-            .column("currentHearts", "INT(255)")
-            .column("lostHearts", "INT(255)")
-            .column("blessedHearts", "INT(255)")
-            .column("normalHearts", "INT(255)")
-            .column("cursedHearts", "INT(255)")
-            .column("peakHeartsReached", "INT(255)")
-            .primaryKey("uniqueID")
-            .build();
+            new CreateTableQuery("lifesteal_data")
+                    .ifNotExists()
+                    .column("uniqueID", "VARCHAR(36)")
+                    .column("lifeState", "VARCHAR(20)")
+                    .column("currentHearts", "INT(255)")
+                    .column("lostHearts", "INT(255)")
+                    .column("blessedHearts", "INT(255)")
+                    .column("normalHearts", "INT(255)")
+                    .column("cursedHearts", "INT(255)")
+                    .column("peakHeartsReached", "INT(255)")
+                    .primaryKey("uniqueID")
+                    .build();
 
     System.out.println(query);
 
@@ -105,10 +123,10 @@ public class ProfileManager {
   public Profile saveProfile(Profile profile) throws SQLException {
     if (hasProfile(profile.getUniqueID())) {
       String sql =
-          new UpdateQuery("lifesteal_data")
-              .set("lifeState", profile.getLifeState().toString())
-              .where("uniqueID = ?")
-              .build();
+              new UpdateQuery("lifesteal_data")
+                      .set("lifeState", profile.getLifeState().toString())
+                      .where("uniqueID = ?")
+                      .build();
 
       System.out.println(sql);
 

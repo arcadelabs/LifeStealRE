@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -210,32 +210,82 @@ public class LSUtils {
   }
 
   public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause) {
-      switch (damageCause) {
-        case CONTACT -> { return "Messages.Elimination.ByDamagingBlocks"; }
-        case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> { return "Messages.Elimination.ByMob"; }
-        case PROJECTILE -> { return "Messages.Elimination.ByProjectile"; }
-        case SUFFOCATION -> { return "Messages.Elimination.BySuffocation"; }
-        case FALL -> { return "Messages.Elimination.ByFallDamage"; }
-        case FIRE, FIRE_TICK -> { return "Messages.Elimination.ByBurn"; }
-        case LAVA -> { return "Messages.Elimination.ByLava"; }
-        case DROWNING -> { return "Messages.Elimination.ByDrowning"; }
-        case BLOCK_EXPLOSION -> { return "Messages.Elimination.ByExplosion"; }
-        case ENTITY_EXPLOSION -> { return "Messages.Elimination.ByCreeper"; }
-        case SUICIDE -> { return "Messages.Elimination.BySuicide"; }
-        case VOID -> { return "Messages.Elimination.ByVoid"; }
-        case LIGHTNING -> { return "Messages.Elimination.ByLightning"; }
-        case STARVATION -> { return "Messages.Elimination.ByStarvation"; }
-        case POISON -> { return "Messages.Elimination.ByPoison"; }
-        case MAGIC -> { return "Messages.Elimination.ByMagic"; }
-        case WITHER -> { return "Messages.Elimination.ByWither"; }
-        case FALLING_BLOCK -> { return "Messages.Elimination.ByFallingBlock"; }
-        case THORNS -> { return "Messages.Elimination.ByThorns"; }
-        case DRAGON_BREATH -> { return "Messages.Elimination.ByDragonBreath"; }
-        case FLY_INTO_WALL -> { return "Messages.Elimination.ByKineticEnergy"; }
-        case HOT_FLOOR -> { return "Messages.Elimination.ByMagmaBlock"; }
-        case CRAMMING -> { return "Messages.Elimination.ByCramming"; }
-        case FREEZE -> { return "Messages.Elimination.ByFreeze"; }
-        default -> { return "Messages.Elimination.Other"; }
+    switch (damageCause) {
+      case CONTACT -> {
+        return "Messages.Elimination.ByDamagingBlocks";
       }
+      case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> {
+        return "Messages.Elimination.ByMob";
+      }
+      case PROJECTILE -> {
+        return "Messages.Elimination.ByProjectile";
+      }
+      case SUFFOCATION -> {
+        return "Messages.Elimination.BySuffocation";
+      }
+      case FALL -> {
+        return "Messages.Elimination.ByFallDamage";
+      }
+      case FIRE, FIRE_TICK -> {
+        return "Messages.Elimination.ByBurn";
+      }
+      case LAVA -> {
+        return "Messages.Elimination.ByLava";
+      }
+      case DROWNING -> {
+        return "Messages.Elimination.ByDrowning";
+      }
+      case BLOCK_EXPLOSION -> {
+        return "Messages.Elimination.ByExplosion";
+      }
+      case ENTITY_EXPLOSION -> {
+        return "Messages.Elimination.ByCreeper";
+      }
+      case SUICIDE -> {
+        return "Messages.Elimination.BySuicide";
+      }
+      case VOID -> {
+        return "Messages.Elimination.ByVoid";
+      }
+      case LIGHTNING -> {
+        return "Messages.Elimination.ByLightning";
+      }
+      case STARVATION -> {
+        return "Messages.Elimination.ByStarvation";
+      }
+      case POISON -> {
+        return "Messages.Elimination.ByPoison";
+      }
+      case MAGIC -> {
+        return "Messages.Elimination.ByMagic";
+      }
+      case WITHER -> {
+        return "Messages.Elimination.ByWither";
+      }
+      case FALLING_BLOCK -> {
+        return "Messages.Elimination.ByFallingBlock";
+      }
+      case THORNS -> {
+        return "Messages.Elimination.ByThorns";
+      }
+      case DRAGON_BREATH -> {
+        return "Messages.Elimination.ByDragonBreath";
+      }
+      case FLY_INTO_WALL -> {
+        return "Messages.Elimination.ByKineticEnergy";
+      }
+      case HOT_FLOOR -> {
+        return "Messages.Elimination.ByMagmaBlock";
+      }
+      case CRAMMING -> {
+        return "Messages.Elimination.ByCramming";
+      }
+      case FREEZE -> {
+        return "Messages.Elimination.ByFreeze";
+      }
+      default -> {
+        return "Messages.Elimination.Other";
+      }
+    }
   }
 }

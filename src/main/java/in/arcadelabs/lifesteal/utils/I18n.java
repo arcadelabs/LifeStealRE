@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,12 +41,12 @@ public class I18n {
     instance = LifeStealPlugin.getInstance();
     lifeSteal = LifeStealPlugin.getLifeSteal();
 
-      language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
-              Objects.requireNonNull(instance.getResource("language.yml")),
-              GeneralSettings.DEFAULT,
-              LoaderSettings.builder().setAutoUpdate(true).build(),
-              DumperSettings.DEFAULT,
-              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+    language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
+            Objects.requireNonNull(instance.getResource("language.yml")),
+            GeneralSettings.DEFAULT,
+            LoaderSettings.builder().setAutoUpdate(true).build(),
+            DumperSettings.DEFAULT,
+            UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
   }
 
   public void translate(Level level, String key) {
