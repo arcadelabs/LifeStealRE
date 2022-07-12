@@ -6,6 +6,8 @@ body:
       value: >-
         Before reporting a bug here, please make sure you are on the latest
         version of respective MCP product
+    validations:
+      required: false
   - type: textarea
     attributes:
       label: Description
@@ -25,12 +27,14 @@ body:
     attributes:
       label: Expected behavior
       description: How it's supposed to work.
+      placeholder: It should do this...
     validations:
       required: true
   - type: textarea
     attributes:
       label: Actual behavior
       description: How it's actually worked.
+      placeholder: It is doing this...
     validations:
       required: true
   - type: textarea
@@ -39,12 +43,14 @@ body:
       description: >-
         You may include a video link, screenshots or detailed steps to reproduce
         the bug/error.
+      placeholder: Abra-ka-dabra, produce BUG!
     validations:
       required: true
   - type: textarea
     attributes:
       label: Possible fix.
       description: Mention any possible fix you have on mind.
+      placeholder: Get good.
     validations:
       required: false
   - type: input
