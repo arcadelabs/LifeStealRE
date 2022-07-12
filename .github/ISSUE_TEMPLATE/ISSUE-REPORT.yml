@@ -3,20 +3,22 @@ description: File a bug report
 body:
   - type: markdown
     attributes:
-      value: |
-        Before reporting a bug here, please make sure you are on the latest version of respective MCP product
+      value: >-
+        Before reporting a bug here, please make sure you are on the latest
+        version of respective MCP product
   - type: textarea
     attributes:
       label: Description
-      description: |
-        Please describe what issue you're facing.
+      description: Please describe what issue you're facing.
     validations:
       required: false
   - type: input
     attributes:
       label: Stackrace print/logs link
-      description: Paste stackrace print or logs here, please use paste.gg or similar paste bins.
-      placeholder: https://paste.gg/a-freakin-error
+      description: >-
+        Paste stackrace print or logs here, please use paste.gg or similar paste
+        bins.
+      placeholder: 'https://paste.gg/a-freakin-error'
     validations:
       required: false
   - type: textarea
@@ -34,7 +36,9 @@ body:
   - type: textarea
     attributes:
       label: Steps to reproduce this bug/error.
-      description: You may include a video link, screenshots or detailed steps to reproduce the bug/error.
+      description: >-
+        You may include a video link, screenshots or detailed steps to reproduce
+        the bug/error.
     validations:
       required: true
   - type: textarea
@@ -46,13 +50,17 @@ body:
   - type: input
     attributes:
       label: LifeSteal++ version
-      description: Type `/lifesteal version` in console or in-game to get current version of the LifeSteal++ plugin.
+      description: >-
+        Type `/lifesteal version` in console or in-game to get current version
+        of the LifeSteal++ plugin.
     validations:
       required: true
-   - type: input
+  - type: input
     attributes:
       label: LabAide version
-      description: Type `/labaide version` in console or in-game to get current version of the LabAide plugin.
+      description: >-
+        Type `/labaide version` in console or in-game to get current version of
+        the LabAide plugin.
     validations:
       required: true
   - type: input
@@ -70,5 +78,7 @@ body:
           required: true
         - label: I am running the latest version of LabAide plugin.
           required: true
-        - label: I have checked for and confirmed there isn't already a similar issue opened.
+        - label: >-
+            I have checked for and confirmed there isn't already a similar issue
+            opened.
           required: true
