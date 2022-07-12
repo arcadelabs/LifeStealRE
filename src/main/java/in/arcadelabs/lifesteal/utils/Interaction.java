@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,12 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.libs.adventure.adventure.key.Key;
-import in.arcadelabs.libs.adventure.adventure.sound.Sound;
-import in.arcadelabs.libs.adventure.adventure.text.Component;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.MiniMessage;
-import in.arcadelabs.libs.adventure.adventure.text.minimessage.tag.resolver.Placeholder;
-import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
+import in.arcadelabs.labaide.libs.adventurelib.impl.SpigotMessenger;
+import in.arcadelabs.labaide.libs.kyori.adventure.key.Key;
+import in.arcadelabs.labaide.libs.kyori.adventure.sound.Sound;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.Component;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.MiniMessage;
+import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
 
@@ -56,7 +56,7 @@ public class Interaction {
    * @param component the component
    */
   public void broadcast(final Level level, final Component component) {
-      messenger.broadcast(component);
+    messenger.broadcast(component);
     if (cleanConsole) return;
     logger.log(level, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
   }
@@ -108,7 +108,7 @@ public class Interaction {
    * Returns message feedback..
    *
    * @param level    the logging level
-   * @param messages  the messages
+   * @param messages the messages
    * @param player   the player
    * @param soundKey the sound key
    */

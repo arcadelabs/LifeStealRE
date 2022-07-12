@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@ public class PlayerKillListener implements Listener {
     final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
       if (victim.getKiller() == null) {
-      lifeSteal.getInteraction().broadcast(
-              lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
+        lifeSteal.getInteraction().broadcast(
+                lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
       } else {
         lifeSteal.getInteraction().broadcast(lifeSteal.getI18n().getKey("Messages.Elimination.ByPlayer"), victim);
       }

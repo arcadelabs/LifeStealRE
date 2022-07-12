@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +18,10 @@
 
 package in.arcadelabs.lifesteal.commands;
 
-import in.arcadelabs.libs.aikar.acf.BaseCommand;
-import in.arcadelabs.libs.aikar.acf.annotation.CommandAlias;
-import in.arcadelabs.libs.aikar.acf.annotation.CommandPermission;
-import in.arcadelabs.libs.aikar.acf.annotation.Subcommand;
+import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
+import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandAlias;
+import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
+import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;

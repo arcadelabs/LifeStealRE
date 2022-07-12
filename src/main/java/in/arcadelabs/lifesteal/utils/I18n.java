@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,12 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.libs.boostedyaml.YamlDocument;
-import in.arcadelabs.libs.boostedyaml.dvs.versioning.BasicVersioning;
-import in.arcadelabs.libs.boostedyaml.settings.dumper.DumperSettings;
-import in.arcadelabs.libs.boostedyaml.settings.general.GeneralSettings;
-import in.arcadelabs.libs.boostedyaml.settings.loader.LoaderSettings;
-import in.arcadelabs.libs.boostedyaml.settings.updater.UpdaterSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.labaide.libs.boostedyaml.dvs.versioning.BasicVersioning;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.dumper.DumperSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.general.GeneralSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.loader.LoaderSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.updater.UpdaterSettings;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 
@@ -41,12 +41,12 @@ public class I18n {
     instance = LifeStealPlugin.getInstance();
     lifeSteal = LifeStealPlugin.getLifeSteal();
 
-      language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
-              Objects.requireNonNull(instance.getResource("language.yml")),
-              GeneralSettings.DEFAULT,
-              LoaderSettings.builder().setAutoUpdate(true).build(),
-              DumperSettings.DEFAULT,
-              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+    language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
+            Objects.requireNonNull(instance.getResource("language.yml")),
+            GeneralSettings.DEFAULT,
+            LoaderSettings.builder().setAutoUpdate(true).build(),
+            DumperSettings.DEFAULT,
+            UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
   }
 
   public void translate(Level level, String key) {
