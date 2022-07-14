@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal;
 
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -37,6 +38,14 @@ public final class LifeStealPlugin extends JavaPlugin {
   @Override
   public void onEnable() {
     instance = this;
+    
+    if (Bukkit.getPluginManager().getPlugin("LabAide") == null) {
+      this.getLogger().severe("LabAide was not found! Disabling LifeSteal...");
+      this.getLogger().severe("Download LabAide at https://github.com/arcadelabs/LabAide/releases/tag/pre-3");
+      this.setEnabled(false);
+      return;
+    }
+
     lifeSteal = new LifeSteal();
     try {
       lifeSteal.init();
