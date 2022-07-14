@@ -1,4 +1,4 @@
-<img src="/branding/LifeStealLogo.svg" align="left" height="200px"><h1 align="right">Lifesteal++ | Yet another LifeSteal SMP core.</h1>
+<img src="/branding/LifeStealLogo.svg" align="left" height="200px"><h1 align="right">Lifesteal++ | Yet another SMP core.</h1>
 <div align="center">
 
 ![Status](https://img.shields.io/badge/STATUS-BETA-3a0ca3?style=for-the-badge)
