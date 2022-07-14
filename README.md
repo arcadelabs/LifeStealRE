@@ -54,4 +54,4 @@ and it's still in development, I'd say it's about 40% done for now, please repor
 For developers who're reviewing the code right now (on my humble request I'm guessing), please don't yell at me for forgetting to add null checks and other important stuff in almost everywhere, also please don't judge my obsession with gradients in configs. 
 
 Ronin: This is my [@RealRONiN](https://github.com/RealRONiN)'s 2nd public project  
-Infinity: This is so fucked up, This is so fucked up
+Infinity: https://images-ext-2.discordapp.net/external/yyt5ZNMq4dktwCwwNYJDZrSZYwYgk32e4h3HqIX-1tE/https/media.tenor.com/GNhq-E15fW8AAAPo/carry-minati-ajey-nagar.mp4
