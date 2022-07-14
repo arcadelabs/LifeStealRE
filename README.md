@@ -52,3 +52,6 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 This is my [@RealRONiN](https://github.com/RealRONiN)'s 2nd public project (first one is Greetings and it's private for god knows what reasons.), 
 and it's still in development, I'd say it's about 40% done for now, please report any bugs or issues you face in issues section.
 For developers who're reviewing the code right now (on my humble request I'm guessing), please don't yell at me for forgetting to add null checks and other important stuff in almost everywhere, also please don't judge my obsession with gradients in configs. 
+
+Ronin: This is my [@RealRONiN](https://github.com/RealRONiN)'s 2nd public project
+Infinity: This is so fucked up, This is so fucked up
