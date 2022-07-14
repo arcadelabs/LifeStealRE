@@ -1,3 +1,21 @@
+/*
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package in.arcadelabs.lifesteal.hearts;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
@@ -16,36 +34,12 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * The type Skull maker.
+ *
  * @author Schottky
  * <a href="https://www.spigotmc.org/threads/player-skulls-without-reflection-nms-or-unsafe.458015/">Original code snippet.</a>
  */
 @SuppressWarnings("unused")
 public class SkullMaker {
-
-  /**
-   * Create skull texture.
-   *
-   * @param value the base64 encoded skull texture value
-   * @return the skull texture map
-   */
-  public Map<String, Object> createSkullMap(String value) {
-    try {
-      final ByteArrayOutputStream out = new ByteArrayOutputStream();
-      final DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(out)));
-      write(dos, value);
-      dos.close();
-      final String internal = Base64.getEncoder().encodeToString(out.toByteArray());
-      final Map<String, Object> map = new HashMap<>();
-      map.put("internal", internal);
-      map.put("meta-type", "SKULL");
-      map.put("==", "ItemMeta");
-      return map;
-    } catch (IOException e) {
-      LifeStealPlugin.getInstance().getLogger().log(Level.WARNING, "Invalid skull texture value.");
-      LifeStealPlugin.getInstance().getLogger().log(Level.WARNING, e.toString());
-      return null;
-    }
-  }
 
   private static final int TYPE_COMPOUND = 10;
   private static final int TYPE_LIST = 9;
@@ -83,5 +77,30 @@ public class SkullMaker {
     output.writeByte(END_MARK);
 
     output.writeByte(END_MARK);
+  }
+
+  /**
+   * Create skull texture.
+   *
+   * @param value the base64 encoded skull texture value
+   * @return the skull texture map
+   */
+  public Map<String, Object> createSkullMap(String value) {
+    try {
+      final ByteArrayOutputStream out = new ByteArrayOutputStream();
+      final DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(out)));
+      write(dos, value);
+      dos.close();
+      final String internal = Base64.getEncoder().encodeToString(out.toByteArray());
+      final Map<String, Object> map = new HashMap<>();
+      map.put("internal", internal);
+      map.put("meta-type", "SKULL");
+      map.put("==", "ItemMeta");
+      return map;
+    } catch (IOException e) {
+      LifeStealPlugin.getInstance().getLogger().log(Level.WARNING, "Invalid skull texture value.");
+      LifeStealPlugin.getInstance().getLogger().log(Level.WARNING, e.toString());
+      return null;
+    }
   }
 }

@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.Profile;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -27,6 +28,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 public class PlayerKillListener implements Listener {
 
@@ -41,8 +45,8 @@ public class PlayerKillListener implements Listener {
     final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
       if (victim.getKiller() == null) {
-      lifeSteal.getInteraction().broadcast(
-              lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
+        lifeSteal.getInteraction().broadcast(
+                lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
       } else {
         lifeSteal.getInteraction().broadcast(lifeSteal.getI18n().getKey("Messages.Elimination.ByPlayer"), victim);
       }
@@ -54,6 +58,12 @@ public class PlayerKillListener implements Listener {
                 .cookHeart();
         replacementHeart = heartItemManager.getHeartItem();
         lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - lostHearts);
+        try {
+          Profile victimProfile = lifeSteal.getProfileManager().getProfile(victim.getUniqueId());
+          victimProfile.setLostHearts(victimProfile.getLostHearts() - 1);
+        } catch (SQLException e) {
+          lifeSteal.getInstance().getLogger().log(Level.WARNING, e.toString());
+        }
         victim.getWorld().dropItemNaturally(victim.getLocation(), replacementHeart);
       } else {
         lifeSteal.getUtils().transferHealth(victim, victim.getKiller());

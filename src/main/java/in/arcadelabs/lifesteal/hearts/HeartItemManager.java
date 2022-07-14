@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 package in.arcadelabs.lifesteal.hearts;
 
-import in.arcadelabs.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.utils.ProbabilityCollection;
@@ -97,42 +97,42 @@ public class HeartItemManager {
    */
   public HeartItemManager prepareIngedients() {
     switch (this.mode) {
-      case FIXED_BLESSED:
+      case FIXED_BLESSED -> {
         this.index = this.blessedRarity[0];
         this.type = "Blessed";
-        break;
-      case FIXED_NORMAL:
+      }
+      case FIXED_NORMAL -> {
         this.index = this.normalRarity[0];
         this.type = "Normal";
-        break;
-      case FIXED_CURSED:
+      }
+      case FIXED_CURSED -> {
         this.index = this.cursedRarity[0];
         this.type = "Cursed";
-        break;
-      case RANDOM_BLESSED:
+      }
+      case RANDOM_BLESSED -> {
         this.index = String.valueOf(this.randomBlessCol.get());
         this.type = "Blessed";
-        break;
-      case RANDOM_NORMAL:
+      }
+      case RANDOM_NORMAL -> {
         this.index = String.valueOf(this.randomNormalCol.get());
         this.type = "Normal";
-        break;
-      case RANDOM_CURSED:
+      }
+      case RANDOM_CURSED -> {
         this.index = String.valueOf(this.randomCurseCol.get());
         this.type = "Cursed";
-        break;
-      case RANDOM_ALL:
+      }
+      case RANDOM_ALL -> {
         final ProbabilityCollection<Mode> modeCol = new ProbabilityCollection<>();
         modeCol.add(Mode.RANDOM_BLESSED, 27);
         modeCol.add(Mode.RANDOM_NORMAL, 27);
         modeCol.add(Mode.RANDOM_CURSED, 27);
         this.mode = modeCol.get();
         this.prepareIngedients();
-        break;
-      default:
+      }
+      default -> {
         this.mode = Mode.FIXED_NORMAL;
         this.prepareIngedients();
-        break;
+      }
     }
 
     this.heartType = Material.valueOf(heartConfig.getString

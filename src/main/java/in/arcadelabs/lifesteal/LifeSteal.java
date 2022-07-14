@@ -1,6 +1,6 @@
 /*
- * LifeSteal - Yet another lifecore smp core.
- * Copyright (C) 2022  Arcade Labs
+ *          LifeSteal - Yet another lifecore smp core.
+ *                Copyright (C) 2022  Arcade Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,19 +18,19 @@
 
 package in.arcadelabs.lifesteal;
 
-import in.arcadelabs.arcadelibs.metrics.BStats;
-import in.arcadelabs.arcadelibs.placeholder.Placeholder;
-import in.arcadelabs.arcadelibs.updatechecker.UpdateChecker;
-import in.arcadelabs.libs.adventurelib.impl.SpigotMessenger;
-import in.arcadelabs.libs.aikar.acf.BaseCommand;
-import in.arcadelabs.libs.aikar.acf.BukkitCommandManager;
-import in.arcadelabs.libs.aikar.acf.PaperCommandManager;
-import in.arcadelabs.libs.boostedyaml.YamlDocument;
-import in.arcadelabs.libs.boostedyaml.dvs.versioning.BasicVersioning;
-import in.arcadelabs.libs.boostedyaml.settings.dumper.DumperSettings;
-import in.arcadelabs.libs.boostedyaml.settings.general.GeneralSettings;
-import in.arcadelabs.libs.boostedyaml.settings.loader.LoaderSettings;
-import in.arcadelabs.libs.boostedyaml.settings.updater.UpdaterSettings;
+import in.arcadelabs.labaide.libs.adventurelib.impl.SpigotMessenger;
+import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
+import in.arcadelabs.labaide.libs.aikar.acf.BukkitCommandManager;
+import in.arcadelabs.labaide.libs.aikar.acf.PaperCommandManager;
+import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.labaide.libs.boostedyaml.dvs.versioning.BasicVersioning;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.dumper.DumperSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.general.GeneralSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.loader.LoaderSettings;
+import in.arcadelabs.labaide.libs.boostedyaml.settings.updater.UpdaterSettings;
+import in.arcadelabs.labaide.metrics.BStats;
+import in.arcadelabs.labaide.placeholder.Placeholder;
+import in.arcadelabs.labaide.updatechecker.UpdateChecker;
 import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.GiveHearts;
 import in.arcadelabs.lifesteal.commands.Reload;

@@ -1,0 +1,90 @@
+name: Bug Report
+description: File a bug report
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Before reporting a bug here, please make sure you are on the latest
+        version of respective MCP product
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Description
+      description: Please describe what issue you're facing.
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: Stackrace print/logs link
+      description: >-
+        Paste stackrace print or logs here, please use paste.gg or similar paste
+        bins.
+      placeholder: 'https://paste.gg/a-freakin-error'
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: How it's supposed to work.
+      placeholder: It should do this...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behavior
+      description: How it's actually worked.
+      placeholder: It is doing this...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce this bug/error.
+      description: >-
+        You may include a video link, screenshots or detailed steps to reproduce
+        the bug/error.
+      placeholder: Abra-ka-dabra, produce BUG!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Possible fix.
+      description: Mention any possible fix you have on mind.
+      placeholder: Get good.
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: LifeSteal++ version
+      description: >-
+        Type `/lifesteal version` in console or in-game to get current version
+        of the LifeSteal++ plugin.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: LabAide version
+      description: >-
+        Type `/labaide version` in console or in-game to get current version of
+        the LabAide plugin.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Java version
+      description: Please enter the Java version you're using.
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Agreement
+      description: Please agree to the following.
+      options:
+        - label: I am running the latest version of LifeSteal++ plugin.
+          required: true
+        - label: I am running the latest version of LabAide plugin.
+          required: true
+        - label: >-
+            I have checked for and confirmed there isn't already a similar issue
+            opened.
+          required: true
