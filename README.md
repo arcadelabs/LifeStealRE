@@ -55,6 +55,6 @@ For developers who're reviewing the code right now (on my humble request I'm gue
 
 Ronin: This is my [@RealRONiN](https://github.com/RealRONiN)'s 2nd public project  
 Infinity:  
- ![ifunny](https://c.tenor.com/GNhq-E15fW8AAAAC/carry-minati-ajey-nagar.gif)
+ ![ifunny](https://c.tenor.com/MGv-3XIyTGIAAAAC/carryminati-ajey-nagar.gif)
 
 
