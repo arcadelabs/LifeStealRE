@@ -1,4 +1,4 @@
-<h1 align="center"><img height="35" src="https://cdnb.artstation.com/p/assets/images/images/016/235/721/original/christopher-haugen-heart-rotate4.gif"> Lifesteal++ <img height="35" src="https://cdnb.artstation.com/p/assets/images/images/016/235/721/original/christopher-haugen-heart-rotate4.gif"></h1>
+<img src="/branding/LifeStealLogo.svg" align="left" height="200px"><h1 align="right">Lifesteal++ | Yet another LifeSteal SMP core.</h1>
 <div align="center">
 
 ![Status](https://img.shields.io/badge/STATUS-BETA-3a0ca3?style=for-the-badge)
@@ -14,23 +14,24 @@ Lifesteal is a survival gamemode concept made by some MCYT content creators, whe
 
 Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
-### Features,
-- HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages, and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an heart that doesn't work as long as it shows the errors in gradients.
-- Customizable heart recipe.
-- Blessed, normal and cursed heart types.
-- Unlimited amount of 100% customizable hearts.
-- Rarity based heart drops.
-- Heart item can be edible (consumable), a player head (on right click) or any item from supported server version (on right click).
-- Heart item can have unlimited amount of potion effects which will be given when player consumes a heart.
-- Totems can be disabled.
-- Milk cures negetive effects can be disabled.
-- Hearts can have custom texture model ID which resource packs will use to replace the textures.
-- 100% Customizable messages and sounds.
-- Heart consume animations and particle effects (work in progress, don't expect proper functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- MySQL and SQLite database support. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- Player elimination, ban/spectator/spectate body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- And tons of other stuff that I'm gonna send screenshot of because me lazy...
+### Features, 
+![Progress](https://progress-bar.dev/40/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
+- [x] HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages, and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an heart that doesn't work as long as it shows the errors in gradients.
+- [x] Customizable heart recipe.
+- [x] Blessed, normal and cursed heart types.
+- [x] Unlimited amount of 100% customizable hearts.
+- [x] Rarity based heart drops.
+- [x] Heart item can be edible (consumable), a player head (on right click) or any item from supported server version (on right click).
+- [x] Heart item can have unlimited amount of potion effects which will be given when player consumes a heart.
+- [x] Totems can be disabled.
+- [x] Milk cures negetive effects can be disabled.
+- [x] Hearts can have custom texture model ID which resource packs will use to replace the textures.
+- [x] 100% Customizable messages and sounds.
+- [ ] Heart consume animations and particle effects (work in progress, don't expect proper functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
+- [ ] Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
+- [ ] MySQL and SQLite database support. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
+- [ ] Player elimination, ban/spectator/spectate body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
+- [ ] And tons of other stuff that I'm gonna send screenshot of because me lazy...
   I blured some stuff out because they're upcoming more exciting features 😈
 
 > ![image](https://user-images.githubusercontent.com/69498033/177811484-f9ef5fbc-3881-4d1e-b988-dd414502fb0d.png)
@@ -45,16 +46,11 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
    ![bStats Players](https://img.shields.io/bstats/players/15272?style=for-the-badge)
    ![bStats Servers](https://img.shields.io/bstats/servers/15272?style=for-the-badge)
    <br>
-   _Contact me to include your server name and IP here._
+   > **Note**
+   > _Contact me to include your server name and IP here._
 
 
 ### Final thoughts,
-This is my [@RealRONiN](https://github.com/RealRONiN)'s 2nd public project (first one is Greetings and it's private for god knows what reasons.), 
+This is my ([@RealRONiN](https://github.com/RealRONiN)'s) 2nd public project (first one is Greetings and it's private for god knows what reasons.), 
 and it's still in development, I'd say it's about 40% done for now, please report any bugs or issues you face in issues section.
 For developers who're reviewing the code right now (on my humble request I'm guessing), please don't yell at me for forgetting to add null checks and other important stuff in almost everywhere, also please don't judge my obsession with gradients in configs. 
-
-Ronin: This is my [@RealRONiN](https://github.com/RealRONiN)'s 2nd public project  
-Infinity:  
- ![ifunny](https://c.tenor.com/MGv-3XIyTGIAAAAC/carryminati-ajey-nagar.gif)
-
-
