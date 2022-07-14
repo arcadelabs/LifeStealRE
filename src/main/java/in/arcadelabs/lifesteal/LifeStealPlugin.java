@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal;
 
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -33,10 +34,21 @@ public final class LifeStealPlugin extends JavaPlugin {
   @Getter
   private static LifeSteal lifeSteal;
 
+  private boolean labaideExist;
 
   @Override
   public void onEnable() {
     instance = this;
+    
+    if (Bukkit.getPluginManager().getPlugin("LabAide") == null) {
+      this.labaideExist = false;
+      this.getLogger().severe("LabAide was not found! Disabling LifeSteal...");
+      this.getLogger().severe("Download LabAide at https://github.com/arcadelabs/LabAide/releases/tag/pre-3");
+      this.setEnabled(false);
+      return;
+    }
+
+    this.labaideExist = true;
     lifeSteal = new LifeSteal();
     try {
       lifeSteal.init();
@@ -51,13 +63,15 @@ public final class LifeStealPlugin extends JavaPlugin {
   @Override
   public void onDisable() {
 
-    try {
-      lifeSteal.getProfileManager().saveAll();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    if (this.labaideExist) {
+      try {
+        lifeSteal.getProfileManager().saveAll();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+      lifeSteal.getMessenger().closeMessenger();
+      lifeSteal.getDatabaseHandler().disconnect();
     }
-    lifeSteal.getMessenger().closeMessenger();
-    lifeSteal.getDatabaseHandler().disconnect();
 
     getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
     getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
