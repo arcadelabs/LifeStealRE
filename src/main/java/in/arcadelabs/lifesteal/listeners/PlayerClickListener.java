@@ -67,6 +67,7 @@ public class PlayerClickListener implements Listener {
 
       lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
               + healthPoints);
+      player.setHealth(player.getHealth() + healthPoints);
       player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
       lifeSteal.getUtils().spawnParticles(player, "heart");
       lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);

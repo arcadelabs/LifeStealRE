@@ -56,7 +56,7 @@ public class I18n {
       instance.getLogger().warning(lifeSteal.getUtils().formatString(
               "<red>Missing " + key + " language key in language.yml</red>"
       ));
-      instance.getLogger().warning(exception.getLocalizedMessage());
+      instance.getLogger().warning(exception.toString());
     }
   }
 

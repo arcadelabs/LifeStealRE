@@ -24,6 +24,7 @@ import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.tag.resolver.
 import in.arcadelabs.labaide.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -47,6 +48,7 @@ public class LSUtils {
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
   private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
   private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToGain", 2);
+  private List<Player> spectators = new ArrayList<>();
 
   /**
    * Gets player base health.
@@ -93,6 +95,15 @@ public class LSUtils {
     if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("BANNED")
             && player.isBanned()) return LifeState.BANNED;
     return LifeState.LIVING;
+  }
+
+  /**
+   * Handle ban.
+   *
+   * @param URI the ban command uri
+   */
+  public void handleBan(final String URI, final Player player) {
+    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), new in.arcadelabs.labaide.placeholder.Placeholder().replace(URI, player));
   }
 
   /**
@@ -206,6 +217,36 @@ public class LSUtils {
         if (player.isPermissionSet("lifesteal.particles.soul")) {
           ParticleEffect.SOUL.display(player.getLocation().add(0, 2, 0));
         }
+    }
+  }
+
+  public void addSpectator(final Player player) {
+    if (spectators.contains(player)) return;
+    spectators.add(player);
+  }
+
+  public void removeSpectator(final Player player) {
+    if (spectators.contains(player)) return;
+    spectators.remove(player);
+  }
+
+  public void handleElimination(final Player player) {
+    switch (lifeSteal.getConfig().getString("Elimination")) {
+      case "BANNED" -> lifeSteal.getUtils().handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
+      case "SPECTATING" -> {
+        addSpectator(player);
+        for(Player serverPlayer : Bukkit.getOnlinePlayers()){
+          if(!player.isOnline())
+            break;
+
+          if(!serverPlayer.isOnline())
+            continue;
+
+          serverPlayer.hidePlayer(lifeSteal.getInstance(), player);
+        }
+      }
+      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("TTPP");
     }
   }
 

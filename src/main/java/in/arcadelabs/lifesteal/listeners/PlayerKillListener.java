@@ -22,7 +22,6 @@ import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.database.profile.Profile;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,14 +42,14 @@ public class PlayerKillListener implements Listener {
 
     final Player victim = event.getEntity();
     final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
-    if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 0) {
+    if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 1 || lifeSteal.getUtils().getPlayerBaseHealth(victim) == 2) {
       if (victim.getKiller() == null) {
         lifeSteal.getInteraction().broadcast(
                 lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
       } else {
         lifeSteal.getInteraction().broadcast(lifeSteal.getI18n().getKey("Messages.Elimination.ByPlayer"), victim);
       }
-      victim.setGameMode(GameMode.SPECTATOR);
+      lifeSteal.getUtils().handleElimination(victim);
     } else {
       if (victim.getKiller() == null) {
         heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))

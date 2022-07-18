@@ -28,9 +28,11 @@ public class PlayerPotionEffectListener implements Listener {
   @EventHandler
   public void onPotionEffectEvent(final EntityPotionEffectEvent event) {
     if (event.getCause() == EntityPotionEffectEvent.Cause.MILK) {
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
-    } else if (event.getCause() == EntityPotionEffectEvent.Cause.TOTEM) {
+      if (event.isCancelled()) return;
       event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure"));
+    } else if (event.getCause() == EntityPotionEffectEvent.Cause.TOTEM) {
+      if (event.isCancelled()) return;
+      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
     }
   }
 }

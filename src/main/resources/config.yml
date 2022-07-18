@@ -4,11 +4,11 @@ Clean-Console: false
 
 DATABASE:
   ENABLED: false
-  ADDRESS:
-  PORT:
-  DATABASE:
-  USERNAME:
-  PASSWORD:
+  ADDRESS: ''
+  PORT: ''
+  DATABASE: ''
+  USERNAME: ''
+  PASSWORD: ''
 
 DefaultHealth: 20
 DisableTotem: true
@@ -16,7 +16,7 @@ DisableMilkCure: true
 
 Heart:
   Properties:
-    ItemType: "PAPER"
+    ItemType: 'PAPER'
     Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Heart'
     Lore:
       - '<gradient:#e01e37:#f72585>══════════════════════════════════════'
@@ -28,15 +28,15 @@ Heart:
     ModelData: 123456
 #Heart item recipe, it is a shaped recipe.
   Recipe:
-    A: "DIAMOND"
-    B: "GOLD_INGOT"
-    C: "DIAMOND"
-    D: "GOLD_INGOT"
-    E: "NETHER_STAR"
-    F: "GOLD_INGOT"
-    G: "DIAMOND"
-    H: "GOLD_INGOT"
-    I: "DIAMOND"
+    A: 'DIAMOND'
+    B: 'GOLD_INGOT'
+    C: 'DIAMOND'
+    D: 'GOLD_INGOT'
+    E: 'NETHER_STAR'
+    F: 'GOLD_INGOT'
+    G: 'DIAMOND'
+    H: 'GOLD_INGOT'
+    I: 'DIAMOND'
 #Crafting table representation.
 #  ╔═══╦═══╦═══╗
 #  ║ A ║ B ║ C ║
@@ -51,7 +51,7 @@ Heart:
 #DEAD = Spectates own body npc,
 #SPECTATING = Roams around freely in spectator mode,
 #BANNED = Gets banned, only works if death bans are enabled.
-LifeState: "BANNED"
+Elimination: 'SPECTATING'
 
 Ban-Command-URI: 'ban %player% 3d [LifeSteal] - Eliminated. -s'
 

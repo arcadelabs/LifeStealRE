@@ -60,6 +60,7 @@ public class HeartConsumeListener implements Listener {
 
     lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
             + healthPoints);
+    player.setHealth(player.getHealth() + healthPoints);
     lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
     lifeSteal.getInteraction().retuurn(Level.INFO, consumeMessages, player, consumeSound);
   }

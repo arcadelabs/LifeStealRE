@@ -122,9 +122,11 @@ public class LifeSteal {
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      i18n.translate(Level.FINE, "ConfigLoad");
+      utils = new LSUtils();
+      i18n = new I18n();
+      i18n.translate(Level.INFO, "Messages.ConfigLoad");
     } catch (Exception e) {
-      i18n.translate(Level.WARNING, "ConfigLoadError");
+      i18n.translate(Level.WARNING, "Messages.ConfigLoadError");
       instance.getLogger().warning(e.toString());
     }
 
@@ -135,9 +137,9 @@ public class LifeSteal {
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      i18n.translate(Level.FINE, "HeartConfigLoad");
+      i18n.translate(Level.INFO, "Messages.HeartConfigLoad");
     } catch (Exception e) {
-      i18n.translate(Level.WARNING, "HeartConfigLoadError");
+      i18n.translate(Level.WARNING, "Messages.HeartConfigLoadError");
       instance.getLogger().warning(e.toString());
     }
   }
@@ -145,9 +147,9 @@ public class LifeSteal {
   private void databaseInit() {
     try {
       databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
-      i18n.translate(Level.FINE, "DatabaseLoad");
+      i18n.translate(Level.INFO, "Messages.DatabaseLoad");
     } catch (Exception e) {
-      i18n.translate(Level.WARNING, "DatabaseLoadError");
+      i18n.translate(Level.WARNING, "Messages.DatabaseLoadError");
       instance.getLogger().warning(e.toString());
     }
   }
@@ -155,9 +157,9 @@ public class LifeSteal {
   private void profilesInit() {
     try {
       profileManager = new ProfileManager();
-      i18n.translate(Level.FINE, "ProfilesLoad");
+      i18n.translate(Level.INFO, "Messages.ProfilesLoad");
     } catch (Exception e) {
-      i18n.translate(Level.WARNING, "ProfilesLoadError");
+      i18n.translate(Level.WARNING, "Messages.ProfilesLoadError");
       instance.getLogger().warning(e.toString());
     }
   }
@@ -198,11 +200,11 @@ public class LifeSteal {
     if (isOnPaper()) {
       final PaperCommandManager pcm = new PaperCommandManager(instance);
       Arrays.stream(commands).forEach(pcm::registerCommand);
-      i18n.translate(Level.FINE, "CommandsLoad");
+      i18n.translate(Level.INFO, "Messages.CommandsLoad");
     } else {
       final BukkitCommandManager bcm = new BukkitCommandManager(instance);
       Arrays.stream(commands).forEach(bcm::registerCommand);
-      i18n.translate(Level.FINEST, "CommandsAsyncLoad");
+      i18n.translate(Level.INFO, "Messages.CommandsAsyncLoad");
     }
   }
 
@@ -218,20 +220,16 @@ public class LifeSteal {
             new ProfileListener(),
     };
     Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
-    i18n.translate(Level.FINE, "ListenersLoad");
+    i18n.translate(Level.INFO, "Messages.ListenersLoad");
   }
 
   /**
    * Initializes everything.
    *
-   * @throws IOException undefined exception
    */
-  public void init() throws IOException {
+  public void init() {
+
     messengerInit();
-
-    i18n = new I18n();
-
-    utils = new LSUtils();
 
     configInit();
 
@@ -251,7 +249,7 @@ public class LifeSteal {
 
     LifeStealPlugin.getInstance().getServer().addRecipe(heartRecipeManager.getHeartRecipe());
 
-    updateCheckerInit();
+//    updateCheckerInit();
 
     metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
 

@@ -52,10 +52,10 @@ public final class LifeStealPlugin extends JavaPlugin {
     lifeSteal = new LifeSteal();
     try {
       lifeSteal.init();
-      lifeSteal.getI18n().translate(Level.FINEST, "LifestealLoad");
+      lifeSteal.getI18n().translate(Level.INFO, "Messages.LifestealLoad");
     } catch (Exception e) {
       this.getLogger().warning("There was an error while loading LifeSteal, gotta be a hooman error, blame Aniket#7102.");
-      this.getLogger().warning(e.getLocalizedMessage());
+      this.getLogger().warning(e.toString());
       e.printStackTrace();
     }
   }
