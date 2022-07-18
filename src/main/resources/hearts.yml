@@ -2,9 +2,9 @@ Version: 5
 Hearts:
   #  FIXED_BLESSED | FIXED_NORMAL | FIXED_CURSED | RANDOM_BLESSED | RANDOM_NORMAL | RANDOM_CURSED | RANDOM_ALL
   Mode:
-    OnDeath: FIXED_NORMAL
-    OnWithdraw: FIXED_NORMAL
-    OnCraft: FIXED_NORMAL
+    OnDeath: RANDOM_ALL
+    OnWithdraw: RANDOM_ALL
+    OnCraft: RANDOM_ALL
   Types:
     Normal:
 #      This index number down here represents rarity of the item.
