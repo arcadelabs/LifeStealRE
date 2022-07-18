@@ -23,6 +23,7 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandAlias;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandCompletion;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
+import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
@@ -33,15 +34,11 @@ public class SetHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
-  /**
-   * On set hearts command.
-   *
-   * @param target the target
-   * @param hearts the hearts
-   */
   @Subcommand("sethearts")
-  @CommandCompletion("@players")
-  public void onSetHearts(final Player target, final int hearts) {
-    lifeSteal.getUtils().setPlayerBaseHealth(target, hearts);
+  @CommandCompletion("@players @nothing true|false")
+  public void onSetHearts(final OnlinePlayer target, final int hearts) {
+    Player player = target.player;
+    lifeSteal.getUtils().setPlayerBaseHealth(player, hearts);
+    player.setHealth(hearts);
   }
 }
