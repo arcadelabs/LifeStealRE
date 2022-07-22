@@ -65,10 +65,17 @@ public class HeartConsumeListener implements Listener {
       final List<String> consumeMessages = lifeSteal.getHeartConfig().getStringList
               ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage");
 
-    lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
-            + healthPoints);
-    player.setHealth(player.getHealth() + healthPoints);
-    lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
-    lifeSteal.getInteraction().retuurn(Level.INFO, consumeMessages, player, consumeSound);
+      lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
+              + healthPoints);
+      lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
+      lifeSteal.getInteraction().retuurn(Level.INFO, consumeMessages, player, consumeSound);
+
+      Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () ->
+              player.setHealth(Math.min(player.getHealth() +
+                      healthPoints, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
+    } else {
+      event.setCancelled(true);
+      lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Consume"));
+    }
   }
 }
