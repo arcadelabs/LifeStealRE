@@ -1,4 +1,4 @@
-Version: 5
+Version: 6
 
 Clean-Console: false
 
@@ -14,6 +14,25 @@ DefaultHealth: 20
 DisableTotem: true
 DisableMilkCure: true
 
+# Put [] to disable any of these.
+Disabled-Worlds:
+  Heart-Craft:
+    - 'world_nether'
+    - 'world_the_end'
+  Heart-Withdraw:
+    - 'world_nether'
+    - 'world_the_end'
+  Heart-Drops:
+    Player-Kill:
+      - 'world_nether'
+      - 'world_the_end'
+    Other:
+      - 'world_nether'
+      - 'world_the_end'
+  Heart-Consume:
+    - 'world_nether'
+    - 'world_the_end'
+
 Heart:
   Properties:
     ItemType: 'PAPER'
@@ -26,7 +45,7 @@ Heart:
       - '<gradient:#f89999:#f6c0ba>blessed or cursed heart after crafting.'
       - '<gradient:#f72585:#e01e37>══════════════════════════════════════'
     ModelData: 123456
-#Heart item recipe, it is a shaped recipe.
+  #Heart item recipe, it is a shaped recipe.
   Recipe:
     A: 'DIAMOND'
     B: 'GOLD_INGOT'

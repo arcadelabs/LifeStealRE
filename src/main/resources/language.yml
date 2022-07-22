@@ -1,51 +1,62 @@
-Version: 3
+Version: 4
 
 Messages:
-  LifestealLoad: <gradient:e01e37:f52486>LifeSteal enabled successfully!</gradient>
-  ConfigLoad: <gradient:e01e37:f52486>config.yml loaded gracefully.</gradient>
-  HeartConfigLoad: <gradient:e01e37:f52486>hearts.yml also loaded gracefully, maybe...</gradient>
-  DatabaseLoad: <gradient:e01e37:f52486>Database seems to be loaded just fine...</gradient>
-  ProfilesLoad: <gradient:e01e37:f52486>Profiles are loaded, I hope.</gradient>
-  ListenersLoad: <gradient:e01e37:f52486>All the listeners are active now, and they're better at listeneing than you were.</gradient>
-  CommandsLoad: <gradient:e01e37:f52486>Commands are registered, go get em commander!</gradient>
-  CommandsAsyncLoad: <gradient:e01e37:f52486>Commands are registered asynchronously, get em gracefully commander!</gradient>
-  HeartWithdraw: <gradient:e01e37:f52486>You've withdrawn <hearts>x hearts.</gradient>
+  LifestealLoad: "<gradient:e01e37:f52486>LifeSteal enabled successfully!"
+  ConfigLoad: "<gradient:e01e37:f52486>config.yml loaded gracefully."
+  HeartConfigLoad: "<gradient:e01e37:f52486>hearts.yml also loaded gracefully, maybe..."
+  DatabaseLoad: "<gradient:e01e37:f52486>Database seems to be loaded just fine..."
+  ProfilesLoad: "<gradient:e01e37:f52486>Profiles are loaded, I hope."
+  ListenersLoad: "<gradient:e01e37:f52486>All the listeners are active now, and they're better at listeneing than you were."
+  CommandsLoad: "<gradient:e01e37:f52486>Commands are registered, go get em commander!"
+  CommandsAsyncLoad: "<gradient:e01e37:f52486>Commands are registered asynchronously, get em gracefully commander!"
+  HeartWithdraw: "<gradient:e01e37:f52486>You've withdrawn <hearts>x hearts."
   Elimination:
-    ByCommand: <gradient:e01e37:f52486><player> has been eliminated by <commander>.</gradient>
-    ByPlayer: <gradient:e01e37:f52486><player> has been eliminated by <killer>.</gradient>
-    ByDamagingBlocks: <gradient:e01e37:f52486>Forces beyond our understanding has eliminated <player>.</gradient>
-    ByMob: <gradient:e01e37:f52486><player> has been eliminated by a monster.</gradient>
-    ByProjectile: <gradient:e01e37:f52486><player> has been caught midst firing, thus, eliminated.</gradient>
-    BySuffocation: <gradient:e01e37:f52486><player> has been suffocated to elimination.</gradient>
-    ByFallDamage: <gradient:e01e37:f52486><player> fell to their elimination.</gradient>
-    ByBurn: <gradient:e01e37:f52486><player> has been burnt to elimination.</gradient>
-    ByLava: <gradient:e01e37:f52486><player> discovered the floor is lava, instant elimination HAH!</gradient>
-    ByDrowning: <gradient:e01e37:f52486><player> has been drowned to elimination.</gradient>
-    ByExplosion: <gradient:e01e37:f52486><player> has been <st>blessed</st> blasted for elimination.</gradient>
-    ByCreeper: <gradient:e01e37:f52486><player> has been <st>blasted</st> blessed by a Creeper for elimination.</gradient>
-    BySuicide: <gradient:e01e37:f52486><player> has lost will to live and gave up into elimination.</gradient>
-    ByVoid: <gradient:e01e37:f52486><player> fell into infinite void of elimination D:</gradient>
-    ByLightning: <gradient:e01e37:f52486>Lord Zeus''s wrath has declared <player>''s elimination.</gradient>
-    ByStarvation: <gradient:e01e37:f52486><player> has starved to elimination, rough times D:</gradient>
-    ByPoison: <gradient:e01e37:f52486><player> chose wrong pill and got eliminated.</gradient>
-    ByMagic: <gradient:e01e37:f52486>The Witch has cursed <player> to elimination.</gradient>
-    ByWither: <gradient:e01e37:f52486><player> were withered away into the void of elimination.</gradient>
-    ByFallingBlock: <gradient:e01e37:f52486>Ya''ll know what's diffrence between Newton and <player>? one of them wasn''t eliminated by a falling entity xD</gradient>
-    ByThorns: <gradient:e01e37:f52486><player>''s attacks were reppeled towards them, resulting elimination.</gradient>
-    ByDragonBreath: <gradient:e01e37:f52486>Goddamnit, the Dragon needs to brush regularly, it''s breath eliminated <player>.</gradient>
-    ByKineticEnergy: <gradient:e01e37:f52486><player> got a good physics lecture on how kinetic energy is converted into potential energy, sadly they got eliminated midst demonstration.</gradient>
-    ByMagmaBlock: <gradient:e01e37:f52486><player> discovered the floor is <st>lava</st>magma, instant elimination HAH!</gradient>
-    ByCramming: <gradient:e01e37:f52486><player> tried catching a Mumbai local, thus, eliminated.</gradient>
-    ByFreeze: <gradient:e01e37:f52486><player> freezed to elimination.</gradient>
-    Other: <gradient:e01e37:f52486><player> got eliminated.</gradient>
+    ByCommand: "<gradient:e01e37:f52486><player> has been eliminated by <commander>."
+    ByPlayer: "<gradient:e01e37:f52486><player> has been eliminated by <killer>."
+    ByDamagingBlocks: "<gradient:e01e37:f52486>Forces beyond our understanding has eliminated <player>."
+    ByMob: "<gradient:e01e37:f52486><player> has been eliminated by a monster."
+    ByProjectile: "<gradient:e01e37:f52486><player> has been caught midst firing, thus, eliminated."
+    BySuffocation: "<gradient:e01e37:f52486><player> has been suffocated to elimination."
+    ByFallDamage: "<gradient:e01e37:f52486><player> fell to their elimination."
+    ByBurn: "<gradient:e01e37:f52486><player> has been burnt to elimination."
+    ByLava: "<gradient:e01e37:f52486><player> discovered the floor is lava, instant elimination HAH!"
+    ByDrowning: "<gradient:e01e37:f52486><player> has been drowned to elimination."
+    ByExplosion: "<gradient:e01e37:f52486><player> has been <st>blessed</st> blasted for elimination."
+    ByCreeper: "<gradient:e01e37:f52486><player> has been <st>blasted</st> blessed by a Creeper for elimination."
+    BySuicide: "<gradient:e01e37:f52486><player> has lost will to live and gave up into elimination."
+    ByVoid: "<gradient:e01e37:f52486><player> fell into infinite void of elimination D:"
+    ByLightning: "<gradient:e01e37:f52486>Lord Zeus''s wrath has declared <player>''s elimination."
+    ByStarvation: "<gradient:e01e37:f52486><player> has starved to elimination, rough times D:"
+    ByPoison: "<gradient:e01e37:f52486><player> chose wrong pill and got eliminated."
+    ByMagic: "<gradient:e01e37:f52486>The Witch has cursed <player> to elimination."
+    ByWither: "<gradient:e01e37:f52486><player> were withered away into the void of elimination."
+    ByFallingBlock: "<gradient:e01e37:f52486>Ya''ll know what's diffrence between Newton and <player>? one of them wasn''t eliminated by a falling entity xD"
+    ByThorns: "<gradient:e01e37:f52486><player>''s attacks were reppeled towards them, resulting elimination."
+    ByDragonBreath: "<gradient:e01e37:f52486>Goddamnit, the Dragon needs to brush regularly, it''s breath eliminated <player>."
+    ByKineticEnergy: "<gradient:e01e37:f52486><player> got a good physics lecture on how kinetic energy is converted into potential energy, sadly they got eliminated midst demonstration."
+    ByMagmaBlock: "<gradient:e01e37:f52486><player> discovered the floor is <st>lava</st>magma, instant elimination HAH!"
+    ByCramming: "<gradient:e01e37:f52486><player> tried catching a Mumbai local, thus, eliminated."
+    ByFreeze: "<gradient:e01e37:f52486><player> freezed to elimination."
+    Other: "<gradient:e01e37:f52486><player> got eliminated."
 
-  ConfigLoadError: <gradient:e01e37:641220>Error(s) occured while loading config.yml</gradient>
-  HeartConfigLoadError: <gradient:e01e37:641220>Error(s) occured while loading hearts.yml</gradient>
-  DatabaseLoadError: <gradient:e01e37:641220>Error(s) occured while connecting to database, blame Infinity#1392 :p</gradient>
-  ProfilesLoadError: <gradient:e01e37:641220>Error(s) occured while loading profiles, blame Infinity#1392 :p</gradient>
-  NotEnoughHearts: <gradient:e01e37:641220>You don't have enough hearts to withdraw.</gradient>
+  ConfigLoadError: "<gradient:e01e37:641220>Error(s) occured while loading config.yml"
+  HeartConfigLoadError: "<gradient:e01e37:641220>Error(s) occured while loading hearts.yml"
+  DatabaseLoadError: "<gradient:e01e37:641220>Error(s) occured while connecting to database, blame Infinity#1392 :p"
+  ProfilesLoadError: "<gradient:e01e37:641220>Error(s) occured while loading profiles, blame Infinity#1392 :p"
+  NotEnoughHearts: "<gradient:e01e37:641220>You don't have enough hearts to withdraw."
+  
+  DisabledWorld:
+    Heart-Craft: "<gradient:e01e37:641220>You''re not allowed to craft hearts in this realm."
+    Heart-Withdraw: "<gradient:e01e37:641220>You''re not allowed to withdraw hearts in this realm."
+    Heart-Drops:
+      Player-Kill:
+        Killer: "<gradient:e01e37:641220>You can't steal lives in this realm."
+        Victim: "<gradient:e01e37:641220>You won't loose lives in this realm."
+      Other: "<gradient:e01e37:641220>You won't loose lives in this realm."
+    Heart-Consume: "<gradient:e01e37:641220>You''re not allowed to consume hearts in this realm."
+
 
 Sounds:
-  Error: entity.villager.ambient
-  Success: block.bell.use
-  HeartWithdraw: block.anvil.use
+  Error: 'entity.villager.ambient'
+  Success: 'block.bell.use'
+  HeartWithdraw: 'block.anvil.use'
