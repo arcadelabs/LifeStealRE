@@ -44,7 +44,6 @@ Messages:
   DatabaseLoadError: "<gradient:e01e37:641220>Error(s) occured while connecting to database, blame Infinity#1392 :p"
   ProfilesLoadError: "<gradient:e01e37:641220>Error(s) occured while loading profiles, blame Infinity#1392 :p"
   NotEnoughHearts: "<gradient:e01e37:641220>You don't have enough hearts to withdraw."
-  
   DisabledWorld:
     Heart-Craft: "<gradient:e01e37:641220>You''re not allowed to craft hearts in this realm."
     Heart-Withdraw: "<gradient:e01e37:641220>You''re not allowed to withdraw hearts in this realm."
@@ -54,7 +53,6 @@ Messages:
         Victim: "<gradient:e01e37:641220>You won't loose lives in this realm."
       Other: "<gradient:e01e37:641220>You won't loose lives in this realm."
     Heart-Consume: "<gradient:e01e37:641220>You''re not allowed to consume hearts in this realm."
-
 
 Sounds:
   Error: 'entity.villager.ambient'
