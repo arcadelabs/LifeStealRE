@@ -29,6 +29,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 
 public class PlayerKillListener implements Listener {
@@ -36,6 +37,7 @@ public class PlayerKillListener implements Listener {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private HeartItemManager heartItemManager;
   private ItemStack replacementHeart;
+  private List<String> disabledWorlds, disabledWorldsNatural;
 
   @EventHandler
   public void onPlayerKilled(final PlayerDeathEvent event) {
@@ -52,20 +54,35 @@ public class PlayerKillListener implements Listener {
       lifeSteal.getUtils().handleElimination(victim);
     } else {
       if (victim.getKiller() == null) {
-        heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
-                .prepareIngedients()
-                .cookHeart();
-        replacementHeart = heartItemManager.getHeartItem();
-        lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - lostHearts);
-        try {
-          Profile victimProfile = lifeSteal.getProfileManager().getProfile(victim.getUniqueId());
-          victimProfile.setLostHearts(victimProfile.getLostHearts() - 1);
-        } catch (SQLException e) {
-          lifeSteal.getInstance().getLogger().log(Level.WARNING, e.toString());
+        if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other").size() != 0) {
+          disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other");
         }
-        victim.getWorld().dropItemNaturally(victim.getLocation(), replacementHeart);
+        if (!(disabledWorlds.contains(victim.getWorld().toString().toLowerCase()))) {
+          heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
+                  .prepareIngedients()
+                  .cookHeart();
+          replacementHeart = heartItemManager.getHeartItem();
+          lifeSteal.getUtils().setPlayerBaseHealth(victim, lifeSteal.getUtils().getPlayerBaseHealth(victim) - lostHearts);
+          try {
+            Profile victimProfile = lifeSteal.getProfileManager().getProfile(victim.getUniqueId());
+            victimProfile.setLostHearts(victimProfile.getLostHearts() - 1);
+          } catch (SQLException e) {
+            lifeSteal.getInstance().getLogger().log(Level.WARNING, e.toString());
+          }
+          victim.getWorld().dropItemNaturally(victim.getLocation(), replacementHeart);
+        } else {
+          lifeSteal.getMessenger().sendMessage(victim, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Drops.Other"));
+        }
       } else {
-        lifeSteal.getUtils().transferHealth(victim, victim.getKiller());
+        if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill").size() != 0) {
+          disabledWorldsNatural = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill");
+        }
+        if (!(disabledWorldsNatural.contains(victim.getWorld().toString().toLowerCase()))) {
+          lifeSteal.getUtils().transferHealth(victim, victim.getKiller());
+        } else {
+          lifeSteal.getMessenger().sendMessage(victim.getKiller(), lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Drops.Player-Kill.Killer"));
+          lifeSteal.getMessenger().sendMessage(victim, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Drops.Player-Kill.Victim"));
+        }
       }
     }
   }

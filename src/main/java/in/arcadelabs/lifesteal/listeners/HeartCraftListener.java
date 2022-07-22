@@ -18,29 +18,45 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Objects;
 
 public class HeartCraftListener implements Listener {
+
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
   private HeartItemManager heartItemManager;
   private ItemStack replacementHeart;
+  private List<String> disabledWorlds;
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onCraftEvent(final CraftItemEvent event) {
     if (!(Objects.equals(event.getRecipe().getResult(), LifeStealPlugin.getLifeSteal().getPlaceholderHeart()))) return;
-    if (event.isShiftClick()) event.setCancelled(true);
-    heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
-            .getHeartConfig().getString("Hearts.Mode.OnCraft")))
-            .prepareIngedients()
-            .cookHeart();
-    replacementHeart = heartItemManager.getHeartItem();
-    event.getInventory().setResult(replacementHeart);
+    Player player = event.getWhoClicked().getKiller();
+    if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft").size() != 0) {
+      disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft");
+    }
+    if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
+      if (event.isShiftClick()) event.setCancelled(true);
+      heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
+              .getHeartConfig().getString("Hearts.Mode.OnCraft")))
+              .prepareIngedients()
+              .cookHeart();
+      replacementHeart = heartItemManager.getHeartItem();
+      event.getInventory().setResult(replacementHeart);
+    } else {
+      event.setCancelled(true);
+      lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Craft"));
+    }
   }
 }

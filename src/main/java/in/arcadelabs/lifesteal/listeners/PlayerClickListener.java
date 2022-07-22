@@ -20,7 +20,9 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,6 +39,7 @@ public class PlayerClickListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
+  private List<String> disabledWorlds;
 
   @EventHandler
   public void onPlayerClick(final PlayerInteractEvent event) {
@@ -52,17 +55,20 @@ public class PlayerClickListener implements Listener {
       if (player.getFoodLevel() == 20) player.setFoodLevel(19);
       instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
     } else {
-
-      final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
-      final String type = heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
-      final String index = heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
-      final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_consumesound"), PersistentDataType.STRING));
-      final List<String> consumeMessages = lifeSteal.getHeartConfig().getStringList
-              ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage");
+      if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
+        disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
+      }
+      if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
+        final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
+                (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
+        final String type = heartMeta.getPersistentDataContainer().get
+                (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
+        final String index = heartMeta.getPersistentDataContainer().get
+                (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
+        final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
+                (new NamespacedKey(instance, "lifesteal_heart_consumesound"), PersistentDataType.STRING));
+        final List<String> consumeMessages = lifeSteal.getHeartConfig().getStringList
+                ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage");
 
 
       lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
