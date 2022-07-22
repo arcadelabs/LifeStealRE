@@ -15,7 +15,7 @@ Lifesteal is a survival gamemode concept made by some MCYT content creators, whe
 Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
 ## Features, 
-![Progress](https://progress-bar.dev/40/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
+![Progress](https://progress-bar.dev/50/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
 - [x] HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages, and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an heart that doesn't work as long as it shows the errors in gradients.
 - [x] Customizable heart recipe.
 - [x] Blessed, normal and cursed heart types.
@@ -27,6 +27,7 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 - [x] Milk cures negetive effects can be disabled.
 - [x] Hearts can have custom texture model ID which resource packs will use to replace the textures.
 - [x] 100% Customizable messages and sounds.
+- [x] Very configurable per world feature toggle.
 - [ ] Heart consume animations and particle effects (work in progress, don't expect proper functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - [ ] Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - [ ] MySQL and SQLite database support. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)

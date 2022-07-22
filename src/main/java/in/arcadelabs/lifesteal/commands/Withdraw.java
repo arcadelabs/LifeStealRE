@@ -29,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -39,6 +40,7 @@ public class Withdraw extends BaseCommand {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private HeartItemManager heartItemManager;
   private ItemStack replacementHeart;
+  private List<String> disabledWorlds;
 
   /**
    * On withdraw command.
@@ -49,23 +51,30 @@ public class Withdraw extends BaseCommand {
   @Subcommand("withdraw")
   public void onWithdraw(final CommandSender sender, final int hearts) {
     final Player player = (Player) sender;
-    if (hearts * 2 >= lifeSteal.getUtils().getPlayerBaseHealth(player)) {
-      lifeSteal.getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
-    } else {
-      lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts * 2);
-      heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
-              .prepareIngedients()
-              .cookHeart(hearts * 2);
-      replacementHeart = heartItemManager.getHeartItem();
+    if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw").size() != 0) {
+      disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw");
+    }
+    if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
+      if (hearts * 2 >= lifeSteal.getUtils().getPlayerBaseHealth(player)) {
+        lifeSteal.getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
+      } else {
+        lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts * 2);
+        heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
+                .prepareIngedients()
+                .cookHeart(hearts * 2);
+        replacementHeart = heartItemManager.getHeartItem();
 
-      final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
-      for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
-        player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+        final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
+        for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
+          player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+        }
+        lifeSteal.getUtils().spawnParticles(player, "soul");
+        lifeSteal.getInteraction().retuurn(Level.FINE,
+                lifeSteal.getUtils().formatString(lifeSteal.getI18n().getKey("Messages.HeartWithdraw"), "hearts", hearts), player,
+                lifeSteal.getI18n().getKey("Sounds.HeartWithdraw"));
       }
-      lifeSteal.getUtils().spawnParticles(player, "soul");
-      lifeSteal.getInteraction().retuurn(Level.FINE,
-              lifeSteal.getUtils().formatString(lifeSteal.getI18n().getKey("Messages.HeartWithdraw"), "hearts", hearts), player,
-              lifeSteal.getI18n().getKey("Sounds.HeartWithdraw"));
+    } else {
+      lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Withdraw"));
     }
   }
 }

@@ -251,82 +251,34 @@ public class LSUtils {
   }
 
   public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause) {
+    final String tt;
     switch (damageCause) {
-      case CONTACT -> {
-        return "Messages.Elimination.ByDamagingBlocks";
-      }
-      case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> {
-        return "Messages.Elimination.ByMob";
-      }
-      case PROJECTILE -> {
-        return "Messages.Elimination.ByProjectile";
-      }
-      case SUFFOCATION -> {
-        return "Messages.Elimination.BySuffocation";
-      }
-      case FALL -> {
-        return "Messages.Elimination.ByFallDamage";
-      }
-      case FIRE, FIRE_TICK -> {
-        return "Messages.Elimination.ByBurn";
-      }
-      case LAVA -> {
-        return "Messages.Elimination.ByLava";
-      }
-      case DROWNING -> {
-        return "Messages.Elimination.ByDrowning";
-      }
-      case BLOCK_EXPLOSION -> {
-        return "Messages.Elimination.ByExplosion";
-      }
-      case ENTITY_EXPLOSION -> {
-        return "Messages.Elimination.ByCreeper";
-      }
-      case SUICIDE -> {
-        return "Messages.Elimination.BySuicide";
-      }
-      case VOID -> {
-        return "Messages.Elimination.ByVoid";
-      }
-      case LIGHTNING -> {
-        return "Messages.Elimination.ByLightning";
-      }
-      case STARVATION -> {
-        return "Messages.Elimination.ByStarvation";
-      }
-      case POISON -> {
-        return "Messages.Elimination.ByPoison";
-      }
-      case MAGIC -> {
-        return "Messages.Elimination.ByMagic";
-      }
-      case WITHER -> {
-        return "Messages.Elimination.ByWither";
-      }
-      case FALLING_BLOCK -> {
-        return "Messages.Elimination.ByFallingBlock";
-      }
-      case THORNS -> {
-        return "Messages.Elimination.ByThorns";
-      }
-      case DRAGON_BREATH -> {
-        return "Messages.Elimination.ByDragonBreath";
-      }
-      case FLY_INTO_WALL -> {
-        return "Messages.Elimination.ByKineticEnergy";
-      }
-      case HOT_FLOOR -> {
-        return "Messages.Elimination.ByMagmaBlock";
-      }
-      case CRAMMING -> {
-        return "Messages.Elimination.ByCramming";
-      }
-      case FREEZE -> {
-        return "Messages.Elimination.ByFreeze";
-      }
-      default -> {
-        return "Messages.Elimination.Other";
-      }
+      case CONTACT -> tt = "Messages.Elimination.ByDamagingBlocks";
+      case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK -> tt = "Messages.Elimination.ByMob";
+      case PROJECTILE -> tt = "Messages.Elimination.ByProjectile";
+      case SUFFOCATION -> tt = "Messages.Elimination.BySuffocation";
+      case FALL -> tt = "Messages.Elimination.ByFallDamage";
+      case FIRE, FIRE_TICK -> tt = "Messages.Elimination.ByBurn";
+      case LAVA -> tt = "Messages.Elimination.ByLava";
+      case DROWNING -> tt = "Messages.Elimination.ByDrowning";
+      case BLOCK_EXPLOSION -> tt = "Messages.Elimination.ByExplosion";
+      case ENTITY_EXPLOSION -> tt = "Messages.Elimination.ByCreeper";
+      case SUICIDE -> tt = "Messages.Elimination.BySuicide";
+      case VOID -> tt = "Messages.Elimination.ByVoid";
+      case LIGHTNING -> tt = "Messages.Elimination.ByLightning";
+      case STARVATION -> tt = "Messages.Elimination.ByStarvation";
+      case POISON -> tt = "Messages.Elimination.ByPoison";
+      case MAGIC -> tt = "Messages.Elimination.ByMagic";
+      case WITHER -> tt = "Messages.Elimination.ByWither";
+      case FALLING_BLOCK -> tt = "Messages.Elimination.ByFallingBlock";
+      case THORNS -> tt = "Messages.Elimination.ByThorns";
+      case DRAGON_BREATH -> tt = "Messages.Elimination.ByDragonBreath";
+      case FLY_INTO_WALL -> tt = "Messages.Elimination.ByKineticEnergy";
+      case HOT_FLOOR -> tt = "Messages.Elimination.ByMagmaBlock";
+      case CRAMMING -> tt = "Messages.Elimination.ByCramming";
+      case FREEZE -> tt = "Messages.Elimination.ByFreeze";
+      default -> tt = "Messages.Elimination.Other";
     }
+    return tt;
   }
 }
