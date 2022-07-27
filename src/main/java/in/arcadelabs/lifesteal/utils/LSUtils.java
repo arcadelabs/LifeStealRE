@@ -30,6 +30,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +38,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.xenondevs.particle.ParticleEffect;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,7 +50,6 @@ public class LSUtils {
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
   private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
   private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToGain", 2);
-  private List<Player> spectators = new ArrayList<>();
 
   /**
    * Gets player base health.
@@ -88,13 +89,12 @@ public class LSUtils {
    * @return the life state
    */
   public LifeState getLifeState(final Player player) {
-    if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("SPECTATING")
-            && player.getGameMode() == GameMode.SPECTATOR) return LifeState.SPECTATING;
-    if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("DEAD"))
-      return LifeState.DEAD;
-    if (Objects.requireNonNull(lifeSteal.getConfig().getString("LifeState")).equalsIgnoreCase("BANNED")
-            && player.isBanned()) return LifeState.BANNED;
-    return LifeState.LIVING;
+    try {
+      return lifeSteal.getProfileManager().getProfile(player.getUniqueId()).getLifeState();
+    } catch (SQLException e) {
+      LifeStealPlugin.getInstance().getLogger().warning(e.toString());
+      return null;
+    }
   }
 
   /**
@@ -220,33 +220,40 @@ public class LSUtils {
     }
   }
 
-  public void addSpectator(final Player player) {
-    if (spectators.contains(player)) return;
-    spectators.add(player);
-  }
-
-  public void removeSpectator(final Player player) {
-    if (spectators.contains(player)) return;
-    spectators.remove(player);
-  }
-
   public void handleElimination(final Player player) {
     switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> lifeSteal.getUtils().handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "BANNED" -> handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
       case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
-      case "SPECTATING" -> {
-        addSpectator(player);
-        for (Player serverPlayer : Bukkit.getOnlinePlayers()) {
-          if (!player.isOnline())
-            break;
-
-          if (!serverPlayer.isOnline())
-            continue;
-
-          serverPlayer.hidePlayer(lifeSteal.getInstance(), player);
-        }
-      }
+      case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
       case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("TTPP");
+    }
+  }
+
+  public void handleElimination(final Player player, final PlayerDeathEvent event) {
+    switch (lifeSteal.getConfig().getString("InventoryMode")) {
+      case "DROP" -> event.setKeepInventory(false);
+      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveInventory(player);
+      case "CLEAR" -> player.getInventory().clear();
+      case "NONE" -> player.saveData();
+    }
+
+    switch (lifeSteal.getConfig().getString("Elimination")) {
+      case "BANNED" -> handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
+      case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
+      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("TTPP");
+    }
+  }
+
+  public void handleRevive(final Player player) {
+    switch (lifeSteal.getConfig().getString("Elimination")) {
+      case "BANNED" -> {
+        handleBan(lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
+        lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.Revive.ByUnban"));
+      }
+      case "DEAD" -> player.setGameMode(GameMode.SURVIVAL);
+      case "SPIRIT" -> lifeSteal.getSpiritFactory().removeSpirit(player);
+      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("PPTT");
     }
   }
 

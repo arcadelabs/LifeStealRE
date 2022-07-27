@@ -22,6 +22,6 @@ public enum LifeState {
 
   LIVING,
   DEAD,
-  SPECTATING,
+  SPIRIT,
   BANNED
 }

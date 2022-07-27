@@ -43,6 +43,7 @@ public class GiveHearts extends BaseCommand {
 
   @Subcommand("givehearts")
   @CommandCompletion("@players Blessed|Normal|Cursed @nothing")
+  @CommandAlias("givehearts")
   public void onGiveHearts(final CommandSender sender, final OnlinePlayer target, final String type, final int amount) {
     switch (type) {
       case "Blessed" -> giveHearts("blessed", HeartItemManager.Mode.RANDOM_BLESSED, target.player, amount);

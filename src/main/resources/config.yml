@@ -1,15 +1,19 @@
-Version: 6
+Version: 8
 
 Clean-Console: false
 
 DATABASE:
+# true = MySQL, false = SQLite
   ENABLED: false
-  ADDRESS: ''
-  PORT: ''
-  DATABASE: ''
-  USERNAME: ''
-  PASSWORD: ''
+  ADDRESS: '127.0.0.1'
+  PORT: '3306'
+  DATABASE: 'lifesteal'
+  USERNAME: 'username'
+  PASSWORD: 'password'
 
+# State how many hearts players should transfer on player death.
+# 2 heart points = 1 whole heart.
+HeartsToTransfer: 2
 DefaultHealth: 20
 DisableTotem: true
 DisableMilkCure: true
@@ -32,7 +36,6 @@ Disabled-Worlds:
   Heart-Consume:
     - 'world_nether'
     - 'world_the_end'
-
 Heart:
   Properties:
     ItemType: 'PAPER'
@@ -68,16 +71,35 @@ Heart:
 # What happens after player looses all hearts.
 #Valid values are,
 #DEAD = Spectates own body npc,
-#SPECTATING = Roams around freely in spectator mode,
+#SPIRIT = Roams around freely in spectator mode,
 #BANNED = Gets banned, only works if death bans are enabled.
-Elimination: 'SPECTATING'
+Elimination: 'SPIRIT'
 
-Ban-Command-URI: 'ban %player% 3d [LifeSteal] - Eliminated. -s'
+# What happens to player's inventory when they get eliminated.
+# Valid values are,
+# DROP = Drops player inventory where they were eliminated,
+# SAVE_TO_RESTORE = Saves the inventory and restores it when player is revived,
+# CLEAR = Clears the inventory, don't use this please, :(
+# NONE = Nothing happens, use this if you're going to use ban mode on elimination.
+InventoryMode: 'SAVE_TO_RESTORE'
 
-# State how many hearts players should lose on death.
-# 2 heart points = 1 whole heart.
-HeartsToLose: 2
+Ban-Command-URI: 'ban %player_name% 3d [LifeSteal] - Eliminated. -s'
+UnBan-Command-URI: 'unban %player_name% 3d [LifeSteal] - Revived. -s'
 
-# State how many hearts points players gain on heart item consume.
-# 2 heart points = 1 whole heart.
-HeartsToGain: 2
+Spirits:
+  Black-Hearts: true
+  Spirit-Model:
+    Enabled: true
+    ItemType: 'GOLDEN_HELMET'
+    Name: '<#f89999>Spirit Cloak'
+    Lore: [" "]
+    ModelData: 123456
+#   leave these settings as is to get a perfect spirit concept.
+  Hearts: 1
+  GameMode: 'ADVENTURE'
+  Invisible: true
+  Invulnerable: true
+  CanPickupItems: false
+  Collidable: false
+  SleepingIgnored: true
+  Silent: true

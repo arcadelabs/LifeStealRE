@@ -34,6 +34,7 @@ import in.arcadelabs.labaide.updatechecker.UpdateChecker;
 import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.GiveHearts;
 import in.arcadelabs.lifesteal.commands.Reload;
+import in.arcadelabs.lifesteal.commands.Revive;
 import in.arcadelabs.lifesteal.commands.SetHearts;
 import in.arcadelabs.lifesteal.commands.Withdraw;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
@@ -46,12 +47,13 @@ import in.arcadelabs.lifesteal.listeners.HeartConsumeListener;
 import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
 import in.arcadelabs.lifesteal.listeners.PlayerClickListener;
 import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
-import in.arcadelabs.lifesteal.listeners.PlayerKillListener;
+import in.arcadelabs.lifesteal.listeners.PlayerDeathListener;
 import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
 import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
 import in.arcadelabs.lifesteal.utils.I18n;
 import in.arcadelabs.lifesteal.utils.Interaction;
 import in.arcadelabs.lifesteal.utils.LSUtils;
+import in.arcadelabs.lifesteal.utils.SpiritFactory;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -87,6 +89,7 @@ public class LifeSteal {
   private ItemStack placeholderHeart;
   private Interaction interaction;
   private SkullMaker skullMaker;
+  private SpiritFactory spiritFactory;
 
   /**
    * Check if server ruunning on Paper or it's forks.
@@ -191,11 +194,12 @@ public class LifeSteal {
 
   private void registerCommands() {
     final BaseCommand[] commands = {
-            new Eliminate(),
             new GiveHearts(),
-            new Reload(),
+            new Eliminate(),
             new SetHearts(),
             new Withdraw(),
+            new Reload(),
+            new Revive(),
     };
     if (isOnPaper()) {
       final PaperCommandManager pcm = new PaperCommandManager(instance);
@@ -215,7 +219,7 @@ public class LifeSteal {
             new HeartConsumeListener(),
             new PlayerClickListener(),
             new PlayerJoinListener(),
-            new PlayerKillListener(),
+            new PlayerDeathListener(),
             new HeartCraftListener(),
             new ProfileListener(),
     };
@@ -240,6 +244,8 @@ public class LifeSteal {
     interaction = new Interaction(instance.getLogger(), config.getBoolean("Clean-Console"));
 
     skullMaker = new SkullMaker();
+
+    spiritFactory = new SpiritFactory();
 
     placeholderHeartInit();
 

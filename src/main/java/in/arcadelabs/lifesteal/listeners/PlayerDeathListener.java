@@ -32,7 +32,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PlayerKillListener implements Listener {
+public class PlayerDeathListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private HeartItemManager heartItemManager;
@@ -43,7 +43,7 @@ public class PlayerKillListener implements Listener {
   public void onPlayerKilled(final PlayerDeathEvent event) {
 
     final Player victim = event.getEntity();
-    final int lostHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
+    final int lostHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 2);
     if (lifeSteal.getUtils().getPlayerBaseHealth(victim) == 1 || lifeSteal.getUtils().getPlayerBaseHealth(victim) == 2) {
       if (victim.getKiller() == null) {
         lifeSteal.getInteraction().broadcast(
@@ -51,7 +51,7 @@ public class PlayerKillListener implements Listener {
       } else {
         lifeSteal.getInteraction().broadcast(lifeSteal.getI18n().getKey("Messages.Elimination.ByPlayer"), victim);
       }
-      lifeSteal.getUtils().handleElimination(victim);
+      lifeSteal.getUtils().handleElimination(victim, event);
     } else {
       if (victim.getKiller() == null) {
         if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other").size() != 0) {

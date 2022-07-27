@@ -26,20 +26,23 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import org.bukkit.entity.Player;
 
 @CommandAlias("lifesteal|ls")
-@CommandPermission("lifesteal.sethearts")
-public class SetHearts extends BaseCommand {
+@CommandPermission("lifesteal.revive")
+public class Revive extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
-  @Subcommand("sethearts")
-  @CommandCompletion("@players @nothing true|false")
-  @CommandAlias("sethearts")
-  public void onSetHearts(final OnlinePlayer target, final int hearts) {
-    Player player = target.player;
-    lifeSteal.getUtils().setPlayerBaseHealth(player, hearts * 2);
-    player.setHealth(hearts * 2);
+  /**
+   * On revive command.
+   *
+   * @param target the target
+   */
+  @Subcommand("revive")
+  @CommandCompletion("@players")
+  @CommandAlias("revive")
+  public void onRevive(final OnlinePlayer target) {
+    lifeSteal.getUtils().handleRevive(target.getPlayer());
+    lifeSteal.getInteraction().broadcast("Messages.Revive.ByCommand", target.getPlayer());
   }
 }

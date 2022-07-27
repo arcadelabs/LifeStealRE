@@ -22,24 +22,14 @@ import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
-public class PlayerPotionEffectListener implements Listener {
-
+public class PlayerDamageEvent implements Listener {
   @EventHandler
-  public void onPotionEffectEvent(final EntityPotionEffectEvent event) {
-    if (event.getCause() == EntityPotionEffectEvent.Cause.MILK) {
-      if (event.isCancelled()) return;
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure"));
-    } else if (event.getCause() == EntityPotionEffectEvent.Cause.TOTEM) {
-      if (event.isCancelled()) return;
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
-    } else if (event.getEntity() instanceof Player player &&
-            LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(player)) {
-      if (event.getCause() == EntityPotionEffectEvent.Cause.AREA_EFFECT_CLOUD ||
-              event.getCause() == EntityPotionEffectEvent.Cause.POTION_SPLASH) {
-        event.setCancelled(true);
-      }
-    }
+  public void onDamage(final EntityDamageEvent event) {
+    if(event.getCause() != EntityDamageEvent.DamageCause.WITHER) return;
+    if (!(LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains((Player) event.getEntity()))) return;
+    if(event.isCancelled()) return;
+    event.setCancelled(true);
   }
 }
