@@ -49,6 +49,7 @@ public class Withdraw extends BaseCommand {
    * @param hearts the hearts
    */
   @Subcommand("withdraw")
+  @CommandAlias("withdraw")
   public void onWithdraw(final CommandSender sender, final int hearts) {
     final Player player = (Player) sender;
     if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw").size() != 0) {
@@ -56,7 +57,7 @@ public class Withdraw extends BaseCommand {
     }
     if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
       if (hearts * 2 >= lifeSteal.getUtils().getPlayerBaseHealth(player)) {
-        lifeSteal.getMessenger().sendMessage(player, "Chutiye, aukat hai tera itna?");
+        lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.NotEnoughHearts"));
       } else {
         lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts * 2);
         heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))

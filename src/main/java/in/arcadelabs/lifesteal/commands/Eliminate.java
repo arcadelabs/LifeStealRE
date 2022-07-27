@@ -40,6 +40,7 @@ public class Eliminate extends BaseCommand {
    */
   @Subcommand("eliminate")
   @CommandCompletion("@players")
+  @CommandAlias("eliminate")
   public void onEliminate(final OnlinePlayer target) {
     lifeSteal.getUtils().handleElimination(target.getPlayer());
     lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCommand", target.getPlayer());
