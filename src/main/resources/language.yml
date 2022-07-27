@@ -9,7 +9,10 @@ Messages:
   ListenersLoad: "<gradient:e01e37:f52486>All the listeners are active now, and they're better at listeneing than you were."
   CommandsLoad: "<gradient:e01e37:f52486>Commands are registered, go get em commander!"
   CommandsAsyncLoad: "<gradient:e01e37:f52486>Commands are registered asynchronously, get em gracefully commander!"
+
   HeartWithdraw: "<gradient:e01e37:f52486>You've withdrawn <hearts>x hearts."
+  SetHearts: "<gradient:e01e37:f52486>Set <hearts> hearts."
+
   Elimination:
     ByCommand: "<gradient:e01e37:f52486><player> has been eliminated by <commander>."
     ByPlayer: "<gradient:e01e37:f52486><player> has been eliminated by <killer>."
@@ -38,6 +41,11 @@ Messages:
     ByCramming: "<gradient:e01e37:f52486><player> tried catching a Mumbai local, thus, eliminated."
     ByFreeze: "<gradient:e01e37:f52486><player> freezed to elimination."
     Other: "<gradient:e01e37:f52486><player> got eliminated."
+  Revive:
+    ByUnban: "<gradient:e01e37:f52486><player> got second chance at life."
+    ByCommand: "<gradient:e01e37:f52486><player> has been revived by <commander>."
+    ByBeacon: "<gradient:e01e37:f52486><player> is revived, they been summoned back to life bu their well-wishers."
+    AfterLife: "<gradient:e01e37:f52486><player> has returned from the afterlife, must be a ''hell'' of a journey. xd"
 
   ConfigLoadError: "<gradient:e01e37:641220>Error(s) occured while loading config.yml"
   HeartConfigLoadError: "<gradient:e01e37:641220>Error(s) occured while loading hearts.yml"
