@@ -19,6 +19,7 @@
 package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
@@ -33,6 +34,12 @@ public class PlayerPotionEffectListener implements Listener {
     } else if (event.getCause() == EntityPotionEffectEvent.Cause.TOTEM) {
       if (event.isCancelled()) return;
       event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
+    } else if (event.getEntity() instanceof Player player &&
+            LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(player)) {
+      if (event.getCause() == EntityPotionEffectEvent.Cause.AREA_EFFECT_CLOUD ||
+              event.getCause() == EntityPotionEffectEvent.Cause.POTION_SPLASH) {
+        event.setCancelled(true);
+      }
     }
   }
 }
