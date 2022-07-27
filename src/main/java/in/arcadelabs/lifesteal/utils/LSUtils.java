@@ -250,6 +250,18 @@ public class LSUtils {
     }
   }
 
+  public void handleRevive(final Player player) {
+    switch (lifeSteal.getConfig().getString("Elimination")) {
+      case "BANNED" -> {
+        handleBan(lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
+        lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.Revive.ByUnban"));
+      }
+      case "DEAD" -> player.setGameMode(GameMode.SURVIVAL);
+      case "SPIRIT" -> lifeSteal.getSpiritFactory().removeSpirit(player);
+      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("PPTT");
+    }
+  }
+
   public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause) {
     return switch (damageCause) {
       case CONTACT -> "Messages.Elimination.ByDamagingBlocks";
