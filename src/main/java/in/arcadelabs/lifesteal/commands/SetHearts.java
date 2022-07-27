@@ -38,7 +38,7 @@ public class SetHearts extends BaseCommand {
   @CommandCompletion("@players @nothing true|false")
   public void onSetHearts(final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerBaseHealth(player, hearts);
-    player.setHealth(hearts);
+    lifeSteal.getUtils().setPlayerBaseHealth(player, hearts * 2);
+    player.setHealth(hearts * 2);
   }
 }
