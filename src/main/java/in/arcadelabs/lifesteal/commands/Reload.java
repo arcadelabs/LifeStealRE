@@ -48,11 +48,11 @@ public class Reload extends BaseCommand {
     if (sender instanceof Player) {
       final Player player = (Player) sender;
       lifeSteal.getConfig().reload();
-      lifeSteal.getMessenger().sendMessage(player, "<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
-      lifeSteal.getMessenger().sendConsoleMessage("<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
+      lifeSteal.getMessenger().sendMessage(player, "<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>");
+      lifeSteal.getMessenger().sendConsoleMessage("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>");
     } else {
       lifeSteal.getConfig().reload();
-      lifeSteal.getMessenger().sendConsoleMessage("<gradient:e01e37:f52486>LifeSteal Core reloaded.</gradient>");
+      lifeSteal.getMessenger().sendConsoleMessage("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>");
     }
   }
 }
