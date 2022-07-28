@@ -15,7 +15,7 @@ Lifesteal is a survival gamemode concept made by some MCYT content creators, whe
 Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
 ## Features, 
-![Progress](https://progress-bar.dev/55/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
+![Progress](https://progress-bar.dev/60/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
 - [x] HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages, and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an heart that doesn't work as long as it shows the errors in gradients.
 - [x] Customizable heart recipe.
 - [x] Blessed, normal and cursed heart types.
