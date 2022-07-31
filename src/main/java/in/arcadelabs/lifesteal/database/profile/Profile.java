@@ -18,23 +18,46 @@
 
 package in.arcadelabs.lifesteal.database.profile;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import in.arcadelabs.lifesteal.utils.LifeState;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
 import java.util.UUID;
+import lombok.Data;
 
 @Data
-@RequiredArgsConstructor
+@DatabaseTable(tableName = "lifesteal-storage")
 public class Profile {
 
-  private final UUID uniqueID;
+  @DatabaseField(columnName = "UNIQUE_ID", id = true, dataType = DataType.UUID)
+  private UUID uniqueID;
+
+  @DatabaseField(columnName = "LIFE_STATE", dataType = DataType.ENUM_TO_STRING)
   private LifeState lifeState;
+
+  @DatabaseField(columnName = "CURRENT_HEARTS")
   private int currentHearts;
+
+  @DatabaseField(columnName = "LOST_HEARTS")
   private int lostHearts;
+
+  @DatabaseField(columnName = "NORMAL_HEARTS")
   private int normalHearts;
+
+  @DatabaseField(columnName = "BLESSED_HEARTS")
   private int blessedHearts;
+
+  @DatabaseField(columnName = "CURSED_HEARTS")
   private int cursedHearts;
+
+  @DatabaseField(columnName = "PEAK_HEARTS_REACHED")
   private int peakHeartsReached;
 
+  // <-- No-args constructor for orm-lite -->
+  public Profile() {
+  }
+
+  public Profile(UUID uniqueID) {
+    this.uniqueID = uniqueID;
+  }
 }

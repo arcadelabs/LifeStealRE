@@ -33,10 +33,6 @@ public class PlayerJoinListener implements Listener {
   public void onPlayerJoin(final PlayerJoinEvent event) {
 
     final Player player = event.getPlayer();
-    final double defaultHealth = lifeSteal.getConfig().getDouble("DefaultHealth");
-
-    if (!player.hasPlayedBefore()) {
-      lifeSteal.getUtils().setPlayerBaseHealth(player, defaultHealth);
-    }
+    lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts());
   }
 }

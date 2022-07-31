@@ -18,10 +18,19 @@
 
 package in.arcadelabs.lifesteal.database;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.DataSourceConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.Profile;
+import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import lombok.Getter;
 
 import java.io.File;
@@ -33,6 +42,9 @@ import java.sql.SQLException;
 public class DatabaseHandler {
 
   private final HikariDataSource hikariDataSource;
+  private final Executor hikariExecutor = Executors.newFixedThreadPool(2);
+  private Dao<Profile, UUID> profileDao;
+  private ConnectionSource  connectionSource;
 
   private String address, database, username, password;
   private int port;
@@ -63,7 +75,6 @@ public class DatabaseHandler {
     hikariConfig.setMaximumPoolSize(10);
     hikariConfig.setUsername(username);
     hikariConfig.setPassword(password);
-    hikariConfig.setConnectionTestQuery("SELECT 1;");
     hikariConfig.setPoolName("LifeSteal-Pool");
     hikariDataSource = new HikariDataSource(hikariConfig);
 
@@ -71,9 +82,16 @@ public class DatabaseHandler {
       lifeStealPlugin.getLogger().info("Successfully initialized connection to MySQL database...");
     } else {
       lifeStealPlugin
-              .getLogger()
-              .severe("Failed to initialize connection to MySQL database! Shutting down...");
+          .getLogger()
+          .severe("Failed to initialize connection to MySQL database! Shutting down...");
       lifeStealPlugin.getServer().getPluginManager().disablePlugin(lifeStealPlugin);
+    }
+    try {
+      this.connectionSource = new DataSourceConnectionSource(hikariDataSource, hikariConfig.getJdbcUrl());
+      this.profileDao = DaoManager.createDao(connectionSource, Profile.class);
+      TableUtils.createTableIfNotExists(connectionSource, Profile.class);
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
   }
 
@@ -88,7 +106,8 @@ public class DatabaseHandler {
     this.ssl = configuration.getBoolean("DATABASE.SSL");
   }
 
-  public void disconnect() {
+  public void disconnect() throws Exception {
+    if (connectionSource != null) connectionSource.closeQuietly();
     if (hikariDataSource != null) hikariDataSource.close();
   }
 
