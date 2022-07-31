@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal;
 
+import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -29,21 +30,20 @@ import java.util.logging.Level;
 @Getter
 public final class LifeStealPlugin extends JavaPlugin {
 
-  @Getter
-  private static LifeStealPlugin instance;
-  @Getter
-  private static LifeSteal lifeSteal;
+  @Getter private static LifeStealPlugin instance;
+  @Getter private static LifeSteal lifeSteal;
 
   private boolean labaideExist;
 
   @Override
   public void onEnable() {
     instance = this;
-    
+
     if (Bukkit.getPluginManager().getPlugin("LabAide") == null) {
       this.labaideExist = false;
       this.getLogger().severe("LabAide was not found! Disabling LifeSteal...");
-      this.getLogger().severe("Download LabAide at https://github.com/arcadelabs/LabAide/releases/tag/pre-3");
+      this.getLogger()
+          .severe("Download LabAide at https://github.com/arcadelabs/LabAide/releases/tag/pre-3");
       this.setEnabled(false);
       return;
     }
@@ -54,7 +54,9 @@ public final class LifeStealPlugin extends JavaPlugin {
       lifeSteal.init();
       lifeSteal.getI18n().translate(Level.INFO, "Messages.LifestealLoad");
     } catch (Exception e) {
-      this.getLogger().warning("There was an error while loading LifeSteal, gotta be a hooman error, blame Aniket#7102.");
+      this.getLogger()
+          .warning(
+              "There was an error while loading LifeSteal, gotta be a hooman error, blame Aniket#7102.");
       this.getLogger().warning(e.toString());
       e.printStackTrace();
     }
@@ -64,20 +66,29 @@ public final class LifeStealPlugin extends JavaPlugin {
   public void onDisable() {
 
     if (this.labaideExist) {
+      lifeSteal.getDatabaseHandler().getHikariExecutor()
+          .execute(() -> {
+                lifeSteal.getProfileManager()
+                    .getProfileCache()
+                    .values().forEach(profile -> {
+                          try {
+                            lifeSteal.getProfileManager().saveProfile(profile);
+                          } catch (SQLException e) {
+                            e.printStackTrace();
+                          }
+                        });
+              });
+      lifeSteal.getMessenger().closeMessenger();
       try {
-        lifeSteal.getProfileManager().saveAll();
-      } catch (SQLException e) {
+        lifeSteal.getDatabaseHandler().disconnect();
+      } catch (Exception e) {
         e.printStackTrace();
       }
-      lifeSteal.getMessenger().closeMessenger();
-      lifeSteal.getDatabaseHandler().disconnect();
     }
-
     getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
     getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
     getLogger().info(ChatColor.of("#7209b7") + "( (__  \\  / /(__)\\ ");
     getLogger().info(ChatColor.of("#560bad") + " \\___) (__)(__)(__)... on the other side");
     getLogger().info(ChatColor.of("#560bad") + " ");
-
   }
 }
