@@ -113,6 +113,7 @@ public class LifeSteal {
               .defaultToMiniMessageTranslator()
               .build();
     } catch (Exception e) {
+
       instance.getLogger().warning(e.getLocalizedMessage());
     }
   }
