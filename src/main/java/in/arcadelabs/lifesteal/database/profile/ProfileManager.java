@@ -25,7 +25,6 @@ import in.arcadelabs.lifesteal.utils.LifeState;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +48,10 @@ public class ProfileManager {
     Profile profile = new Profile(uuid);
 
     if (this.hasProfile(uuid)) {
+      instance.getInstance().getLogger().info("Profile found for " + uuid + " !, Loading...");
       return databaseHandler.getProfileDao().queryForId(uuid);
     } else {
+      instance.getInstance().getLogger().info("Profile not found for " + uuid + " !, Creating...");
       this.saveProfile(profile);
     }
     return profile;

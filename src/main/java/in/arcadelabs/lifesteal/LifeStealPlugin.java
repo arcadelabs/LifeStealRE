@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal;
 
-import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -64,7 +63,7 @@ public final class LifeStealPlugin extends JavaPlugin {
 
   @Override
   public void onDisable() {
-
+    System.setProperty("com.j256.simplelogging.level", "ERROR");
     if (this.labaideExist) {
       lifeSteal.getDatabaseHandler().getHikariExecutor()
           .execute(() -> {
@@ -85,10 +84,10 @@ public final class LifeStealPlugin extends JavaPlugin {
         e.printStackTrace();
       }
     }
-    getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
-    getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
-    getLogger().info(ChatColor.of("#7209b7") + "( (__  \\  / /(__)\\ ");
-    getLogger().info(ChatColor.of("#560bad") + " \\___) (__)(__)(__)... on the other side");
-    getLogger().info(ChatColor.of("#560bad") + " ");
+    this.getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
+    this.getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
+    this.getLogger().info(ChatColor.of("#7209b7") + "( (__  \\  / /(__)\\ ");
+    this.getLogger().info(ChatColor.of("#560bad") + " \\___) (__)(__)(__)... on the other side");
+    this.getLogger().info(ChatColor.of("#560bad") + " ");
   }
 }

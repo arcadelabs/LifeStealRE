@@ -44,7 +44,7 @@ public class DatabaseHandler {
   private final HikariDataSource hikariDataSource;
   private final Executor hikariExecutor = Executors.newFixedThreadPool(2);
   private Dao<Profile, UUID> profileDao;
-  private ConnectionSource connectionSource;
+  private ConnectionSource  connectionSource;
 
   private String address, database, username, password;
   private int port;
@@ -75,7 +75,6 @@ public class DatabaseHandler {
     hikariConfig.setMaximumPoolSize(10);
     hikariConfig.setUsername(username);
     hikariConfig.setPassword(password);
-    hikariConfig.setConnectionTestQuery("SELECT 1;");
     hikariConfig.setPoolName("LifeSteal-Pool");
     hikariDataSource = new HikariDataSource(hikariConfig);
 
@@ -90,8 +89,8 @@ public class DatabaseHandler {
     try {
       this.connectionSource = new DataSourceConnectionSource(hikariDataSource, hikariConfig.getJdbcUrl());
       this.profileDao = DaoManager.createDao(connectionSource, Profile.class);
-      TableUtils.createTable(connectionSource, Profile.class);
-    } catch (SQLException ex) {
+      TableUtils.createTableIfNotExists(connectionSource, Profile.class);
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
@@ -108,7 +107,7 @@ public class DatabaseHandler {
   }
 
   public void disconnect() throws Exception {
-    if (connectionSource != null) connectionSource.close();
+    if (connectionSource != null) connectionSource.closeQuietly();
     if (hikariDataSource != null) hikariDataSource.close();
   }
 
