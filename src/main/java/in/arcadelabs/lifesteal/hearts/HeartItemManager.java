@@ -141,8 +141,8 @@ public class HeartItemManager {
             ("Hearts.Types." + type + "." + index + ".Properties.ItemType"));
     this.heartName = lifeSteal.getUtils().formatString(heartConfig.getString
             ("Hearts.Types." + type + "." + index + ".Properties.Name"));
-    this.heartLore = lifeSteal.getUtils().formatStringList(heartConfig.getStringList
-            ("Hearts.Types." + type + "." + index + ".Properties.Lore"));
+    this.heartLore = lifeSteal.getUtils().stringToComponentList(heartConfig.getStringList
+            ("Hearts.Types." + type + "." + index + ".Properties.Lore"), true);
     this.modelData = heartConfig.getInt
             ("Hearts.Types." + type + "." + index + ".Properties.ModelData");
     this.healthPoints = heartConfig.getDouble
@@ -167,7 +167,7 @@ public class HeartItemManager {
       this.heartItemCooker = new HeartItemCooker(this.heartType);
     }
     this.heartItemCooker
-            .setHeartName(this.heartName)
+            .setHeartName(this.heartName.decoration(TextDecoration.ITALIC, false))
             .setHeartLore(this.heartLore)
             .setModelData(this.modelData)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
@@ -193,7 +193,7 @@ public class HeartItemManager {
       this.heartItemCooker = new HeartItemCooker(this.heartType);
     }
     this.heartItemCooker
-            .setHeartName(this.heartName)
+            .setHeartName(this.heartName.decoration(TextDecoration.ITALIC, false))
             .setHeartLore(this.heartLore)
             .setModelData(this.modelData)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
