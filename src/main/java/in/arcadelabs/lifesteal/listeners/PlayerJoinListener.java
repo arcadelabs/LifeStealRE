@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.Profile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,11 +29,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class PlayerJoinListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final int defaultHealth = lifeSteal.getConfig().getInt("DefaultHealth");
 
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
-
     final Player player = event.getPlayer();
-    lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts());
+
+    if (!player.hasPlayedBefore()) {
+      lifeSteal.getUtils().setPlayerHearts(player, defaultHealth);
+      new Profile(player.getUniqueId());
+      lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setCurrentHearts(defaultHealth);
+    } else lifeSteal.getUtils().setPlayerHearts(player,
+            lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts());
   }
 }
