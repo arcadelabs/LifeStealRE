@@ -57,7 +57,7 @@ public class PlayerDeathListener implements Listener {
         if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other").size() != 0) {
           disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other");
         }
-        if (!(disabledWorlds.contains(victim.getWorld().toString().toLowerCase()))) {
+        if (!(disabledWorlds.contains(victim.getWorld().getName()))) {
           heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
                   .prepareIngedients()
                   .cookHeart();
@@ -77,8 +77,8 @@ public class PlayerDeathListener implements Listener {
         if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill").size() != 0) {
           disabledWorldsNatural = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill");
         }
-        if (!(disabledWorldsNatural.contains(victim.getWorld().toString().toLowerCase()))) {
-          lifeSteal.getUtils().transferHealth(victim, victim.getKiller());
+        if (!(disabledWorldsNatural.contains(victim.getWorld().getName()))) {
+          lifeSteal.getUtils().transferHearts(victim, victim.getKiller());
         } else {
           lifeSteal.getMessenger().sendMessage(victim.getKiller(), lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Drops.Player-Kill.Killer"));
           lifeSteal.getMessenger().sendMessage(victim, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Drops.Player-Kill.Victim"));

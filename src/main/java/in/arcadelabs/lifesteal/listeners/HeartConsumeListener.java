@@ -53,7 +53,7 @@ public class HeartConsumeListener implements Listener {
     if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
       disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
     }
-    if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
+    if (!(disabledWorlds.contains(player.getWorld().getName()))) {
       final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
               (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
       final String type = heartMeta.getPersistentDataContainer().get

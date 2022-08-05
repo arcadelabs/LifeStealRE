@@ -49,26 +49,26 @@ public class PlayerClickListener implements Listener {
     if (!(player.getInventory().getItemInMainHand().hasItemMeta())) return;
     final ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
 
-    if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
-            .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
-    if (player.getInventory().getItemInMainHand().getType().isEdible()) {
-      if (player.getFoodLevel() == 20) player.setFoodLevel(19);
-      instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
-    } else {
-      if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
-        disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
-      }
-      if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
-        final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-                (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
-        final String type = heartMeta.getPersistentDataContainer().get
-                (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
-        final String index = heartMeta.getPersistentDataContainer().get
-                (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
-        final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-                (new NamespacedKey(instance, "lifesteal_heart_consumesound"), PersistentDataType.STRING));
-        final List<String> consumeMessages = lifeSteal.getHeartConfig().getStringList
-                ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage");
+      if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
+              .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
+      if (player.getInventory().getItemInMainHand().getType().isEdible()) {
+        if (player.getFoodLevel() == 20) player.setFoodLevel(19);
+        instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
+      } else {
+        if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
+          disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
+        }
+        if (!(disabledWorlds.contains(player.getWorld().getName()))) {
+          final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
+                  (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
+          final String type = heartMeta.getPersistentDataContainer().get
+                  (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
+          final String index = heartMeta.getPersistentDataContainer().get
+                  (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
+          final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
+                  (new NamespacedKey(instance, "lifesteal_heart_consumesound"), PersistentDataType.STRING));
+          final List<Component> consumeMessages = lifeSteal.getUtils().stringToComponentList(lifeSteal.getHeartConfig().getStringList
+                  ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage"), false);
 
         lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
                 + healthPoints);
