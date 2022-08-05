@@ -82,9 +82,11 @@ Elimination: 'SPIRIT'
 # CLEAR = Clears the inventory, don't use this please, :(
 # NONE = Nothing happens, use this if you're going to use ban mode on elimination.
 InventoryMode: 'SAVE_TO_RESTORE'
+# Same as Inventory mode.
+ExperienceMode: 'SAVE_TO_RESTORE'
 
-Ban-Command-URI: 'ban %player_name% 3d [LifeSteal] - Eliminated. -s'
-UnBan-Command-URI: 'unban %player_name% 3d [LifeSteal] - Revived. -s'
+Ban-Command-URI: 'ban <player> 3d [LifeSteal] - Eliminated. -s'
+UnBan-Command-URI: 'unban <player> 3d [LifeSteal] - Revived. -s'
 
 Spirits:
   Black-Hearts: true

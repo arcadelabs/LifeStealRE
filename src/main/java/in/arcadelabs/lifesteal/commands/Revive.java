@@ -26,6 +26,8 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.revive")
@@ -41,8 +43,13 @@ public class Revive extends BaseCommand {
   @Subcommand("revive")
   @CommandCompletion("@players")
   @CommandAlias("revive")
-  public void onRevive(final OnlinePlayer target) {
-    lifeSteal.getUtils().handleRevive(target.getPlayer());
-    lifeSteal.getInteraction().broadcast("Messages.Revive.ByCommand", target.getPlayer());
+  public void onRevive(final CommandSender sender,  final OnlinePlayer target) {
+    if (sender instanceof Player player) {
+      lifeSteal.getUtils().handleRevive(target.getPlayer());
+      lifeSteal.getInteraction().broadcast("Messages.Revive.ByCommand.Player", target.getPlayer(), player);
+    } else {
+      lifeSteal.getUtils().handleRevive(target.getPlayer());
+      lifeSteal.getInteraction().broadcast("Messages.Revive.ByCommand.Console", target.getPlayer());
+    }
   }
 }

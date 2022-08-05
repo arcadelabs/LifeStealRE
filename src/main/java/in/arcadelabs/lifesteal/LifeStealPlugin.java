@@ -18,13 +18,13 @@
 
 package in.arcadelabs.lifesteal;
 
+import in.arcadelabs.labaide.logger.Logger;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
 
 @Getter
 public final class LifeStealPlugin extends JavaPlugin {
@@ -42,7 +42,7 @@ public final class LifeStealPlugin extends JavaPlugin {
       this.labaideExist = false;
       this.getLogger().severe("LabAide was not found! Disabling LifeSteal...");
       this.getLogger()
-          .severe("Download LabAide at https://github.com/arcadelabs/LabAide/releases/tag/pre-3");
+          .severe("Download LabAide at https://github.com/arcadelabs/LabAide/releases/latest");
       this.setEnabled(false);
       return;
     }
@@ -51,7 +51,7 @@ public final class LifeStealPlugin extends JavaPlugin {
     lifeSteal = new LifeSteal();
     try {
       lifeSteal.init();
-      lifeSteal.getI18n().translate(Level.INFO, "Messages.LifestealLoad");
+      lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(lifeSteal.getKey("Messages.LifestealLoad")));
     } catch (Exception e) {
       this.getLogger()
           .warning(
@@ -66,18 +66,15 @@ public final class LifeStealPlugin extends JavaPlugin {
     System.setProperty("com.j256.simplelogging.level", "ERROR");
     if (this.labaideExist) {
       lifeSteal.getDatabaseHandler().getHikariExecutor()
-          .execute(() -> {
-                lifeSteal.getProfileManager()
-                    .getProfileCache()
-                    .values().forEach(profile -> {
-                          try {
-                            lifeSteal.getProfileManager().saveProfile(profile);
-                          } catch (SQLException e) {
-                            e.printStackTrace();
-                          }
-                        });
-              });
-      lifeSteal.getMessenger().closeMessenger();
+          .execute(() -> lifeSteal.getProfileManager()
+              .getProfileCache()
+              .values().forEach(profile -> {
+                    try {
+                      lifeSteal.getProfileManager().saveProfile(profile);
+                    } catch (SQLException e) {
+                      e.printStackTrace();
+                    }
+                  }));
       try {
         lifeSteal.getDatabaseHandler().disconnect();
       } catch (Exception e) {

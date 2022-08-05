@@ -22,6 +22,8 @@ import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.utils.ProbabilityCollection;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -47,8 +49,8 @@ public class HeartItemManager {
   private ItemStack heartItem;
   private String skullData;
   private Material heartType;
-  private String heartName;
-  private List<String> heartLore;
+  private Component heartName;
+  private List<Component> heartLore;
   private int modelData;
   private double healthPoints;
   private Mode mode;
@@ -139,8 +141,8 @@ public class HeartItemManager {
             ("Hearts.Types." + type + "." + index + ".Properties.ItemType"));
     this.heartName = lifeSteal.getUtils().formatString(heartConfig.getString
             ("Hearts.Types." + type + "." + index + ".Properties.Name"));
-    this.heartLore = lifeSteal.getUtils().formatStringList(heartConfig.getStringList
-            ("Hearts.Types." + type + "." + index + ".Properties.Lore"));
+    this.heartLore = lifeSteal.getUtils().stringToComponentList(heartConfig.getStringList
+            ("Hearts.Types." + type + "." + index + ".Properties.Lore"), true);
     this.modelData = heartConfig.getInt
             ("Hearts.Types." + type + "." + index + ".Properties.ModelData");
     this.healthPoints = heartConfig.getDouble
@@ -165,7 +167,7 @@ public class HeartItemManager {
       this.heartItemCooker = new HeartItemCooker(this.heartType);
     }
     this.heartItemCooker
-            .setHeartName(this.heartName)
+            .setHeartName(this.heartName.decoration(TextDecoration.ITALIC, false))
             .setHeartLore(this.heartLore)
             .setModelData(this.modelData)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
@@ -191,7 +193,7 @@ public class HeartItemManager {
       this.heartItemCooker = new HeartItemCooker(this.heartType);
     }
     this.heartItemCooker
-            .setHeartName(this.heartName)
+            .setHeartName(this.heartName.decoration(TextDecoration.ITALIC, false))
             .setHeartLore(this.heartLore)
             .setModelData(this.modelData)
             .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")

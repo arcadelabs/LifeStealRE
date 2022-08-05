@@ -18,28 +18,22 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
-import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import in.arcadelabs.lifesteal.database.profile.Profile;
-import org.bukkit.entity.Player;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.persistence.PersistentDataType;
 
-public class PlayerJoinListener implements Listener {
-
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private final int defaultHealth = lifeSteal.getConfig().getInt("DefaultHealth");
+public class HeartPlaceListener implements Listener {
 
   @EventHandler
-  public void onPlayerJoin(final PlayerJoinEvent event) {
-    final Player player = event.getPlayer();
-
-    if (!player.hasPlayedBefore()) {
-      lifeSteal.getUtils().setPlayerHearts(player, defaultHealth);
-      new Profile(player.getUniqueId());
-      lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setCurrentHearts(defaultHealth);
-    } else lifeSteal.getUtils().setPlayerHearts(player,
-            lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts());
+  public void onPlace(final BlockPlaceEvent event) {
+    if (event.getItemInHand().getItemMeta().getPersistentDataContainer().has(
+            new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart_item"), PersistentDataType.STRING)) {
+      event.setCancelled(true);
+      event.getPlayer().sendMessage(LifeStealPlugin.getLifeSteal().getUtils().formatString(
+              LifeStealPlugin.getLifeSteal().getKey("Messages.DisabledStuff.HeartItemPlace")));
+    }
   }
 }

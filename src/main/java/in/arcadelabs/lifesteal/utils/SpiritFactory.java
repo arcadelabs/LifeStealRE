@@ -18,8 +18,10 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -48,10 +50,10 @@ public class SpiritFactory {
 
   private ItemStack bakeSpiritModel() {
     spiritModel = new ItemStack(Material.valueOf(lifeSteal.getConfig().getString("Spirits.Spirit-Model.ItemType")));
-    spiritModel.getItemMeta().setDisplayName(lifeSteal.getUtils().formatString
+    spiritModel.getItemMeta().displayName(lifeSteal.getUtils().formatString
             (lifeSteal.getConfig().getString("Spirits.Spirit-Model.Name")));
-    spiritModel.getItemMeta().setLore(lifeSteal.getUtils().formatStringList
-            (lifeSteal.getConfig().getStringList("Spirits.Spirit-Model.Lore")));
+    spiritModel.getItemMeta().lore(lifeSteal.getUtils().stringToComponentList
+            (lifeSteal.getConfig().getStringList("Spirits.Spirit-Model.Lore"), true));
     spiritModel.getItemMeta().setCustomModelData(lifeSteal.getConfig().getInt("Spirits.Spirit-Model.ModelData"));
     return spiritModel;
   }
@@ -64,7 +66,7 @@ public class SpiritFactory {
   public void addSpirit(final Player player) {
     if (spirits.contains(player)) return;
     spirits.add(player);
-    lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
+    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
     player.setGameMode(GameMode.valueOf(lifeSteal.getConfig().getString("Spirits.GameMode", "ADVENTURE")));
     player.setInvisible(lifeSteal.getConfig().getBoolean("Spirits.Invisible", true));
     player.setInvulnerable(lifeSteal.getConfig().getBoolean("Spirits.Invulnerable", true));
@@ -89,7 +91,7 @@ public class SpiritFactory {
   public void removeSpirit(final Player player) {
     if (!spirits.contains(player)) return;
     spirits.remove(player);
-    lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getConfig().getInt("DefaultHealth", 20));
+    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getConfig().getInt("DefaultHealth", 20));
     player.setInvisible(false);
     player.setInvulnerable(false);
     player.setGameMode(GameMode.SURVIVAL);
@@ -99,6 +101,7 @@ public class SpiritFactory {
     player.setSilent(false);
     player.removePotionEffect(PotionEffectType.WITHER);
     loadInventory(player);
+    restoreXP(player);
   }
 
   /**
@@ -117,6 +120,7 @@ public class SpiritFactory {
    */
   public void saveInventory(final Player player) {
     final PlayerInventory inventory = player.getInventory();
+    if (inventory.isEmpty()) return;
     try (
             final ByteArrayOutputStream invStream = new ByteArrayOutputStream();
             final BukkitObjectOutputStream invOutput = new BukkitObjectOutputStream(invStream)) {
@@ -134,6 +138,19 @@ public class SpiritFactory {
     }
   }
 
+  public void saveXP(final Player player) {
+    final int XP = player.getTotalExperience();
+    player.getPersistentDataContainer().set(new NamespacedKey(instance, "lifesteal_player_xp"),
+            PersistentDataType.INTEGER,
+            XP);
+    player.setTotalExperience(0);
+  }
+
+  public void restoreXP(final Player player) {
+    if (!(player.getPersistentDataContainer().has(new NamespacedKey(instance, "lifesteal_player_xp")))) return;
+    player.setTotalExperience(player.getPersistentDataContainer().get(new NamespacedKey(instance, "lifesteal_player_xp"), PersistentDataType.INTEGER));
+  }
+
   /**
    * Load inventory.
    *
@@ -142,18 +159,25 @@ public class SpiritFactory {
   public void loadInventory(final Player player) {
     final PlayerInventory inventory = player.getInventory();
     inventory.clear();
+    if (!player.getPersistentDataContainer().has(new NamespacedKey(instance, "lifesteal_player_inventory"))) return;
     final String base64Inv = player.getPersistentDataContainer().get(new NamespacedKey(instance,
             "lifesteal_player_inventory"), PersistentDataType.STRING);
-    try (
-            final ByteArrayInputStream invStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64Inv));
-            final BukkitObjectInputStream invOutput = new BukkitObjectInputStream(invStream)) {
-      final int invSize = invOutput.readInt();
-      for (int i = 0; i < invSize; i++) {
-        inventory.setItem(i, (ItemStack) invOutput.readObject());
+    try {
+      assert base64Inv != null;
+      try (final ByteArrayInputStream invStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64Inv));
+           final BukkitObjectInputStream invOutput = new BukkitObjectInputStream(invStream)) {
+        final int invSize = invOutput.readInt();
+        for (int i = 0; i < invSize; i++) {
+          try {
+            inventory.setItem(i, (ItemStack) invOutput.readObject());
+          } catch (ClassNotFoundException e) {
+            lifeSteal.getLogger().logger(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
+          }
+        }
+        player.getPersistentDataContainer().remove(new NamespacedKey(instance, "lifesteal_player_inventory"));
       }
-      player.getPersistentDataContainer().remove(new NamespacedKey(instance, "lifesteal_player_inventory"));
-    } catch (final ClassNotFoundException | IOException e) {
-      e.printStackTrace();
+    } catch (IOException e) {
+      lifeSteal.getLogger().logger(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
     }
   }
 }

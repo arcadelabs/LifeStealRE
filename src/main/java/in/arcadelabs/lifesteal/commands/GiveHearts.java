@@ -24,9 +24,14 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandCompletion;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -46,22 +51,32 @@ public class GiveHearts extends BaseCommand {
   @CommandAlias("givehearts")
   public void onGiveHearts(final CommandSender sender, final OnlinePlayer target, final String type, final int amount) {
     switch (type) {
-      case "Blessed" -> giveHearts("blessed", HeartItemManager.Mode.RANDOM_BLESSED, target.player, amount);
-      case "Normal" -> giveHearts("normal", HeartItemManager.Mode.RANDOM_NORMAL, target.player, amount);
-      case "Cursed" -> giveHearts("cursed", HeartItemManager.Mode.RANDOM_CURSED, target.player, amount);
+      case "Blessed" -> giveHearts(sender, "blessed", HeartItemManager.Mode.RANDOM_BLESSED, target.player, amount);
+      case "Normal" -> giveHearts(sender, "normal", HeartItemManager.Mode.RANDOM_NORMAL, target.player, amount);
+      case "Cursed" -> giveHearts(sender, "cursed", HeartItemManager.Mode.RANDOM_CURSED, target.player, amount);
     }
   }
 
-  public void giveHearts(final String type, final HeartItemManager.Mode mode, final Player player, final int amount) {
+  public void giveHearts(final CommandSender sender, final String type, final HeartItemManager.Mode mode, final Player target, final int amount) {
     heartItemManager = new HeartItemManager(mode)
             .prepareIngedients()
             .cookHeart();
     replacementHeart = heartItemManager.getHeartItem();
     replacementHeart.setAmount(amount);
 
-    final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
+    final Map<Integer, ItemStack> items = target.getInventory().addItem(replacementHeart);
     for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
-      player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+      target.getWorld().dropItemNaturally(target.getLocation(), leftovers.getValue());
     }
+
+    TagResolver.Single playerName = target == sender ?
+            Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.name());
+
+    final Component giveHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.GiveHearts"),
+            Placeholder.unparsed("hearts", String.valueOf(amount)),
+            Placeholder.unparsed("type", type),
+            playerName);
+    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, giveHeartsMsg, target,
+            lifeSteal.getKey("Sounds.GiveHearts"));
   }
 }

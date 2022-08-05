@@ -22,16 +22,19 @@ import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandAlias;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.withdraw")
@@ -55,11 +58,11 @@ public class Withdraw extends BaseCommand {
     if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw").size() != 0) {
       disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw");
     }
-    if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
-      if (hearts * 2 >= lifeSteal.getUtils().getPlayerBaseHealth(player)) {
-        lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.NotEnoughHearts"));
+    if (!(disabledWorlds.contains(player.getWorld().getName()))) {
+      if (hearts * 2 >= lifeSteal.getUtils().getPlayerHearts(player)) {
+        player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.NotEnoughHearts")));
       } else {
-        lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts * 2);
+        lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) - hearts * 2);
         heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
                 .prepareIngedients()
                 .cookHeart(hearts * 2);
@@ -70,12 +73,13 @@ public class Withdraw extends BaseCommand {
           player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
         }
         lifeSteal.getUtils().spawnParticles(player, "soul");
-        lifeSteal.getInteraction().retuurn(Level.FINE,
-                lifeSteal.getUtils().formatString(lifeSteal.getI18n().getKey("Messages.HeartWithdraw"), "hearts", hearts), player,
-                lifeSteal.getI18n().getKey("Sounds.HeartWithdraw"));
+        final Component withdrawMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.HeartWithdraw"),
+                Placeholder.unparsed("hearts", String.valueOf(hearts)));
+        lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
+                lifeSteal.getKey("Sounds.HeartWithdraw"));
       }
     } else {
-      lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Withdraw"));
+      player.sendMessage(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
     }
   }
 }

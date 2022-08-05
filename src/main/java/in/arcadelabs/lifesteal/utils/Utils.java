@@ -18,19 +18,23 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.labaide.libs.kyori.adventure.text.Component;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.MiniMessage;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,144 +42,110 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.xenondevs.particle.ParticleEffect;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class LSUtils {
+public class Utils {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final MiniMessage miniMessage = MiniMessage.miniMessage();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
   private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
   private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToGain", 2);
 
   /**
-   * Gets player base health.
+   * Gets player hearts.
    *
    * @param player the player
-   * @return the player base health
+   * @return the player hearts
    */
-  public double getPlayerBaseHealth(final Player player) {
+  public double getPlayerHearts(final Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
   }
 
   /**
-   * Sets player base health.
+   * Sets player hearts.
    *
    * @param player the player
    * @param health the health
    */
-  public void setPlayerBaseHealth(final Player player, final double health) {
+  public void setPlayerHearts(final Player player, final double health) {
     Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
   }
 
   /**
-   * Transfer health.
+   * Transfer hearts.
    *
    * @param victim the victim
    * @param killer the killer
    */
-  public void transferHealth(final Player victim, final Player killer) {
-    setPlayerBaseHealth(killer, getPlayerBaseHealth(killer) + gainHearts);
-    setPlayerBaseHealth(victim, getPlayerBaseHealth(victim) - looseHearts);
+  public void transferHearts(final Player victim, final Player killer) {
+    setPlayerHearts(killer, getPlayerHearts(killer) + gainHearts);
+    setPlayerHearts(victim, getPlayerHearts(victim) - looseHearts);
   }
 
   /**
-   * Gets life state.
+   * Command dispatcher.
    *
+   * @param URI    the uri
    * @param player the player
-   * @return the life state
    */
-  public LifeState getLifeState(final Player player) {
-    try {
-      return lifeSteal.getProfileManager().getProfile(player.getUniqueId()).getLifeState();
-    } catch (SQLException e) {
-      LifeStealPlugin.getInstance().getLogger().warning(e.toString());
-      return null;
-    }
+  public void commandDispatcher(final String URI, final Player player) {
+    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            legecySerializer.serialize(miniMessage.deserialize(URI, Placeholder.component("player", player.name()))));
   }
 
   /**
-   * Handle ban.
+   * String to component list.
    *
-   * @param URI the ban command uri
-   */
-  public void handleBan(final String URI, final Player player) {
-    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), new in.arcadelabs.labaide.placeholder.Placeholder().replace(URI, player));
-  }
-
-  /**
-   * Format string list + placeholder with MiniMessage.
-   *
-   * @param loreList         the lore list
+   * @param stringList       the string list
    * @param placeholder      the placeholder
    * @param placeholderValue the placeholder value
    * @return the list
    */
-  public List<String> formatStringList(final List<String> loreList, final String placeholder, final int placeholderValue) {
-    final List<String> formattedList = new ArrayList<>();
-    for (final String list : loreList) {
-      formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list,
-              Placeholder.component(placeholder, Component.text(placeholderValue)))));
+  public List<Component> stringToComponentList(final List<String> stringList, final String placeholder, final int placeholderValue) {
+    final List<Component> formattedList = new ArrayList<>();
+    for (final String list : stringList) {
+      formattedList.add(miniMessage.deserialize(list,
+              Placeholder.component(placeholder, Component.text(placeholderValue))));
     }
     return formattedList;
   }
 
   /**
-   * Format string list with MiniMessage.
+   * String to component list.
    *
-   * @param loreList the lore list
+   * @param stringList the string list
+   * @param noItalics  the no italics
    * @return the list
    */
-  public List<String> formatStringList(final List<String> loreList) {
-    final List<String> formattedList = new ArrayList<>();
-    for (final String list : loreList) {
-      formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list)));
+  public List<Component> stringToComponentList(final List<String> stringList, final boolean noItalics) {
+    final List<Component> formattedList = new ArrayList<>();
+    for (final String list : stringList) {
+      if (noItalics) formattedList.add(miniMessage.deserialize(list).decoration(TextDecoration.ITALIC, false));
+      else formattedList.add(miniMessage.deserialize(list));
     }
     return formattedList;
   }
 
   /**
-   * Format string + placeholder with MiniMessage.
-   *
-   * @param string           the string
-   * @param placeholder      the placeholder
-   * @param placeholderValue the placeholder value
-   * @return the string
-   */
-  public String formatString(final String string, final String placeholder, final int placeholderValue) {
-    return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string,
-            Placeholder.component(placeholder, Component.text(placeholderValue))));
-  }
-
-  /**
-   * Format string with MiniMessage.
+   * Format string component.
    *
    * @param string the string
-   * @return the string
+   * @return the component
    */
-  public String formatString(final String string) {
-    return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string));
+  public Component formatString(final String string) {
+    return miniMessage.deserialize(string);
   }
 
   /**
-   * Format Component with Minimessage.
+   * Give heart effects.
    *
-   * @param component the component
-   * @return the string
-   */
-  public String formatString(final Component component) {
-    return this.legecySerializer.serialize(component);
-  }
-
-  /**
-   * Give heart item's effects.
-   *
-   * @param target    the target player
-   * @param heartMeta the heart item meta
-   * @param instance  the plugin instance
+   * @param target    the target
+   * @param heartMeta the heart meta
+   * @param instance  the instance
    */
   public void giveHeartEffects(final Player target, final ItemMeta heartMeta, final JavaPlugin instance) {
     final String itemType = heartMeta.getPersistentDataContainer().get
@@ -197,7 +167,7 @@ public class LSUtils {
   }
 
   /**
-   * Spawn particle effects.
+   * Spawn particles.
    *
    * @param player the player
    * @param type   the type
@@ -220,15 +190,45 @@ public class LSUtils {
     }
   }
 
+  /**
+   * Handle elimination.
+   *
+   * @param player the player
+   */
   public void handleElimination(final Player player) {
+    switch (lifeSteal.getConfig().getString("InventoryMode")) {
+      case "DROP" -> {
+        if (player.getInventory().isEmpty()) return;
+        for (final ItemStack stuff : player.getInventory().getContents())
+          player.getWorld().dropItemNaturally(player.getLocation(), stuff);
+      }
+      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveInventory(player);
+      case "CLEAR" -> player.getInventory().clear();
+      case "NONE" -> player.saveData();
+    }
+
+    switch (lifeSteal.getConfig().getString("ExperienceMode")) {
+      case "DROP" -> player.getWorld().spawn(player.getLocation(), ExperienceOrb.class)
+              .setExperience(player.getTotalExperience());
+      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveXP(player);
+      case "CLEAR" -> player.setTotalExperience(0);
+      case "NONE" -> player.saveData();
+    }
+
     switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
       case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("TTPP");
+      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
+  /**
+   * Handle elimination.
+   *
+   * @param player the player
+   * @param event  the event
+   */
   public void handleElimination(final Player player, final PlayerDeathEvent event) {
     switch (lifeSteal.getConfig().getString("InventoryMode")) {
       case "DROP" -> event.setKeepInventory(false);
@@ -237,26 +237,48 @@ public class LSUtils {
       case "NONE" -> player.saveData();
     }
 
+    switch (lifeSteal.getConfig().getString("ExperienceMode")) {
+      case "DROP" -> {
+        event.setShouldDropExperience(true);
+        event.setKeepLevel(false);
+      }
+      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveXP(player);
+      case "CLEAR" -> player.setTotalExperience(0);
+      case "NONE" -> player.saveData();
+    }
+
     switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
       case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("TTPP");
+      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
+  /**
+   * Handle revive.
+   *
+   * @param player the player
+   */
   public void handleRevive(final Player player) {
     switch (lifeSteal.getConfig().getString("Elimination")) {
       case "BANNED" -> {
-        handleBan(lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
-        lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.Revive.ByUnban"));
+        commandDispatcher(lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
+        Bukkit.broadcast(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.Revive.ByUnban"),
+                Placeholder.component("player", player.displayName())));
       }
       case "DEAD" -> player.setGameMode(GameMode.SURVIVAL);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().removeSpirit(player);
-      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("PPTT");
+      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
+  /**
+   * Gets elimination message.
+   *
+   * @param damageCause the damage cause
+   * @return the elimination message
+   */
   public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause) {
     return switch (damageCause) {
       case CONTACT -> "Messages.Elimination.ByDamagingBlocks";

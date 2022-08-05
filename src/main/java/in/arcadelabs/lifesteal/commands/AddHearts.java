@@ -31,30 +31,32 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("lifesteal|ls")
-@CommandPermission("lifesteal.sethearts")
-public class SetHearts extends BaseCommand {
+@CommandPermission("lifesteal.addhearts")
+public class AddHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
-  @Subcommand("sethearts")
+  @Subcommand("addhearts")
   @CommandCompletion("@players @nothing")
-  @CommandAlias("sethearts")
-  public void onSetHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
+  @CommandAlias("addhearts")
+  public void onAddHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerHearts(player, hearts * 2);
-    player.setHealth(hearts * 2);
+    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) + (hearts * 2));
+    player.setHealth(Math.min(player.getHealth() +
+            hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
-    TagResolver.Single playerName = target == sender ?
-            Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.player.name());
+    TagResolver.Single playerName = target.player == sender ?
+            Placeholder.component("player", Component.text("you")) : Placeholder.component("player", player.name());
 
-    final Component setHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.SetHearts"),
+    final Component addHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.AddHearts"),
             Placeholder.unparsed("hearts", String.valueOf(hearts)),
             playerName);
-    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, setHeartsMsg, player,
-            lifeSteal.getKey("Sounds.SetHearts"));
+    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, addHeartsMsg, player,
+            lifeSteal.getKey("Sounds.AddHearts"));
   }
 }

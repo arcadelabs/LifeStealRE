@@ -46,7 +46,8 @@ public class HeartCraftListener implements Listener {
     if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft").size() != 0) {
       disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft");
     }
-    if (!(disabledWorlds.contains(player.getWorld().toString().toLowerCase()))) {
+    assert player != null;
+    if (!disabledWorlds.contains(player.getWorld().getName())) {
       if (event.isShiftClick()) event.setCancelled(true);
       heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
               .getHeartConfig().getString("Hearts.Mode.OnCraft")))
@@ -56,7 +57,7 @@ public class HeartCraftListener implements Listener {
       event.getInventory().setResult(replacementHeart);
     } else {
       event.setCancelled(true);
-      lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Craft"));
+      player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Craft")));
     }
   }
 }
