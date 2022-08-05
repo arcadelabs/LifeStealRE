@@ -24,6 +24,7 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandCompletion;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import net.kyori.adventure.text.Component;
@@ -40,11 +41,11 @@ public class SetHearts extends BaseCommand {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @Subcommand("sethearts")
-  @CommandCompletion("@players @nothing true|false")
+  @CommandCompletion("@players @nothing")
   @CommandAlias("sethearts")
-  public void onSetHearts(final OnlinePlayer target, final int hearts) {
+  public void onSetHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerBaseHealth(player, hearts * 2);
+    lifeSteal.getUtils().setPlayerHearts(player, hearts * 2);
     player.setHealth(hearts * 2);
 
     TagResolver.Single playerName = target == sender ?

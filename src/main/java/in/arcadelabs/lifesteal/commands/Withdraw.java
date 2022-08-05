@@ -62,7 +62,7 @@ public class Withdraw extends BaseCommand {
       if (hearts * 2 >= lifeSteal.getUtils().getPlayerHearts(player)) {
         player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.NotEnoughHearts")));
       } else {
-        lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player) - hearts * 2);
+        lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) - hearts * 2);
         heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
                 .prepareIngedients()
                 .cookHeart(hearts * 2);

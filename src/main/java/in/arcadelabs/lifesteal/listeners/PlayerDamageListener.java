@@ -24,12 +24,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class PlayerDamageEvent implements Listener {
+public class PlayerDamageListener implements Listener {
   @EventHandler
   public void onDamage(final EntityDamageEvent event) {
-    if(event.getCause() != EntityDamageEvent.DamageCause.WITHER) return;
-    if (!(LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains((Player) event.getEntity()))) return;
-    if(event.isCancelled()) return;
-    event.setCancelled(true);
+    if (event.getEntity() instanceof final Player player) {
+      if (event.getCause() != EntityDamageEvent.DamageCause.WITHER) return;
+      if (!(LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(player)))
+        return;
+      if (event.isCancelled()) return;
+      event.setCancelled(true);
+    }
   }
 }

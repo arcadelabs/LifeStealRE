@@ -51,9 +51,9 @@ public class GiveHearts extends BaseCommand {
   @CommandAlias("givehearts")
   public void onGiveHearts(final CommandSender sender, final OnlinePlayer target, final String type, final int amount) {
     switch (type) {
-      case "Blessed" -> giveHearts("blessed", HeartItemManager.Mode.RANDOM_BLESSED, target.player, amount);
-      case "Normal" -> giveHearts("normal", HeartItemManager.Mode.RANDOM_NORMAL, target.player, amount);
-      case "Cursed" -> giveHearts("cursed", HeartItemManager.Mode.RANDOM_CURSED, target.player, amount);
+      case "Blessed" -> giveHearts(sender, "blessed", HeartItemManager.Mode.RANDOM_BLESSED, target.player, amount);
+      case "Normal" -> giveHearts(sender, "normal", HeartItemManager.Mode.RANDOM_NORMAL, target.player, amount);
+      case "Cursed" -> giveHearts(sender, "cursed", HeartItemManager.Mode.RANDOM_CURSED, target.player, amount);
     }
   }
 
@@ -64,9 +64,9 @@ public class GiveHearts extends BaseCommand {
     replacementHeart = heartItemManager.getHeartItem();
     replacementHeart.setAmount(amount);
 
-    final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
+    final Map<Integer, ItemStack> items = target.getInventory().addItem(replacementHeart);
     for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
-      player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+      target.getWorld().dropItemNaturally(target.getLocation(), leftovers.getValue());
     }
 
     TagResolver.Single playerName = target == sender ?
