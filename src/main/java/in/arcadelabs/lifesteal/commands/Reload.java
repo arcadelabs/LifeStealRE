@@ -20,9 +20,11 @@ package in.arcadelabs.lifesteal.commands;
 
 import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandAlias;
+import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandCompletion;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.Description;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.command.CommandSender;
@@ -44,15 +46,54 @@ public class Reload extends BaseCommand {
    */
   @Subcommand("reload")
   @Description("Reloads the instance")
-  public void onReload(final CommandSender sender) throws IOException {
-    if (sender instanceof Player) {
-      final Player player = (Player) sender;
-      lifeSteal.getConfig().reload();
-      lifeSteal.getMessenger().sendMessage(player, "<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>");
-      lifeSteal.getMessenger().sendConsoleMessage("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>");
+  @CommandCompletion("All|Language.yml|Config.yml|Hearts.yml")
+  public void onReload(final CommandSender sender, final String file) throws IOException {
+    if (sender instanceof final Player player) {
+      switch (file) {
+        case "All" -> {
+          lifeSteal.getLanguage().reload();
+          lifeSteal.getConfig().reload();
+          lifeSteal.getHeartConfig().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>"));
+          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>"));
+        }
+        case "Language.yml" -> {
+          lifeSteal.getLanguage().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+        }
+        case "Config.yml" -> {
+          lifeSteal.getConfig().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+        }
+        case "Hearts.yml" -> {
+          lifeSteal.getHeartConfig().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+        }
+      }
     } else {
-      lifeSteal.getConfig().reload();
-      lifeSteal.getMessenger().sendConsoleMessage("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>");
+      switch (file) {
+        case "All" -> {
+          lifeSteal.getLanguage().reload();
+          lifeSteal.getConfig().reload();
+          lifeSteal.getHeartConfig().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>"));
+        }
+        case "Language.yml" -> {
+          lifeSteal.getLanguage().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+        }
+        case "Config.yml" -> {
+          lifeSteal.getConfig().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+        }
+        case "Hearts.yml" -> {
+          lifeSteal.getHeartConfig().reload();
+          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+        }
+      }
     }
   }
 }
