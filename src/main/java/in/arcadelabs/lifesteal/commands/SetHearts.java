@@ -26,6 +26,11 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("lifesteal|ls")
@@ -41,5 +46,14 @@ public class SetHearts extends BaseCommand {
     Player player = target.player;
     lifeSteal.getUtils().setPlayerBaseHealth(player, hearts * 2);
     player.setHealth(hearts * 2);
+
+    TagResolver.Single playerName = target == sender ?
+            Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.player.name());
+
+    final Component setHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.SetHearts"),
+            Placeholder.unparsed("hearts", String.valueOf(hearts)),
+            playerName);
+    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, setHeartsMsg, player,
+            lifeSteal.getKey("Sounds.SetHearts"));
   }
 }

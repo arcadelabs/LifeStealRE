@@ -70,19 +70,20 @@ public class PlayerClickListener implements Listener {
           final List<Component> consumeMessages = lifeSteal.getUtils().stringToComponentList(lifeSteal.getHeartConfig().getStringList
                   ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage"), false);
 
-        lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getUtils().getPlayerBaseHealth(player)
-                + healthPoints);
-        player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
-        lifeSteal.getUtils().spawnParticles(player, "heart");
-        lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
-        lifeSteal.getInteraction().retuurn(Level.INFO, consumeMessages, player, consumeSound);
+          lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player)
+                  + healthPoints);
+          player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+          lifeSteal.getUtils().spawnParticles(player, "heart");
+          lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
+          lifeSteal.getInteraction().retuurn(Logger.Level.INFO, consumeMessages, player, consumeSound);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () ->
-                player.setHealth(Math.min(player.getHealth() +
-                        healthPoints, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
-      } else {
-        event.setCancelled(true);
-        lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Consume"));
+          Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () ->
+                  player.setHealth(Math.min(player.getHealth() +
+                          healthPoints, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
+        } else {
+          event.setCancelled(true);
+          player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Consume")));
+        }
       }
     }
   }

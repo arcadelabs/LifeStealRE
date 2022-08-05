@@ -57,7 +57,7 @@ public class HeartCraftListener implements Listener {
       event.getInventory().setResult(replacementHeart);
     } else {
       event.setCancelled(true);
-      lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.DisabledWorld.Heart-Craft"));
+      player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Craft")));
     }
   }
 }

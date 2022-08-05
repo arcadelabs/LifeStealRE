@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.hearts;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -54,19 +55,19 @@ public class HeartItemCooker {
    * @param name the name
    * @return the heart item cooker with heart name
    */
-  public HeartItemCooker setHeartName(final String name) {
-    this.heartMeta.setDisplayName(name);
+  public HeartItemCooker setHeartName(final Component name) {
+    this.heartMeta.displayName(name);
     return this;
   }
 
   /**
    * Sets heart lore.
    *
-   * @param lore the lore
+   * @param loreList the lore
    * @return the heart item cooker with heart lore
    */
-  public HeartItemCooker setHeartLore(final List<String> lore) {
-    this.heartMeta.setLore(lore);
+  public HeartItemCooker setHeartLore(final List<Component> loreList) {
+    this.heartMeta.lore(loreList);
     return this;
   }
 

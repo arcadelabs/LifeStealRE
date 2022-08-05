@@ -18,8 +18,10 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -48,10 +50,10 @@ public class SpiritFactory {
 
   private ItemStack bakeSpiritModel() {
     spiritModel = new ItemStack(Material.valueOf(lifeSteal.getConfig().getString("Spirits.Spirit-Model.ItemType")));
-    spiritModel.getItemMeta().setDisplayName(lifeSteal.getUtils().formatString
+    spiritModel.getItemMeta().displayName(lifeSteal.getUtils().formatString
             (lifeSteal.getConfig().getString("Spirits.Spirit-Model.Name")));
-    spiritModel.getItemMeta().setLore(lifeSteal.getUtils().formatStringList
-            (lifeSteal.getConfig().getStringList("Spirits.Spirit-Model.Lore")));
+    spiritModel.getItemMeta().lore(lifeSteal.getUtils().stringToComponentList
+            (lifeSteal.getConfig().getStringList("Spirits.Spirit-Model.Lore"), true));
     spiritModel.getItemMeta().setCustomModelData(lifeSteal.getConfig().getInt("Spirits.Spirit-Model.ModelData"));
     return spiritModel;
   }
@@ -144,16 +146,22 @@ public class SpiritFactory {
     inventory.clear();
     final String base64Inv = player.getPersistentDataContainer().get(new NamespacedKey(instance,
             "lifesteal_player_inventory"), PersistentDataType.STRING);
-    try (
-            final ByteArrayInputStream invStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64Inv));
-            final BukkitObjectInputStream invOutput = new BukkitObjectInputStream(invStream)) {
-      final int invSize = invOutput.readInt();
-      for (int i = 0; i < invSize; i++) {
-        inventory.setItem(i, (ItemStack) invOutput.readObject());
+    try {
+      assert base64Inv != null;
+      try (final ByteArrayInputStream invStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64Inv));
+           final BukkitObjectInputStream invOutput = new BukkitObjectInputStream(invStream)) {
+        final int invSize = invOutput.readInt();
+        for (int i = 0; i < invSize; i++) {
+          try {
+            inventory.setItem(i, (ItemStack) invOutput.readObject());
+          } catch (ClassNotFoundException e) {
+            lifeSteal.getLogger().logger(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
+          }
+        }
+        player.getPersistentDataContainer().remove(new NamespacedKey(instance, "lifesteal_player_inventory"));
       }
-      player.getPersistentDataContainer().remove(new NamespacedKey(instance, "lifesteal_player_inventory"));
-    } catch (final ClassNotFoundException | IOException e) {
-      e.printStackTrace();
+    } catch (IOException e) {
+      lifeSteal.getLogger().logger(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
     }
   }
 }

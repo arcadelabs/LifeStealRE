@@ -24,9 +24,14 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandCompletion;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +57,7 @@ public class GiveHearts extends BaseCommand {
     }
   }
 
-  public void giveHearts(final String type, final HeartItemManager.Mode mode, final Player player, final int amount) {
+  public void giveHearts(final CommandSender sender, final String type, final HeartItemManager.Mode mode, final Player target, final int amount) {
     heartItemManager = new HeartItemManager(mode)
             .prepareIngedients()
             .cookHeart();
@@ -63,5 +68,15 @@ public class GiveHearts extends BaseCommand {
     for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
       player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
     }
+
+    TagResolver.Single playerName = target == sender ?
+            Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.name());
+
+    final Component giveHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.GiveHearts"),
+            Placeholder.unparsed("hearts", String.valueOf(amount)),
+            Placeholder.unparsed("type", type),
+            playerName);
+    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, giveHeartsMsg, target,
+            lifeSteal.getKey("Sounds.GiveHearts"));
   }
 }

@@ -18,34 +18,32 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.labaide.libs.adventurelib.impl.SpigotMessenger;
-import in.arcadelabs.labaide.libs.kyori.adventure.key.Key;
-import in.arcadelabs.labaide.libs.kyori.adventure.sound.Sound;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.Component;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.MiniMessage;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import in.arcadelabs.labaide.logger.Logger;
+import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Interaction {
 
-  private final SpigotMessenger messenger;
-  private final Logger logger;
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final boolean cleanConsole;
+  private final Audience audience = Audience.audience(Bukkit.getOnlinePlayers());
 
   /**
    * Instantiates a new Interaction.
    *
-   * @param logger       the logger
    * @param cleanConsole clean console boolean
    */
-  public Interaction(final Logger logger, final boolean cleanConsole) {
-    this.messenger = LifeStealPlugin.getLifeSteal().getMessenger();
-    this.logger = logger;
+  public Interaction(final boolean cleanConsole) {
     this.cleanConsole = cleanConsole;
   }
 
@@ -55,10 +53,10 @@ public class Interaction {
    * @param level     the level
    * @param component the component
    */
-  public void broadcast(final Level level, final Component component) {
-    messenger.broadcast(component);
+  public void broadcast(final Logger.Level level, final Component component) {
+    audience.sendMessage(component);
     if (cleanConsole) return;
-    logger.log(level, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
+    lifeSteal.getLogger().logger(null, level, component);
   }
 
   /**
@@ -69,11 +67,21 @@ public class Interaction {
    */
   public void broadcast(final String key, final Player player) {
     Component component = MiniMessage.builder().build().deserialize(
-            LifeStealPlugin.getLifeSteal().getI18n().getKey(key),
-            Placeholder.component("player", Component.text(player.getDisplayName())));
-    messenger.broadcast(component);
+            lifeSteal.getKey(key),
+            Placeholder.component("player", player.name()));
+    audience.sendMessage(component);
     if (cleanConsole) return;
-    logger.log(Level.INFO, LifeStealPlugin.getLifeSteal().getUtils().formatString(component));
+    lifeSteal.getLogger().logger(null, Logger.Level.INFO, component);
+  }
+
+  public void broadcast(final String key, final Player player1, final Player player2) {
+    Component component = MiniMessage.builder().build().deserialize(
+            lifeSteal.getKey(key),
+            Placeholder.component("player", player1.name()),
+            Placeholder.component("commander", player2.name()));
+    audience.sendMessage(component);
+    if (cleanConsole) return;
+    lifeSteal.getLogger().logger(null, Logger.Level.INFO, component);
   }
 
   /**
@@ -83,10 +91,10 @@ public class Interaction {
    * @param message the message
    * @param player  the player
    */
-  public void retuurn(final Level level, final String message, final Player player) {
-    messenger.sendMessage(player, message);
+  public void retuurn(final Logger.Level level, final Component message, final Player player) {
+    player.sendMessage(message);
     if (cleanConsole) return;
-    logger.log(level, message);
+    lifeSteal.getLogger().logger(player, level, message);
   }
 
   /**
@@ -97,11 +105,11 @@ public class Interaction {
    * @param player   the player
    * @param soundKey the sound key
    */
-  public void retuurn(final Level level, final String message, final Player player, final String soundKey) {
-    messenger.playSound(player, Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
-    messenger.sendMessage(player, message);
+  public void retuurn(final Logger.Level level, final Component message, final Player player, final String soundKey) {
+    player.sendMessage(message);
+    player.playSound(Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
     if (cleanConsole) return;
-    logger.log(level, message);
+    lifeSteal.getLogger().logger(player, level, message);
   }
 
   /**
@@ -112,12 +120,12 @@ public class Interaction {
    * @param player   the player
    * @param soundKey the sound key
    */
-  public void retuurn(final Level level, final List<String> messages, final Player player, final String soundKey) {
-    messenger.playSound(player, Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
-    for (final String message : messages) {
-      messenger.sendMessage(player, message);
+  public void retuurn(final Logger.Level level, final List<Component> messages, final Player player, final String soundKey) {
+    player.playSound(Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
+    for (final Component message : messages) {
+      player.sendMessage(player, message);
       if (cleanConsole) return;
-      this.logger.log(level, message);
+      lifeSteal.getLogger().logger(player, level, message);
     }
   }
 }

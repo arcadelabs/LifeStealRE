@@ -18,12 +18,14 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.labaide.libs.kyori.adventure.text.Component;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.MiniMessage;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import in.arcadelabs.labaide.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
@@ -47,6 +49,7 @@ import java.util.Set;
 public class LSUtils {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final MiniMessage miniMessage = MiniMessage.miniMessage();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
   private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
   private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToGain", 2);
@@ -83,91 +86,57 @@ public class LSUtils {
   }
 
   /**
-   * Gets life state.
+   * Command dispatcher.
    *
+   * @param URI    the uri
    * @param player the player
-   * @return the life state
    */
-  public LifeState getLifeState(final Player player) {
-    try {
-      return lifeSteal.getProfileManager().getProfile(player.getUniqueId()).getLifeState();
-    } catch (SQLException e) {
-      LifeStealPlugin.getInstance().getLogger().warning(e.toString());
-      return null;
-    }
+  public void commandDispatcher(final String URI, final Player player) {
+    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            legecySerializer.serialize(miniMessage.deserialize(URI, Placeholder.component("player", player.name()))));
   }
 
   /**
-   * Handle ban.
+   * String to component list.
    *
-   * @param URI the ban command uri
-   */
-  public void handleBan(final String URI, final Player player) {
-    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), new in.arcadelabs.labaide.placeholder.Placeholder().replace(URI, player));
-  }
-
-  /**
-   * Format string list + placeholder with MiniMessage.
-   *
-   * @param loreList         the lore list
+   * @param stringList       the string list
    * @param placeholder      the placeholder
    * @param placeholderValue the placeholder value
    * @return the list
    */
-  public List<String> formatStringList(final List<String> loreList, final String placeholder, final int placeholderValue) {
-    final List<String> formattedList = new ArrayList<>();
-    for (final String list : loreList) {
-      formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list,
-              Placeholder.component(placeholder, Component.text(placeholderValue)))));
+  public List<Component> stringToComponentList(final List<String> stringList, final String placeholder, final int placeholderValue) {
+    final List<Component> formattedList = new ArrayList<>();
+    for (final String list : stringList) {
+      formattedList.add(miniMessage.deserialize(list,
+              Placeholder.component(placeholder, Component.text(placeholderValue))));
     }
     return formattedList;
   }
 
   /**
-   * Format string list with MiniMessage.
+   * String to component list.
    *
-   * @param loreList the lore list
+   * @param stringList the string list
+   * @param noItalics  the no italics
    * @return the list
    */
-  public List<String> formatStringList(final List<String> loreList) {
-    final List<String> formattedList = new ArrayList<>();
-    for (final String list : loreList) {
-      formattedList.add(this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(list)));
+  public List<Component> stringToComponentList(final List<String> stringList, final boolean noItalics) {
+    final List<Component> formattedList = new ArrayList<>();
+    for (final String list : stringList) {
+      if (noItalics) formattedList.add(miniMessage.deserialize(list).decoration(TextDecoration.ITALIC, false));
+      else formattedList.add(miniMessage.deserialize(list));
     }
     return formattedList;
   }
 
   /**
-   * Format string + placeholder with MiniMessage.
-   *
-   * @param string           the string
-   * @param placeholder      the placeholder
-   * @param placeholderValue the placeholder value
-   * @return the string
-   */
-  public String formatString(final String string, final String placeholder, final int placeholderValue) {
-    return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string,
-            Placeholder.component(placeholder, Component.text(placeholderValue))));
-  }
-
-  /**
-   * Format string with MiniMessage.
+   * Format string component.
    *
    * @param string the string
-   * @return the string
+   * @return the component
    */
-  public String formatString(final String string) {
-    return this.legecySerializer.serialize(MiniMessage.builder().build().deserialize(string));
-  }
-
-  /**
-   * Format Component with Minimessage.
-   *
-   * @param component the component
-   * @return the string
-   */
-  public String formatString(final Component component) {
-    return this.legecySerializer.serialize(component);
+  public Component formatString(final String string) {
+    return miniMessage.deserialize(string);
   }
 
   /**
@@ -222,10 +191,10 @@ public class LSUtils {
 
   public void handleElimination(final Player player) {
     switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
       case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("TTPP");
+      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
@@ -238,22 +207,23 @@ public class LSUtils {
     }
 
     switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> handleBan(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
       case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("TTPP");
+      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
   public void handleRevive(final Player player) {
     switch (lifeSteal.getConfig().getString("Elimination")) {
       case "BANNED" -> {
-        handleBan(lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
-        lifeSteal.getMessenger().sendMessage(player, lifeSteal.getI18n().getKey("Messages.Revive.ByUnban"));
+        commandDispatcher(lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
+        Bukkit.broadcast(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.Revive.ByUnban"),
+                Placeholder.component("player", player.displayName())));
       }
       case "DEAD" -> player.setGameMode(GameMode.SURVIVAL);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().removeSpirit(player);
-      case "AfterLife" -> lifeSteal.getMessenger().sendConsoleMessage("PPTT");
+      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
