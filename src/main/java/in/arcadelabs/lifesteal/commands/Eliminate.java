@@ -26,6 +26,8 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.eliminate")
@@ -41,8 +43,13 @@ public class Eliminate extends BaseCommand {
   @Subcommand("eliminate")
   @CommandCompletion("@players")
   @CommandAlias("eliminate")
-  public void onEliminate(final OnlinePlayer target) {
-    lifeSteal.getUtils().handleElimination(target.getPlayer());
-    lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCommand", target.getPlayer());
+  public void onEliminate(final CommandSender sender, final OnlinePlayer target) {
+    if (sender instanceof Player player) {
+      lifeSteal.getUtils().handleElimination(target.getPlayer());
+      lifeSteal.getInteraction().broadcast("Messages.Elimination.ByPlayer", target.getPlayer(), player);
+    } else {
+      lifeSteal.getUtils().handleElimination(target.getPlayer());
+      lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCommand", target.getPlayer());
+    }
   }
 }
