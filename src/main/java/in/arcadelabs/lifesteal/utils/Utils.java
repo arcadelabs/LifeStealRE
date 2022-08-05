@@ -30,9 +30,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,13 +42,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.xenondevs.particle.ParticleEffect;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class LSUtils {
+public class Utils {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final MiniMessage miniMessage = MiniMessage.miniMessage();
@@ -55,34 +56,34 @@ public class LSUtils {
   private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToGain", 2);
 
   /**
-   * Gets player base health.
+   * Gets player hearts.
    *
    * @param player the player
-   * @return the player base health
+   * @return the player hearts
    */
-  public double getPlayerBaseHealth(final Player player) {
+  public double getPlayerHearts(final Player player) {
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
   }
 
   /**
-   * Sets player base health.
+   * Sets player hearts.
    *
    * @param player the player
    * @param health the health
    */
-  public void setPlayerBaseHealth(final Player player, final double health) {
+  public void setPlayerHearts(final Player player, final double health) {
     Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
   }
 
   /**
-   * Transfer health.
+   * Transfer hearts.
    *
    * @param victim the victim
    * @param killer the killer
    */
-  public void transferHealth(final Player victim, final Player killer) {
-    setPlayerBaseHealth(killer, getPlayerBaseHealth(killer) + gainHearts);
-    setPlayerBaseHealth(victim, getPlayerBaseHealth(victim) - looseHearts);
+  public void transferHearts(final Player victim, final Player killer) {
+    setPlayerHearts(killer, getPlayerHearts(killer) + gainHearts);
+    setPlayerHearts(victim, getPlayerHearts(victim) - looseHearts);
   }
 
   /**
@@ -140,11 +141,11 @@ public class LSUtils {
   }
 
   /**
-   * Give heart item's effects.
+   * Give heart effects.
    *
-   * @param target    the target player
-   * @param heartMeta the heart item meta
-   * @param instance  the plugin instance
+   * @param target    the target
+   * @param heartMeta the heart meta
+   * @param instance  the instance
    */
   public void giveHeartEffects(final Player target, final ItemMeta heartMeta, final JavaPlugin instance) {
     final String itemType = heartMeta.getPersistentDataContainer().get
@@ -166,7 +167,7 @@ public class LSUtils {
   }
 
   /**
-   * Spawn particle effects.
+   * Spawn particles.
    *
    * @param player the player
    * @param type   the type
@@ -189,20 +190,28 @@ public class LSUtils {
     }
   }
 
+  /**
+   * Handle elimination.
+   *
+   * @param player the player
+   */
   public void handleElimination(final Player player) {
-    switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
-      case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
-      case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
-    }
-  }
-
-  public void handleElimination(final Player player, final PlayerDeathEvent event) {
     switch (lifeSteal.getConfig().getString("InventoryMode")) {
-      case "DROP" -> event.setKeepInventory(false);
+      case "DROP" -> {
+        if (player.getInventory().isEmpty()) return;
+        for (final ItemStack stuff : player.getInventory().getContents())
+          player.getWorld().dropItemNaturally(player.getLocation(), stuff);
+      }
       case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveInventory(player);
       case "CLEAR" -> player.getInventory().clear();
+      case "NONE" -> player.saveData();
+    }
+
+    switch (lifeSteal.getConfig().getString("ExperienceMode")) {
+      case "DROP" -> player.getWorld().spawn(player.getLocation(), ExperienceOrb.class)
+              .setExperience(player.getTotalExperience());
+      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveXP(player);
+      case "CLEAR" -> player.setTotalExperience(0);
       case "NONE" -> player.saveData();
     }
 
@@ -214,6 +223,43 @@ public class LSUtils {
     }
   }
 
+  /**
+   * Handle elimination.
+   *
+   * @param player the player
+   * @param event  the event
+   */
+  public void handleElimination(final Player player, final PlayerDeathEvent event) {
+    switch (lifeSteal.getConfig().getString("InventoryMode")) {
+      case "DROP" -> event.setKeepInventory(false);
+      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveInventory(player);
+      case "CLEAR" -> player.getInventory().clear();
+      case "NONE" -> player.saveData();
+    }
+
+    switch (lifeSteal.getConfig().getString("ExperienceMode")) {
+      case "DROP" -> {
+        event.setShouldDropExperience(true);
+        event.setKeepLevel(false);
+      }
+      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveXP(player);
+      case "CLEAR" -> player.setTotalExperience(0);
+      case "NONE" -> player.saveData();
+    }
+
+    switch (lifeSteal.getConfig().getString("Elimination")) {
+      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+      case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
+      case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
+      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
+    }
+  }
+
+  /**
+   * Handle revive.
+   *
+   * @param player the player
+   */
   public void handleRevive(final Player player) {
     switch (lifeSteal.getConfig().getString("Elimination")) {
       case "BANNED" -> {
@@ -227,6 +273,12 @@ public class LSUtils {
     }
   }
 
+  /**
+   * Gets elimination message.
+   *
+   * @param damageCause the damage cause
+   * @return the elimination message
+   */
   public String getEliminationMessage(final EntityDamageEvent.DamageCause damageCause) {
     return switch (damageCause) {
       case CONTACT -> "Messages.Elimination.ByDamagingBlocks";

@@ -66,7 +66,7 @@ public class SpiritFactory {
   public void addSpirit(final Player player) {
     if (spirits.contains(player)) return;
     spirits.add(player);
-    lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
+    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
     player.setGameMode(GameMode.valueOf(lifeSteal.getConfig().getString("Spirits.GameMode", "ADVENTURE")));
     player.setInvisible(lifeSteal.getConfig().getBoolean("Spirits.Invisible", true));
     player.setInvulnerable(lifeSteal.getConfig().getBoolean("Spirits.Invulnerable", true));
@@ -91,7 +91,7 @@ public class SpiritFactory {
   public void removeSpirit(final Player player) {
     if (!spirits.contains(player)) return;
     spirits.remove(player);
-    lifeSteal.getUtils().setPlayerBaseHealth(player, lifeSteal.getConfig().getInt("DefaultHealth", 20));
+    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getConfig().getInt("DefaultHealth", 20));
     player.setInvisible(false);
     player.setInvulnerable(false);
     player.setGameMode(GameMode.SURVIVAL);
@@ -101,6 +101,7 @@ public class SpiritFactory {
     player.setSilent(false);
     player.removePotionEffect(PotionEffectType.WITHER);
     loadInventory(player);
+    restoreXP(player);
   }
 
   /**
@@ -119,6 +120,7 @@ public class SpiritFactory {
    */
   public void saveInventory(final Player player) {
     final PlayerInventory inventory = player.getInventory();
+    if (inventory.isEmpty()) return;
     try (
             final ByteArrayOutputStream invStream = new ByteArrayOutputStream();
             final BukkitObjectOutputStream invOutput = new BukkitObjectOutputStream(invStream)) {
@@ -136,6 +138,19 @@ public class SpiritFactory {
     }
   }
 
+  public void saveXP(final Player player) {
+    final int XP = player.getTotalExperience();
+    player.getPersistentDataContainer().set(new NamespacedKey(instance, "lifesteal_player_xp"),
+            PersistentDataType.INTEGER,
+            XP);
+    player.setTotalExperience(0);
+  }
+
+  public void restoreXP(final Player player) {
+    if (!(player.getPersistentDataContainer().has(new NamespacedKey(instance, "lifesteal_player_xp")))) return;
+    player.setTotalExperience(player.getPersistentDataContainer().get(new NamespacedKey(instance, "lifesteal_player_xp"), PersistentDataType.INTEGER));
+  }
+
   /**
    * Load inventory.
    *
@@ -144,6 +159,7 @@ public class SpiritFactory {
   public void loadInventory(final Player player) {
     final PlayerInventory inventory = player.getInventory();
     inventory.clear();
+    if (!player.getPersistentDataContainer().has(new NamespacedKey(instance, "lifesteal_player_inventory"))) return;
     final String base64Inv = player.getPersistentDataContainer().get(new NamespacedKey(instance,
             "lifesteal_player_inventory"), PersistentDataType.STRING);
     try {
