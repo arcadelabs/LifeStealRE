@@ -18,8 +18,10 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -33,7 +35,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 
 public class PlayerClickListener implements Listener {
 
@@ -43,11 +44,12 @@ public class PlayerClickListener implements Listener {
 
   @EventHandler
   public void onPlayerClick(final PlayerInteractEvent event) {
-    final Player player = event.getPlayer();
+    if (!LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(event.getPlayer())) {
+      final Player player = event.getPlayer();
 
-    if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
-    if (!(player.getInventory().getItemInMainHand().hasItemMeta())) return;
-    final ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
+      if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
+      if (!(player.getInventory().getItemInMainHand().hasItemMeta())) return;
+      final ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
 
       if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
               .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
@@ -85,6 +87,6 @@ public class PlayerClickListener implements Listener {
           player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Consume")));
         }
       }
-    }
+    } else event.setCancelled(true);
   }
 }
