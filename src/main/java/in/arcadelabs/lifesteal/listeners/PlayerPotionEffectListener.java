@@ -28,17 +28,19 @@ public class PlayerPotionEffectListener implements Listener {
 
   @EventHandler
   public void onPotionEffectEvent(final EntityPotionEffectEvent event) {
-    if (event.getCause() == EntityPotionEffectEvent.Cause.MILK) {
-      if (event.isCancelled()) return;
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure"));
-    } else if (event.getCause() == EntityPotionEffectEvent.Cause.TOTEM) {
-      if (event.isCancelled()) return;
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
-    } else if (event.getEntity() instanceof Player player &&
-            LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(player)) {
-      if (event.getCause() == EntityPotionEffectEvent.Cause.AREA_EFFECT_CLOUD ||
-              event.getCause() == EntityPotionEffectEvent.Cause.POTION_SPLASH) {
-        event.setCancelled(true);
+    if (event.getEntity() instanceof final Player player) {
+
+      if (event.getCause() == EntityPotionEffectEvent.Cause.MILK) {
+        if (event.isCancelled()) return;
+        event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure"));
+        player.sendMessage(LifeStealPlugin.getLifeSteal().getUtils().formatString(
+                LifeStealPlugin.getLifeSteal().getKey("Messages.DisabledStuff.MilkCure")));
+      }
+      if (LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(player)) {
+        if (event.getCause() == EntityPotionEffectEvent.Cause.AREA_EFFECT_CLOUD ||
+                event.getCause() == EntityPotionEffectEvent.Cause.POTION_SPLASH) {
+          event.setCancelled(true);
+        }
       }
     }
   }
