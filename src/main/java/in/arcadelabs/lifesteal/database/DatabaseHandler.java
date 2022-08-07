@@ -78,14 +78,6 @@ public class DatabaseHandler {
     hikariConfig.setPoolName("LifeSteal-Pool");
     hikariDataSource = new HikariDataSource(hikariConfig);
 
-    if (hikariDataSource.isRunning()) {
-      lifeStealPlugin.getLogger().info("Successfully initialized connection to MySQL database...");
-    } else {
-      lifeStealPlugin
-          .getLogger()
-          .severe("Failed to initialize connection to MySQL database! Shutting down...");
-      lifeStealPlugin.getServer().getPluginManager().disablePlugin(lifeStealPlugin);
-    }
     try {
       this.connectionSource = new DataSourceConnectionSource(hikariDataSource, hikariConfig.getJdbcUrl());
       this.profileDao = DaoManager.createDao(connectionSource, Profile.class);

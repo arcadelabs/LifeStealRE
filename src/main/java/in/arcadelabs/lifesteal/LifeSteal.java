@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal;
 
+import in.arcadelabs.labaide.LabAide;
 import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.labaide.libs.aikar.acf.PaperCommandManager;
 import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
@@ -47,6 +48,8 @@ import in.arcadelabs.lifesteal.utils.Interaction;
 import in.arcadelabs.lifesteal.utils.SpiritFactory;
 import in.arcadelabs.lifesteal.utils.Utils;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -59,182 +62,215 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 
 @Getter
 public class LifeSteal {
 
-  private LifeStealPlugin instance;
-  private MiniMessage miniMessage;
-  private PluginManager pluginManager;
-  private DatabaseHandler databaseHandler;
-  private ProfileManager profileManager;
-  private Utils utils;
-  private HeartRecipeManager heartRecipeManager;
-  private YamlDocument config, heartConfig, language;
-  private BStats metrics;
-  private HeartItemCooker heartItemCooker;
-  private ItemStack placeholderHeart;
-  private Interaction interaction;
-  private SkullMaker skullMaker;
-  private SpiritFactory spiritFactory;
-  private Logger logger;
+    private LifeStealPlugin instance;
+    private MiniMessage miniMessage;
+    private PluginManager pluginManager;
+    private DatabaseHandler databaseHandler;
+    private ProfileManager profileManager;
+    private Utils utils;
+    private HeartRecipeManager heartRecipeManager;
+    private YamlDocument config, heartConfig, language;
+    private BStats metrics;
+    private HeartItemCooker heartItemCooker;
+    private ItemStack placeholderHeart;
+    private Interaction interaction;
+    private SkullMaker skullMaker;
+    private SpiritFactory spiritFactory;
+    private Logger logger;
 
-  private void configInit() {
-    try {
-      language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
-              Objects.requireNonNull(instance.getResource("language.yml")),
-              GeneralSettings.DEFAULT,
-              LoaderSettings.builder().setAutoUpdate(true).build(),
-              DumperSettings.DEFAULT,
-              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      logger = new Logger("❥",
-              miniMessage.deserialize(getKey("Prefix")),
-              getKey("ToAllPrefix"),
-              getKey("ToPlayerPrefix"));
-    } catch (IOException e) {
-      logger.logger(Logger.Level.ERROR, miniMessage.deserialize(e.getMessage()), e.fillInStackTrace());
+    private void configInit() {
+        try {
+            language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
+                    Objects.requireNonNull(instance.getResource("language.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(true).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+            logger = new Logger("❥",
+                    miniMessage.deserialize(getKey("Prefix")),
+                    getKey("ToAllPrefix"),
+                    getKey("ToPlayerPrefix"));
+        } catch (IOException e) {
+            logger.logger(Logger.Level.ERROR, miniMessage.deserialize(e.getMessage()), e.fillInStackTrace());
+        }
+        try {
+            config = YamlDocument.create(new File(instance.getDataFolder(), "config.yml"),
+                    Objects.requireNonNull(instance.getResource("config.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(true).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+            utils = new Utils();
+            logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.ConfigLoad")));
+        } catch (Exception e) {
+            logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.ConfigLoadError")), e.fillInStackTrace());
+        }
+
+        try {
+            heartConfig = YamlDocument.create(new File(instance.getDataFolder(), "hearts.yml"),
+                    Objects.requireNonNull(instance.getResource("hearts.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(true).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+            logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.HeartConfigLoad")));
+        } catch (Exception e) {
+            logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.HeartConfigLoadError")), e.fillInStackTrace());
+        }
     }
-    try {
-      config = YamlDocument.create(new File(instance.getDataFolder(), "config.yml"),
-              Objects.requireNonNull(instance.getResource("config.yml")),
-              GeneralSettings.DEFAULT,
-              LoaderSettings.builder().setAutoUpdate(true).build(),
-              DumperSettings.DEFAULT,
-              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      utils = new Utils();
-      logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.ConfigLoad")));
-    } catch (Exception e) {
-      logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.ConfigLoadError")), e.fillInStackTrace());
+
+    private void disableDatabaseLogger(boolean v) {
+        List<String> loggerClassNames = Arrays.asList(
+                "com.zaxxer.hikari.HikariDataSource",
+                "com.zaxxer.hikari.pool.HikariPool"
+        ); // TODO: Fucking make work.
+        if (v) {
+            com.j256.ormlite.logger.Logger.setGlobalLogLevel(com.j256.ormlite.logger.Level.OFF);
+            loggerClassNames.forEach(string -> java.util.logging.Logger.getLogger(string).setLevel(Level.OFF));
+        } else {
+            com.j256.ormlite.logger.Logger.setGlobalLogLevel(com.j256.ormlite.logger.Level.ERROR);
+            loggerClassNames.forEach(string -> java.util.logging.Logger.getLogger(string).setLevel(Level.ALL));
+        }
     }
 
-    try {
-      heartConfig = YamlDocument.create(new File(instance.getDataFolder(), "hearts.yml"),
-              Objects.requireNonNull(instance.getResource("hearts.yml")),
-              GeneralSettings.DEFAULT,
-              LoaderSettings.builder().setAutoUpdate(true).build(),
-              DumperSettings.DEFAULT,
-              UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.HeartConfigLoad")));
-    } catch (Exception e) {
-      logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.HeartConfigLoadError")), e.fillInStackTrace());
+    private void databaseInit() {
+        try {
+            disableDatabaseLogger(true);
+            databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
+            logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.DatabaseLoad")));
+        } catch (Exception e) {
+            logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.DatabaseLoadError")), e.fillInStackTrace());
+            instance.getLogger().warning(e.toString());
+        }
+        disableDatabaseLogger(false);
     }
-  }
 
-  private void databaseInit() {
-    try {
-      databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
-      logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.DatabaseLoad")));
-    } catch (Exception e) {
-      logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.DatabaseLoadError")), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
+    private void profilesInit() {
+        try {
+            profileManager = new ProfileManager();
+            logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.ProfilesLoad")));
+        } catch (Exception e) {
+            logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.ProfilesLoadError")), e.fillInStackTrace());
+            instance.getLogger().warning(e.toString());
+        }
     }
-  }
 
-  private void profilesInit() {
-    try {
-      profileManager = new ProfileManager();
-      logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.ProfilesLoad")));
-    } catch (Exception e) {
-      logger.logger(Logger.Level.ERROR, miniMessage.deserialize(getKey("Messages.ProfilesLoadError")), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
+    private void placeholderHeartInit() {
+        final int amount = config.getInt("HeartsToGain", 2) / 2;
+        heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
+                .setHeartName(utils.formatString(config.getString("Heart.Properties.Name")))
+                .setHeartLore(utils.stringToComponentList(config.getStringList("Heart.Properties.Lore"),
+                        "hp", amount))
+                .setModelData(config.getInt("Heart.Properties.ModelData"))
+                .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
+                .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), amount)
+                .cook();
+        placeholderHeart = heartItemCooker.getCookedItem();
     }
-  }
 
-  private void placeholderHeartInit() {
-    final int amount = config.getInt("HeartsToGain", 2) / 2;
-    heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
-            .setHeartName(utils.formatString(config.getString("Heart.Properties.Name")))
-            .setHeartLore(utils.stringToComponentList(config.getStringList("Heart.Properties.Lore"),
-                    "hp", amount))
-            .setModelData(config.getInt("Heart.Properties.ModelData"))
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
-            .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), amount)
-            .cook();
-    placeholderHeart = heartItemCooker.getCookedItem();
-  }
-
-  private void updateCheckerInit() {
-    try {
-      new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
-              .setNotificationPermission("greetings.update")
-              .enableOpNotification(true)
-              .setup();
-    } catch (IOException e) {
-      instance.getLogger().warning(e.toString());
+    private void updateCheckerInit() {
+        try {
+            new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
+                    .setNotificationPermission("greetings.update")
+                    .enableOpNotification(true)
+                    .setup();
+        } catch (IOException e) {
+            instance.getLogger().warning(e.toString());
+        }
     }
-  }
 
-  private void registerCommands() {
-    final BaseCommand[] commands = {
-            new RemoveHearts(),
-            new GiveHearts(),
-            new Eliminate(),
-            new AddHearts(),
-            new SetHearts(),
-            new Withdraw(),
-            new Reload(),
-            new Revive(),
-    };
+    private void registerCommands() {
+        final BaseCommand[] commands = {
+                new RemoveHearts(),
+                new GiveHearts(),
+                new Eliminate(),
+                new AddHearts(),
+                new SetHearts(),
+                new Withdraw(),
+                new Reload(),
+                new Revive(),
+        };
 
-    final PaperCommandManager pcm = new PaperCommandManager(instance);
-    Arrays.stream(commands).forEach(pcm::registerCommand);
-    logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.CommandsAsyncLoad")));
-  }
+        instance.getLogger().setLevel(Level.OFF);
+        final PaperCommandManager pcm = new PaperCommandManager(instance);
+        Arrays.stream(commands).forEach(pcm::registerCommand);
+        instance.getLogger().setLevel(Level.ALL);
 
-  private void registerListeners() {
-    final Listener[] listeners = {
-            new PlayerPotionEffectListener(),
-            new PlayerResurrectListener(),
-            new PlayerDamageListener(),
-            new HeartConsumeListener(),
-            new PlayerDeathListener(),
-            new PlayerClickListener(),
-            new HeartPlaceListener(),
-            new HeartCraftListener(),
-            new PlayerJoinListener(),
-            new ArrowPickupEvent(),
-    };
-    Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
-    logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.ListenersLoad")));
-  }
+        logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.CommandsAsyncLoad")));
+    }
 
-  public String getKey(String path) {
-    return language.getString(path);
-  }
+    private void registerListeners() {
+        final Listener[] listeners = {
+                new PlayerPotionEffectListener(),
+                new PlayerResurrectListener(),
+                new PlayerDamageListener(),
+                new HeartConsumeListener(),
+                new PlayerDeathListener(),
+                new PlayerClickListener(),
+                new HeartPlaceListener(),
+                new HeartCraftListener(),
+                new PlayerJoinListener(),
+                new ArrowPickupEvent(),
+        };
+        Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
+        logger.logger(Logger.Level.INFO, miniMessage.deserialize(getKey("Messages.ListenersLoad")));
+    }
 
-  /**
-   * Initializes everything.
-   */
-  public void init() {
-    instance = LifeStealPlugin.getInstance();
+    public String getKey(String path) {
+        return language.getString(path);
+    }
 
-    miniMessage = MiniMessage.miniMessage();
+    /**
+     * Initializes everything.
+     */
+    public void init() {
 
-    pluginManager = Bukkit.getPluginManager();
+        LabAide.Logger().logger(Logger.Level.INFO, Component.text("  _     _   __       ___  _               _ ",
+                TextColor.color(248, 153, 153)));
+        LabAide.Logger().logger(Logger.Level.INFO, Component.text(" | |   (_) / _| ___ / __|| |_  ___  __ _ | |",
+                TextColor.color(248, 153, 153)));
+        LabAide.Logger().logger(Logger.Level.INFO, Component.text(" | |__ | ||  _|/ -_)\\__ \\|  _|/ -_)/ _` || |",
+                TextColor.color(248, 160, 159)));
+        LabAide.Logger().logger(Logger.Level.INFO, Component.text(" |____||_||_|  \\___||___/ \\__|\\___|\\__,_||_|",
+                TextColor.color(247, 166, 164)));
+        LabAide.Logger().logger(Logger.Level.INFO, Component.text("                                            ",
+                TextColor.color(247, 173, 170)));
 
-    configInit();
+        instance = LifeStealPlugin.getInstance();
 
-    databaseInit();
+        miniMessage = MiniMessage.miniMessage();
 
-    profilesInit();
+        pluginManager = Bukkit.getPluginManager();
 
-    interaction = new Interaction(config.getBoolean("Clean-Console"));
+        configInit();
 
-    skullMaker = new SkullMaker();
+        databaseInit();
 
-    spiritFactory = new SpiritFactory();
+        profilesInit();
 
-    placeholderHeartInit();
+        interaction = new Interaction(config.getBoolean("Clean-Console"));
 
-    heartRecipeManager = new HeartRecipeManager();
+        skullMaker = new SkullMaker();
 
-    LifeStealPlugin.getInstance().getServer().addRecipe(heartRecipeManager.getHeartRecipe());
+        spiritFactory = new SpiritFactory();
 
-    metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
+        placeholderHeartInit();
 
-    registerCommands();
+        heartRecipeManager = new HeartRecipeManager();
 
-    registerListeners();
-  }
+        LifeStealPlugin.getInstance().getServer().addRecipe(heartRecipeManager.getHeartRecipe());
+
+        metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
+
+        registerCommands();
+
+        registerListeners();
+    }
 }
