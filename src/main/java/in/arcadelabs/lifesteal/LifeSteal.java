@@ -45,6 +45,7 @@ import in.arcadelabs.lifesteal.hearts.HeartRecipeManager;
 import in.arcadelabs.lifesteal.hearts.SkullMaker;
 import in.arcadelabs.lifesteal.listeners.*;
 import in.arcadelabs.lifesteal.utils.Interaction;
+import in.arcadelabs.lifesteal.utils.LogFilter;
 import in.arcadelabs.lifesteal.utils.SpiritFactory;
 import in.arcadelabs.lifesteal.utils.Utils;
 import lombok.Getter;
@@ -57,10 +58,12 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -127,16 +130,11 @@ public class LifeSteal {
     }
 
     private void disableDatabaseLogger(boolean v) {
-        List<String> loggerClassNames = Arrays.asList(
-                "com.zaxxer.hikari.HikariDataSource",
-                "com.zaxxer.hikari.pool.HikariPool"
-        ); // TODO: Fucking make work.
+        LogFilter.registerFilter();
         if (v) {
             com.j256.ormlite.logger.Logger.setGlobalLogLevel(com.j256.ormlite.logger.Level.OFF);
-            loggerClassNames.forEach(string -> java.util.logging.Logger.getLogger(string).setLevel(Level.OFF));
         } else {
             com.j256.ormlite.logger.Logger.setGlobalLogLevel(com.j256.ormlite.logger.Level.ERROR);
-            loggerClassNames.forEach(string -> java.util.logging.Logger.getLogger(string).setLevel(Level.ALL));
         }
     }
 
