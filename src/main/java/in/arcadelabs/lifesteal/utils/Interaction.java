@@ -56,7 +56,7 @@ public class Interaction {
   public void broadcast(final Logger.Level level, final Component component) {
     audience.sendMessage(component);
     if (cleanConsole) return;
-    lifeSteal.getLogger().logger(null, level, component);
+    lifeSteal.getLogger().log(null, level, component);
   }
 
   /**
@@ -71,7 +71,7 @@ public class Interaction {
             Placeholder.component("player", player.name()));
     audience.sendMessage(component);
     if (cleanConsole) return;
-    lifeSteal.getLogger().logger(null, Logger.Level.INFO, component);
+    lifeSteal.getLogger().log(null, Logger.Level.INFO, component);
   }
 
   public void broadcast(final String key, final Player player1, final Player player2) {
@@ -81,7 +81,7 @@ public class Interaction {
             Placeholder.component("commander", player2.name()));
     audience.sendMessage(component);
     if (cleanConsole) return;
-    lifeSteal.getLogger().logger(null, Logger.Level.INFO, component);
+    lifeSteal.getLogger().log(null, Logger.Level.INFO, component);
   }
 
   /**
@@ -94,7 +94,7 @@ public class Interaction {
   public void retuurn(final Logger.Level level, final Component message, final Player player) {
     player.sendMessage(message);
     if (cleanConsole) return;
-    lifeSteal.getLogger().logger(player, level, message);
+    lifeSteal.getLogger().log(player, level, message);
   }
 
   /**
@@ -109,7 +109,7 @@ public class Interaction {
     player.sendMessage(message);
     player.playSound(Sound.sound(Key.key(soundKey), Sound.Source.PLAYER, 1f, 1f));
     if (cleanConsole) return;
-    lifeSteal.getLogger().logger(player, level, message);
+    lifeSteal.getLogger().log(player, level, message);
   }
 
   /**
@@ -125,7 +125,7 @@ public class Interaction {
     for (final Component message : messages) {
       player.sendMessage(player, message);
       if (cleanConsole) return;
-      lifeSteal.getLogger().logger(player, level, message);
+      lifeSteal.getLogger().log(player, level, message);
     }
   }
 }

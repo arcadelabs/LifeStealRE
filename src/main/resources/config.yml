@@ -3,7 +3,7 @@ Version: 8
 Clean-Console: false
 
 DATABASE:
-# true = MySQL, false = SQLite
+  # true = MySQL, false = SQLite
   ENABLED: false
   ADDRESS: '127.0.0.1'
   PORT: '3306'
@@ -94,9 +94,9 @@ Spirits:
     Enabled: true
     ItemType: 'GOLDEN_HELMET'
     Name: '<#f89999>Spirit Cloak'
-    Lore: [" "]
+    Lore: [ " " ]
     ModelData: 123456
-#   leave these settings as is to get a perfect spirit concept.
+  #   leave these settings as is to get a perfect spirit concept.
   Hearts: 1
   GameMode: 'ADVENTURE'
   Invisible: true

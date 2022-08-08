@@ -219,7 +219,7 @@ public class Utils {
       case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
       case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
+      case "AfterLife" -> lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
@@ -251,7 +251,7 @@ public class Utils {
       case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
       case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
+      case "AfterLife" -> lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 
@@ -269,7 +269,7 @@ public class Utils {
       }
       case "DEAD" -> player.setGameMode(GameMode.SURVIVAL);
       case "SPIRIT" -> lifeSteal.getSpiritFactory().removeSpirit(player);
-      case "AfterLife" -> lifeSteal.getLogger().logger(Logger.Level.DEBUG, Component.text("TTPP"));
+      case "AfterLife" -> lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
     }
   }
 

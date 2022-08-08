@@ -50,7 +50,7 @@ public class AddHearts extends BaseCommand {
     player.setHealth(Math.min(player.getHealth() +
             hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
-    TagResolver.Single playerName = target.player == sender ?
+    final TagResolver.Single playerName = target.player == sender ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", player.name());
 
     final Component addHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.AddHearts"),

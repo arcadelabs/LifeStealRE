@@ -48,7 +48,7 @@ public class SetHearts extends BaseCommand {
     lifeSteal.getUtils().setPlayerHearts(player, hearts * 2);
     player.setHealth(hearts * 2);
 
-    TagResolver.Single playerName = target == sender ?
+    final TagResolver.Single playerName = target.equals(sender) ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.player.name());
 
     final Component setHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.SetHearts"),

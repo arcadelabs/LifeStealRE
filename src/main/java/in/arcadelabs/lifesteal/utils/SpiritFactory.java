@@ -42,9 +42,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpiritFactory {
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private static final LifeStealPlugin instance = LifeStealPlugin.getInstance();
-
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final List<Player> spirits = new ArrayList<>();
   private ItemStack spiritModel;
 
@@ -171,13 +170,13 @@ public class SpiritFactory {
           try {
             inventory.setItem(i, (ItemStack) invOutput.readObject());
           } catch (ClassNotFoundException e) {
-            lifeSteal.getLogger().logger(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
+            lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
           }
         }
         player.getPersistentDataContainer().remove(new NamespacedKey(instance, "lifesteal_player_inventory"));
       }
     } catch (IOException e) {
-      lifeSteal.getLogger().logger(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
+      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
     }
   }
 }
