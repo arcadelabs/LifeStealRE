@@ -33,38 +33,38 @@ import java.sql.SQLException;
 
 public class ProfileListener implements Listener {
 
-    private final LifeSteal instance = LifeStealPlugin.getLifeSteal();
+  private final LifeSteal instance = LifeStealPlugin.getLifeSteal();
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void handleJoin(PlayerJoinEvent event) {
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void handleJoin(PlayerJoinEvent event) {
 
-        if (!(LifeStealPlugin.getInstance()
-                .getServer()
-                .getPluginManager()
-                .isPluginEnabled(LifeStealPlugin.getInstance()))) {
-            event.getPlayer().kick(
-                    Component.text("Server still loading, please join after some time",
-                            TextColor.color(102, 0, 205)), PlayerKickEvent.Cause.TIMEOUT);
-        }
-        try {
-            instance.getProfileManager().getProfileCache()
-                    .put(event.getPlayer().getUniqueId(), instance.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
-        } catch (SQLException e) {
-            event.getPlayer().kick(
-                    Component.text("FAILED TO LOAD YOUR ACCOUNT!",
-                            TextColor.color(255, 0, 0)), PlayerKickEvent.Cause.TIMEOUT);
-            e.printStackTrace();
-        }
+    if (!(LifeStealPlugin.getInstance()
+            .getServer()
+            .getPluginManager()
+            .isPluginEnabled(LifeStealPlugin.getInstance()))) {
+      event.getPlayer().kick(
+              Component.text("Server still loading, please join after some time",
+                      TextColor.color(102, 0, 205)), PlayerKickEvent.Cause.TIMEOUT);
     }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        instance.getDatabaseHandler().getHikariExecutor().execute(() -> {
-            try {
-                instance.getProfileManager().saveProfile(instance.getProfileManager().getProfileCache().get(event.getPlayer().getUniqueId()));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+    try {
+      instance.getProfileManager().getProfileCache()
+              .put(event.getPlayer().getUniqueId(), instance.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
+    } catch (SQLException e) {
+      event.getPlayer().kick(
+              Component.text("FAILED TO LOAD YOUR ACCOUNT!",
+                      TextColor.color(255, 0, 0)), PlayerKickEvent.Cause.TIMEOUT);
+      e.printStackTrace();
     }
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onPlayerQuit(PlayerQuitEvent event) {
+    instance.getDatabaseHandler().getHikariExecutor().execute(() -> {
+      try {
+        instance.getProfileManager().saveProfile(instance.getProfileManager().getProfileCache().get(event.getPlayer().getUniqueId()));
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    });
+  }
 }

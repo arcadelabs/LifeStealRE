@@ -2,6 +2,6 @@ name: LifeSteal
 version: '${project.version}'
 main: in.arcadelabs.lifesteal.LifeStealPlugin
 api-version: 1.18
-softdepend: [LabAide]
+softdepend: [ LabAide ]
 description: Just another LifeSteal SMP core plugin.
 website: https://arcadelabs.in

@@ -1,24 +1,15 @@
-Version: 7
+Version: 8
 
-Prefix: "<b><color:#f89999>『</color><gradient:#e01e37:#f72585>LifeSteal++</gradient><color:#f89999>』"
 ToPlayerPrefix: "<reset><gradient:#f72585:#e01e37>➠ <player> | </gradient>"
 ToAllPrefix: "<reset><gradient:#f72585:#e01e37>➠ All | </gradient>"
 
 Messages:
-  LifestealLoad: "<gradient:#e01e37:#f52486>LifeSteal enabled successfully!"
-  ConfigLoad: "<gradient:#e01e37:#f52486>config.yml loaded gracefully."
-  HeartConfigLoad: "<gradient:#e01e37:#f52486>hearts.yml also loaded gracefully, maybe..."
-  DatabaseLoad: "<gradient:#e01e37:#f52486>Database seems to be loaded just fine..."
-  ProfilesLoad: "<gradient:#e01e37:#f52486>Profiles are loaded, I hope."
-  ListenersLoad: "<gradient:#e01e37:#f52486>All the listeners are active now, and they're better at listeneing than you were."
-  CommandsLoad: "<gradient:#e01e37:#f52486>Commands are registered, go get em commander!"
-  CommandsAsyncLoad: "<gradient:#e01e37:#f52486>Commands are registered asynchronously, get em gracefully commander!"
-
   AddHearts: "<gradient:#e01e37:#f52486>Added <hearts> hearts to <player>"
   GiveHearts: "<gradient:#e01e37:#f52486>Gave <hearts> <type> hearts to <player>"
   SetHearts: "<gradient:#e01e37:#f52486>Set <hearts> hearts to <player>."
   RemoveHearts: "<gradient:#e01e37:#f52486>Removed <hearts> hearts from <player>"
   HeartWithdraw: "<gradient:#e01e37:#f52486>You've withdrawn <hearts>x hearts."
+  NotEnoughHearts: "<gradient:#e01e37:#641220>You don't have enough hearts to withdraw."
 
   DisabledStuff:
     Totem: "<gradient:#e01e37:#641220>Totems won't save you bud."
@@ -69,12 +60,6 @@ Messages:
       Player: "<gradient:#e01e37:#f52486><player> has been revived by <commander>."
     ByBeacon: "<gradient:#e01e37:#f52486><player> is revived, they been summoned back to life bu their well-wishers."
     AfterLife: "<gradient:#e01e37:#f52486><player> has returned from the afterlife, must be a 'hell' of a journey. xd"
-
-  ConfigLoadError: "<gradient:#e01e37:#641220>Error(s) occured while loading config.yml"
-  HeartConfigLoadError: "<gradient:#e01e37:#641220>Error(s) occured while loading hearts.yml"
-  DatabaseLoadError: "<gradient:#e01e37:#641220>Error(s) occured while connecting to database, blame Infinity#1392 :p"
-  ProfilesLoadError: "<gradient:#e01e37:#641220>Error(s) occured while loading profiles, blame Infinity#1392 :p"
-  NotEnoughHearts: "<gradient:#e01e37:#641220>You don't have enough hearts to withdraw."
 
 Sounds:
   Error: 'entity.villager.ambient'

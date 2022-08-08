@@ -22,6 +22,7 @@ import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.utils.ProbabilityCollection;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
@@ -36,8 +37,11 @@ public class HeartItemManager {
   private final LifeSteal lifeSteal;
   private final LifeStealPlugin instance;
   private final YamlDocument heartConfig;
+  @Getter
   private final Set<String> blessedHearts;
+  @Getter
   private final Set<String> normalHearts;
+  @Getter
   private final Set<String> cursedHearts;
   private final String[] blessedRarity;
   private final String[] normalRarity;

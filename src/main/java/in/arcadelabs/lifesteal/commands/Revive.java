@@ -43,7 +43,7 @@ public class Revive extends BaseCommand {
   @Subcommand("revive")
   @CommandCompletion("@players")
   @CommandAlias("revive")
-  public void onRevive(final CommandSender sender,  final OnlinePlayer target) {
+  public void onRevive(final CommandSender sender, final OnlinePlayer target) {
     if (sender instanceof Player player) {
       lifeSteal.getUtils().handleRevive(target.getPlayer());
       lifeSteal.getInteraction().broadcast("Messages.Revive.ByCommand.Player", target.getPlayer(), player);

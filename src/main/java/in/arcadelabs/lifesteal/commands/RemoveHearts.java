@@ -50,7 +50,7 @@ public class RemoveHearts extends BaseCommand {
     player.setHealth(Math.min(player.getHealth() -
             hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
-    TagResolver.Single playerName = target == sender ?
+    final TagResolver.Single playerName = target.equals(sender) ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.player.name());
 
     final Component removeHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.RemoveHearts"),

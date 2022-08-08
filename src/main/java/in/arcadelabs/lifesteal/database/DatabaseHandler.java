@@ -28,15 +28,15 @@ import com.zaxxer.hikari.HikariDataSource;
 import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.database.profile.Profile;
-import java.util.UUID;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Getter
 public class DatabaseHandler {
@@ -44,10 +44,11 @@ public class DatabaseHandler {
   private final HikariDataSource hikariDataSource;
   private final Executor hikariExecutor = Executors.newFixedThreadPool(2);
   private Dao<Profile, UUID> profileDao;
-  private ConnectionSource  connectionSource;
+  private ConnectionSource connectionSource;
 
   private String address, database, username, password;
   private int port;
+  @Getter
   private boolean ssl, dbEnabled;
 
   public DatabaseHandler(LifeStealPlugin lifeStealPlugin) {
@@ -98,7 +99,7 @@ public class DatabaseHandler {
     this.ssl = configuration.getBoolean("DATABASE.SSL");
   }
 
-  public void disconnect() throws Exception {
+  public void disconnect() {
     if (connectionSource != null) connectionSource.closeQuietly();
     if (hikariDataSource != null) hikariDataSource.close();
   }

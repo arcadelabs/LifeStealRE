@@ -69,7 +69,7 @@ public class GiveHearts extends BaseCommand {
       target.getWorld().dropItemNaturally(target.getLocation(), leftovers.getValue());
     }
 
-    TagResolver.Single playerName = target == sender ?
+    final TagResolver.Single playerName = target == sender ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.name());
 
     final Component giveHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.GiveHearts"),

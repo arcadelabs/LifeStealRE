@@ -22,8 +22,9 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import in.arcadelabs.lifesteal.utils.LifeState;
-import java.util.UUID;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 @DatabaseTable(tableName = "lifesteal-storage")

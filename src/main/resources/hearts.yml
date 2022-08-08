@@ -7,10 +7,10 @@ Hearts:
     OnCraft: RANDOM_ALL
   Types:
     Normal:
-#      This index number down here represents rarity of the item.
+      #      This index number down here represents rarity of the item.
       80:
         Properties:
-#          If item type is any edible food, heart will atke effect when player eats it, not when player simply right clicls.
+          #          If item type is any edible food, heart will atke effect when player eats it, not when player simply right clicls.
           ItemType: APPLE
           Name: '<gradient:#f6c0ba:#f89999> <b><color:#e01e37>❥</color> Normal Heart'
           Lore:
@@ -21,15 +21,15 @@ Hearts:
             - '<gradient:#f9b4ed:#f89999> ◇ Effects:'
             - '<red>  ◆ Regeneration <blue>2 <gray>| <green>120s'
             - '<gradient:#f72585:#e01e37>═════════════════════════'
-#            For resourcepack usage.
+          #            For resourcepack usage.
           ModelData: 123456
           HealthPoints: 2
           Effects:
             Regen:
-                Type: regeneration
-                Power: 2
-                Duration: 120
-                ShowParticles: false
+              Type: regeneration
+              Power: 2
+              Duration: 120
+              ShowParticles: false
           ConsumeMessage:
             - '<gradient:#e01e37:#f72585>═══════════════════════════════'
             - '<gradient:#f6c0ba:#f89999>You consumed a normal heart! +♥'
@@ -50,16 +50,16 @@ Hearts:
             - '<red>  ◆ Regeneration <blue>2 <gray>| <green>120s'
             - '<gradient:#f72585:#e01e37>═════════════════════════'
           ModelData: 123456
-#          https://minecraft-heads.com/custom-heads/search?searchword=heart
-#          Go down and check for 'value' fiels and copy paste that down below.
+          #          https://minecraft-heads.com/custom-heads/search?searchword=heart
+          #          Go down and check for 'value' fiels and copy paste that down below.
           SkullTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmQzNmMzMjkxZmUwMmQxNDJjNGFmMjhkZjJmNTViYjAzOTdlMTk4NTU0ZTgzNDU5OTBkYmJjZDRjMTQwMzE2YiJ9fX0="
           HealthPoints: 2
           Effects:
             Speed:
-                Type: speed
-                Power: 2
-                Duration: 120
-                ShowParticles: false
+              Type: speed
+              Power: 2
+              Duration: 120
+              ShowParticles: false
             Regen:
               Type: regeneration
               Power: 2
@@ -87,10 +87,10 @@ Hearts:
           HealthPoints: 2
           Effects:
             Hunger:
-                Type: hunger
-                Power: 2
-                Duration: 120
-                ShowParticles: false
+              Type: hunger
+              Power: 2
+              Duration: 120
+              ShowParticles: false
           ConsumeMessage:
             - '<gradient:#e01e37:#f72585>═══════════════════════════════'
             - '<gradient:#f6c0ba:#f89999>You consumed a cursed heart! +♥'
@@ -112,10 +112,10 @@ Hearts:
           HealthPoints: 2
           Effects:
             Blind:
-                Type: blindness
-                Power: 2
-                Duration: 120
-                ShowParticles: false
+              Type: blindness
+              Power: 2
+              Duration: 120
+              ShowParticles: false
           ConsumeMessage:
             - '<gradient:#e01e37:#f72585>═══════════════════════════════'
             - '<gradient:#f6c0ba:#f89999>You consumed a cursed heart! +♥'

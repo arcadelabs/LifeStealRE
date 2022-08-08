@@ -54,22 +54,22 @@ public class Reload extends BaseCommand {
           lifeSteal.getLanguage().reload();
           lifeSteal.getConfig().reload();
           lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>"));
-          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
+          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
         }
         case "Language.yml" -> {
           lifeSteal.getLanguage().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
           player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
         }
         case "Config.yml" -> {
           lifeSteal.getConfig().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
           player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
         }
         case "Hearts.yml" -> {
           lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
           player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
         }
       }
@@ -79,19 +79,19 @@ public class Reload extends BaseCommand {
           lifeSteal.getLanguage().reload();
           lifeSteal.getConfig().reload();
           lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Core reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
         }
         case "Language.yml" -> {
           lifeSteal.getLanguage().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
         }
         case "Config.yml" -> {
           lifeSteal.getConfig().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
         }
         case "Hearts.yml" -> {
           lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().logger(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
         }
       }
     }
