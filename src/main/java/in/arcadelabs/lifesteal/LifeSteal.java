@@ -28,22 +28,17 @@ import in.arcadelabs.labaide.libs.boostedyaml.settings.loader.LoaderSettings;
 import in.arcadelabs.labaide.libs.boostedyaml.settings.updater.UpdaterSettings;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.labaide.metrics.BStats;
+import in.arcadelabs.lifesteal.commands.*;
+import in.arcadelabs.lifesteal.listeners.*;
 import in.arcadelabs.labaide.updatechecker.UpdateChecker;
-import in.arcadelabs.lifesteal.commands.AddHearts;
-import in.arcadelabs.lifesteal.commands.Eliminate;
-import in.arcadelabs.lifesteal.commands.GiveHearts;
-import in.arcadelabs.lifesteal.commands.Reload;
-import in.arcadelabs.lifesteal.commands.RemoveHearts;
-import in.arcadelabs.lifesteal.commands.Revive;
-import in.arcadelabs.lifesteal.commands.SetHearts;
-import in.arcadelabs.lifesteal.commands.Withdraw;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
+import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import in.arcadelabs.lifesteal.hearts.HeartItemCooker;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import in.arcadelabs.lifesteal.hearts.HeartRecipeManager;
 import in.arcadelabs.lifesteal.hearts.SkullMaker;
-import in.arcadelabs.lifesteal.listeners.*;
+import in.arcadelabs.lifesteal.utils.FancyStuff;
 import in.arcadelabs.lifesteal.utils.Interaction;
 import in.arcadelabs.lifesteal.utils.LogFilter;
 import in.arcadelabs.lifesteal.utils.SpiritFactory;
@@ -83,10 +78,11 @@ public class LifeSteal {
   private Interaction interaction;
   private SkullMaker skullMaker;
   private SpiritFactory spiritFactory;
-  private Logger logger, noPrefixLogger;
+  private Logger logger;
   private HeartItemManager heartItemManager;
+  private FancyStuff fancyStuff;
 
-  private boolean langInit() {
+  private void langInit() {
     try {
       language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
               Objects.requireNonNull(instance.getResource("language.yml")),
@@ -98,15 +94,14 @@ public class LifeSteal {
               miniMessage.deserialize("<b><color:#e01e37>❥</color> </b>"),
               getKey("ToAllPrefix"),
               getKey("ToPlayerPrefix"));
-      return true;
-
+      fancyStuff.setLangStatus(true);
     } catch (IOException e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      return false;
+      fancyStuff.setLangStatus(false);
     }
   }
 
-  private boolean configInit() {
+  private void configInit() {
     try {
       config = YamlDocument.create(new File(instance.getDataFolder(), "config.yml"),
               Objects.requireNonNull(instance.getResource("config.yml")),
@@ -115,14 +110,14 @@ public class LifeSteal {
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
       utils = new Utils();
-      return true;
+      fancyStuff.setConfigStatus(true);
     } catch (Exception e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      return false;
+      fancyStuff.setConfigStatus(false);
     }
   }
 
-  private boolean heartsYMLInit() {
+  private void heartsYMLInit() {
     try {
       heartConfig = YamlDocument.create(new File(instance.getDataFolder(), "hearts.yml"),
               Objects.requireNonNull(instance.getResource("hearts.yml")),
@@ -130,10 +125,10 @@ public class LifeSteal {
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      return true;
+      fancyStuff.setHeartsStatus(true);
     } catch (Exception e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      return false;
+      fancyStuff.setHeartsStatus(false);
     }
   }
 
@@ -143,31 +138,31 @@ public class LifeSteal {
     else com.j256.ormlite.logger.Logger.setGlobalLogLevel(com.j256.ormlite.logger.Level.ERROR);
   }
 
-  private boolean databaseInit() {
+  private void databaseInit() {
     try {
       disableDatabaseLogger(true);
       databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
-      return true;
+      fancyStuff.setDatabaseMode(databaseHandler.isDbEnabled());
+      fancyStuff.setDatabaseStatus(true);
     } catch (Exception e) {
       disableDatabaseLogger(false);
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
-      return false;
+      fancyStuff.setDatabaseMode(databaseHandler.isDbEnabled());
+      fancyStuff.setDatabaseStatus(false);
     }
   }
 
-  private boolean profilesInit() {
+  private void profilesInit() {
     try {
       profileManager = new ProfileManager();
-      return true;
+      fancyStuff.setProfilesStatus(true);
     } catch (Exception e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
-      return false;
+      fancyStuff.setProfilesStatus(false);
     }
   }
 
-  private boolean placeholderHeartInit() {
+  private void placeholderHeartInit() {
     try {
       final int amount = config.getInt("HeartsToGain", 2) / 2;
       heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
@@ -179,24 +174,20 @@ public class LifeSteal {
               .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), amount)
               .cook();
       placeholderHeart = heartItemCooker.getCookedItem();
-      return true;
     } catch (IllegalArgumentException e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
-      return false;
     }
   }
 
-  private boolean recipesInit() {
+  private void recipesInit() {
     try {
       heartRecipeManager = new HeartRecipeManager();
       Bukkit.removeRecipe(heartRecipeManager.getHeartRecipe().getKey());
       LifeStealPlugin.getInstance().getServer().addRecipe(heartRecipeManager.getHeartRecipe());
-      return true;
+      fancyStuff.setRecipeStatus(true);
     } catch (Exception e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
-      return false;
+      fancyStuff.setRecipeStatus(false);
     }
   }
 
@@ -211,7 +202,7 @@ public class LifeSteal {
     }
   }
 
-  private boolean registerCommands() {
+  private void registerCommands() {
     try {
       final BaseCommand[] commands = {
               new RemoveHearts(),
@@ -228,15 +219,14 @@ public class LifeSteal {
       final PaperCommandManager pcm = new PaperCommandManager(instance);
       Arrays.stream(commands).forEach(pcm::registerCommand);
       instance.getLogger().setLevel(Level.ALL);
-      return true;
+      fancyStuff.setCommandsStatus(true);
     } catch (SecurityException e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
-      return false;
+      fancyStuff.setCommandsStatus(false);
     }
   }
 
-  private boolean registerListeners() {
+  private void registerListeners() {
     try {
       final Listener[] listeners = {
               new PlayerPotionEffectListener(),
@@ -244,7 +234,6 @@ public class LifeSteal {
               new PlayerDamageListener(),
               new HeartConsumeListener(),
               new PlayerDeathListener(),
-              new PlayerClickListener(),
               new HeartPlaceListener(),
               new HeartCraftListener(),
               new PlayerJoinListener(),
@@ -252,80 +241,15 @@ public class LifeSteal {
               new ProfileListener(),
       };
       Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
-      return true;
+      fancyStuff.setListenersStatus(true);
     } catch (Exception e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      instance.getLogger().warning(e.toString());
-      return false;
+      fancyStuff.setListenersStatus(false);
     }
   }
 
   public String getKey(String path) {
     return language.getString(path);
-  }
-
-  public void fancyStuff() {
-
-    final String configStatus = configInit() ? "<green>❥" : "<red>❥";
-    final String langStatus = langInit() ? "<green>❥" : "<red>❥";
-    final String heartsStatus = heartsYMLInit() ? "<green>❥" : "<red>❥";
-    final String databaseMode = databaseHandler.isDbEnabled() ? "│   └── MySQL-Hikari  " : "│   └── database.db   ";
-    final String databaseStatus = databaseInit() ? "<green>❥" : "<red>❥";
-    final String profilesStatus = profilesInit() ? "<green>❥" : "<red>❥";
-    final String commandsStatus = registerCommands() ? "<green>❥" : "<red>❥";
-    final String listenersStatus = registerListeners() ? "<green>❥" : "<red>❥";
-    final String recipeStatus = placeholderHeartInit() && recipesInit() ? "<green>❥" : "<red>❥";
-    final String blessedHeartsCount = heartItemManager.getBlessedHearts().isEmpty() ?
-            "<red>" + heartItemManager.getBlessedHearts().size() + "x" :
-            "<green>" + heartItemManager.getBlessedHearts().size() + "x";
-    final String normalHeartsCount = heartItemManager.getNormalHearts().isEmpty() ?
-            "<red>" + heartItemManager.getNormalHearts().size() + "x" :
-            "<green>" + heartItemManager.getNormalHearts().size() + "x";
-    final String cursedHeartsCount = heartItemManager.getCursedHearts().isEmpty() ?
-            "<red>" + heartItemManager.getCursedHearts().size() + "x" :
-            "<green>" + heartItemManager.getCursedHearts().size() + "x";
-
-
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>  _     _   __       ___  _               _ "));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#EB554F> | |   (_) / _| ___ / __|| |_  ___  __ _ | |    "));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#E53A43> | |__ | ||  _|/ -_)\\__ \\|  _|/ -_)/ _` || |  " +
-                    "<color:#F72585>LifeSteal Reimagined v" + instance.getDescription().getVersion()));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#E01E37> |____||_||_|  \\___||___/ \\__|\\___|\\__,_||_|  " +
-                    "<color:#E01E37>Running on " + Bukkit.getVersion() + " " + Bukkit.getBukkitVersion()));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B> ."));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B> ├── I/O"));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B> │   ├── config.yml    " + configStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B> │   ├── language.yml  " + langStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B> │   ├── hearts.yml    " + heartsStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B> " + databaseMode + databaseStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B> └── Functions"));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>     ├── Profiles      " + profilesStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>     ├── Commands      " + commandsStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>     ├── Listeners     " + listenersStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>     ├── Recipes       " + recipeStatus));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>     └── Hearts        "));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>         ├── Blessed   " + blessedHeartsCount));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>         ├── Normal    " + normalHeartsCount));
-    noPrefixLogger.log(Logger.Level.INFO,
-            miniMessage.deserialize("<b><color:#F0715B>         └── Cursed    " + cursedHeartsCount));
   }
 
   /**
@@ -339,7 +263,7 @@ public class LifeSteal {
 
     miniMessage = MiniMessage.miniMessage();
 
-    noPrefixLogger = new Logger("LifeSteal", Component.empty(), null, null);
+    fancyStuff = new FancyStuff(instance, miniMessage);
 
     langInit();
 
@@ -369,6 +293,13 @@ public class LifeSteal {
 
     heartItemManager = new HeartItemManager(HeartItemManager.Mode.RANDOM_ALL);
 
-    fancyStuff();
+    fancyStuff.setBlessedHeartsCount(heartItemManager.getBlessedHearts().size());
+    fancyStuff.setNormalHeartsCount(heartItemManager.getNormalHearts().size());
+    fancyStuff.setCursedHeartsCount(heartItemManager.getCursedHearts().size());
+    fancyStuff.setBlessedHeartsStatus(heartItemManager.getBlessedHearts().isEmpty());
+    fancyStuff.setNormalHeartsStatus(heartItemManager.getNormalHearts().isEmpty());
+    fancyStuff.setCursedHeartsStatus(heartItemManager.getCursedHearts().isEmpty());
+
+    fancyStuff.consolePrint();
   }
 }
