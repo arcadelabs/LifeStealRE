@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,5 +36,7 @@ public class PlayerJoinListener implements Listener {
     final Player player = event.getPlayer();
     lifeSteal.getUtils().setPlayerHearts(player,
             lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts());
+    Bukkit.getScheduler().scheduleSyncDelayedTask(lifeSteal.getInstance(), () ->
+            player.setHealth(player.getHealth()), 20L);
   }
 }

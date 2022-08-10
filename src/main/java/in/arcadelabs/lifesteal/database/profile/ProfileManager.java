@@ -49,11 +49,11 @@ public class ProfileManager {
 
     if (this.hasProfile(uuid)) {
       lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
-              "<gradient:#f58c67:#f10f5d>Profile found for " + uuid + " !, Loading...</gradient>"));
+              "<gradient:#f58c67:#f10f5d>Loading profile for " + uuid + "...</gradient>"));
       return databaseHandler.getProfileDao().queryForId(uuid);
     } else {
       lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
-              "<gradient:#f58c67:#f10f5d>Profile not found for " + uuid + " !, Creating...</gradient>"));
+              "<gradient:#f58c67:#f10f5d>Profile not found for " + uuid + " ! Creating...</gradient>"));
       this.saveProfile(profile);
     }
     return profile;
