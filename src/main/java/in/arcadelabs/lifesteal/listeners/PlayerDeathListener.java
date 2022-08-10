@@ -43,8 +43,8 @@ public class PlayerDeathListener implements Listener {
   public void onPlayerKilled(final PlayerDeathEvent event) {
 
     final Player victim = event.getEntity();
-    final int lostHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 2);
-    if (lifeSteal.getUtils().getPlayerHearts(victim) == 1 || lifeSteal.getUtils().getPlayerHearts(victim) == 2) {
+    final int lostHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
+    if (lifeSteal.getUtils().getPlayerHearts(victim) == 1) {
       if (victim.getKiller() == null) {
         lifeSteal.getInteraction().broadcast(
                 lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);

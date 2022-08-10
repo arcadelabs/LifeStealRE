@@ -52,8 +52,8 @@ public class Utils {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final MiniMessage miniMessage = MiniMessage.miniMessage();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
-  private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToLose", 2);
-  private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToGain", 2);
+  private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
+  private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
 
   /**
    * Gets player hearts.
@@ -62,7 +62,7 @@ public class Utils {
    * @return the player hearts
    */
   public double getPlayerHearts(final Player player) {
-    return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
+    return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue() / 2;
   }
 
   /**
@@ -72,7 +72,7 @@ public class Utils {
    * @param health the health
    */
   public void setPlayerHearts(final Player player, final double health) {
-    Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
+    Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health * 2);
   }
 
   /**

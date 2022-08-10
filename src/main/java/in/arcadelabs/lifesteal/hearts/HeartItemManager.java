@@ -150,7 +150,7 @@ public class HeartItemManager {
     this.modelData = heartConfig.getInt
             ("Hearts.Types." + type + "." + index + ".Properties.ModelData");
     this.healthPoints = heartConfig.getDouble
-            ("Hearts.Types." + type + "." + index + ".Properties.HealthPoints");
+            ("Hearts.Types." + type + "." + index + ".Properties.HeartPoints");
     this.consumeSound = heartConfig.getString
             ("Hearts.Types." + type + "." + index + ".Properties.ConsumeSound");
     if (this.heartType == Material.PLAYER_HEAD) this.skullData = heartConfig.getString

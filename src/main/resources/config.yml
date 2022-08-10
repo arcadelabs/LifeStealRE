@@ -1,4 +1,4 @@
-Version: 8
+Version: 9
 
 Clean-Console: false
 
@@ -6,15 +6,14 @@ DATABASE:
   # true = MySQL, false = SQLite
   ENABLED: false
   ADDRESS: '127.0.0.1'
-  PORT: '3306'
+  PORT: 3306
   DATABASE: 'lifesteal'
   USERNAME: 'username'
   PASSWORD: 'password'
 
 # State how many hearts players should transfer on player death.
-# 2 heart points = 1 whole heart.
-HeartsToTransfer: 2
-DefaultHealth: 20
+HeartsToTransfer: 1
+DefaultHearts: 10
 DisableTotem: true
 DisableMilkCure: true
 

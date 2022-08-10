@@ -29,7 +29,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class PlayerJoinListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private final int defaultHealth = lifeSteal.getConfig().getInt("DefaultHealth");
 
   @EventHandler(priority = EventPriority.NORMAL)
   public void onPlayerJoin(final PlayerJoinEvent event) {
