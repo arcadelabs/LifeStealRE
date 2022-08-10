@@ -216,10 +216,22 @@ public class Utils {
     }
 
     switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
-      case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
-      case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
+      case "BANNED" -> {
+        commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.BANNED));
+      }
+      case "DEAD" -> {
+        player.setGameMode(GameMode.ADVENTURE);
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+      }
+      case "SPIRIT" -> {
+        lifeSteal.getSpiritFactory().addSpirit(player);
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.SPIRIT));
+      }
+      case "AfterLife" -> {
+        lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+      }
     }
   }
 
@@ -248,10 +260,22 @@ public class Utils {
     }
 
     switch (lifeSteal.getConfig().getString("Elimination")) {
-      case "BANNED" -> commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
-      case "DEAD" -> player.setGameMode(GameMode.ADVENTURE);
-      case "SPIRIT" -> lifeSteal.getSpiritFactory().addSpirit(player);
-      case "AfterLife" -> lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
+      case "BANNED" -> {
+        commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.BANNED));
+      }
+      case "DEAD" -> {
+        player.setGameMode(GameMode.ADVENTURE);
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+      }
+      case "SPIRIT" -> {
+        lifeSteal.getSpiritFactory().addSpirit(player);
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.SPIRIT));
+      }
+      case "AfterLife" -> {
+        lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
+        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+      }
     }
   }
 
@@ -271,6 +295,8 @@ public class Utils {
       case "SPIRIT" -> lifeSteal.getSpiritFactory().removeSpirit(player);
       case "AfterLife" -> lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
     }
+
+    lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.LIVING));
   }
 
   /**

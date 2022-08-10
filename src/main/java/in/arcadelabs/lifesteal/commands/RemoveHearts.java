@@ -58,5 +58,11 @@ public class RemoveHearts extends BaseCommand {
             playerName);
     lifeSteal.getInteraction().retuurn(Logger.Level.INFO, removeHeartsMsg, player,
             lifeSteal.getKey("Sounds.RemoveHearts"));
+    lifeSteal.getProfileManager().getProfileCache().get
+            (player.getUniqueId()).setCurrentHearts(
+            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + hearts));
+    lifeSteal.getProfileManager().getProfileCache().get
+            (player.getUniqueId()).setLostHearts(
+            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
   }
 }

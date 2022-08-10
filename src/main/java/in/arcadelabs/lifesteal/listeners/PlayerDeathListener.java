@@ -51,6 +51,12 @@ public class PlayerDeathListener implements Listener {
       } else {
         lifeSteal.getInteraction().broadcast(lifeSteal.getKey("Messages.Elimination.ByPlayer"), victim);
       }
+      lifeSteal.getProfileManager().getProfileCache().get
+              (victim.getUniqueId()).setCurrentHearts(
+                      lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - 1);
+      lifeSteal.getProfileManager().getProfileCache().get
+              (victim.getUniqueId()).setLostHearts(
+              lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + 1);
       lifeSteal.getUtils().handleElimination(victim, event);
     } else {
       if (victim.getKiller() == null) {
@@ -63,12 +69,12 @@ public class PlayerDeathListener implements Listener {
                   .cookHeart();
           replacementHeart = heartItemManager.getHeartItem();
           lifeSteal.getUtils().setPlayerHearts(victim, lifeSteal.getUtils().getPlayerHearts(victim) - lostHearts);
-          try {
-            Profile victimProfile = lifeSteal.getProfileManager().getProfile(victim.getUniqueId());
-            victimProfile.setLostHearts(victimProfile.getLostHearts() - 1);
-          } catch (SQLException e) {
-            lifeSteal.getInstance().getLogger().log(Level.WARNING, e.toString());
-          }
+          lifeSteal.getProfileManager().getProfileCache().get
+                  (victim.getUniqueId()).setCurrentHearts(
+                          lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
+          lifeSteal.getProfileManager().getProfileCache().get
+                  (victim.getUniqueId()).setLostHearts(
+                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + lostHearts);
           victim.getWorld().dropItemNaturally(victim.getLocation(), replacementHeart);
         } else {
           victim.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Other")));
@@ -79,6 +85,18 @@ public class PlayerDeathListener implements Listener {
         }
         if (!(disabledWorldsNatural.contains(victim.getWorld().getName()))) {
           lifeSteal.getUtils().transferHearts(victim, victim.getKiller());
+          lifeSteal.getProfileManager().getProfileCache().get
+                  (victim.getUniqueId()).setCurrentHearts(
+                          lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
+          lifeSteal.getProfileManager().getProfileCache().get
+                  (victim.getKiller().getUniqueId()).setCurrentHearts(
+                          lifeSteal.getProfileManager().getProfileCache().get(victim.getKiller().getUniqueId()).getCurrentHearts() + lostHearts);
+          lifeSteal.getProfileManager().getProfileCache().get
+                  (victim.getUniqueId()).setLostHearts(
+                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + lostHearts);
+          lifeSteal.getProfileManager().getProfileCache().get
+                  (victim.getUniqueId()).setPeakHeartsReached(
+                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getPeakHeartsReached() + lostHearts);
         } else {
           victim.getKiller().sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Killer")));
           victim.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Victim")));

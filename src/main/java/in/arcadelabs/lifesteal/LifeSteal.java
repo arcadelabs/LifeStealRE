@@ -249,6 +249,7 @@ public class LifeSteal {
               new HeartCraftListener(),
               new PlayerJoinListener(),
               new ArrowPickupEvent(),
+              new ProfileListener(),
       };
       Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
       return true;

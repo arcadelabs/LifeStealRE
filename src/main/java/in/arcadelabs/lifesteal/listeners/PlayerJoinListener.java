@@ -34,6 +34,7 @@ public class PlayerJoinListener implements Listener {
   @EventHandler(priority = EventPriority.NORMAL)
   public void onPlayerJoin(final PlayerJoinEvent event) {
     final Player player = event.getPlayer();
-    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts());
+    lifeSteal.getUtils().setPlayerHearts(player,
+            lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts());
   }
 }

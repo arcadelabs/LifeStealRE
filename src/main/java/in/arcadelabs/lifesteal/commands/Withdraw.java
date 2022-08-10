@@ -77,6 +77,13 @@ public class Withdraw extends BaseCommand {
                 Placeholder.unparsed("hearts", String.valueOf(hearts)));
         lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
                 lifeSteal.getKey("Sounds.HeartWithdraw"));
+
+        lifeSteal.getProfileManager().getProfileCache().get
+                (player.getUniqueId()).setCurrentHearts(
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + hearts));
+        lifeSteal.getProfileManager().getProfileCache().get
+                (player.getUniqueId()).setLostHearts(
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
       }
     } else {
       player.sendMessage(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));

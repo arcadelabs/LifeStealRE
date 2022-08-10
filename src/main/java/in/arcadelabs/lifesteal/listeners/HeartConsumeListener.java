@@ -71,6 +71,25 @@ public class HeartConsumeListener implements Listener {
       lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
       lifeSteal.getInteraction().retuurn(Logger.Level.INFO, consumeMessages, player, consumeSound);
 
+      lifeSteal.getProfileManager().getProfileCache().get
+              (player.getUniqueId()).setCurrentHearts(
+              (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + (int) healthPoints));
+      lifeSteal.getProfileManager().getProfileCache().get
+              (player.getUniqueId()).setPeakHeartsReached(
+              (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getPeakHeartsReached() + (int) healthPoints));
+
+      switch (type != null ? type : "Normal") {
+        case "Blessed" -> lifeSteal.getProfileManager().getProfileCache().get
+                (player.getUniqueId()).setBlessedHearts(
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getBlessedHearts() + (int) healthPoints));
+        case "Normal" -> lifeSteal.getProfileManager().getProfileCache().get
+                (player.getUniqueId()).setNormalHearts(
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getNormalHearts() + (int) healthPoints));
+        case "Cursed" -> lifeSteal.getProfileManager().getProfileCache().get
+                (player.getUniqueId()).setCursedHearts(
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCursedHearts() + (int) healthPoints));
+      }
+
       Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () ->
               player.setHealth(Math.min(player.getHealth() +
                       healthPoints, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
