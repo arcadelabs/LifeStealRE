@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal;
 
-import in.arcadelabs.labaide.logger.Logger;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -53,7 +52,6 @@ public final class LifeStealPlugin extends JavaPlugin {
     lifeSteal = new LifeSteal();
     try {
       lifeSteal.init();
-      lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(lifeSteal.getKey("Messages.LifestealLoad")));
     } catch (Exception e) {
       this.getLogger()
               .warning(

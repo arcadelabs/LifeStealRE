@@ -20,7 +20,6 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import in.arcadelabs.lifesteal.database.profile.Profile;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,9 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
 
 public class PlayerDeathListener implements Listener {
 
@@ -98,8 +95,10 @@ public class PlayerDeathListener implements Listener {
                   (victim.getUniqueId()).setPeakHeartsReached(
                   lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getPeakHeartsReached() + lostHearts);
         } else {
-          victim.getKiller().sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Killer")));
-          victim.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Victim")));
+          victim.getKiller().sendMessage(lifeSteal.getUtils().formatString(
+                  lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Killer")));
+          victim.sendMessage(lifeSteal.getUtils().formatString(
+                  lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Victim")));
         }
       }
     }
