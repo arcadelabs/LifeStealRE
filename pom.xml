@@ -6,7 +6,7 @@
 
     <groupId>in.arcadelabs</groupId>
     <artifactId>LifeStealRE</artifactId>
-    <version>1.6</version>
+    <version>1.7</version>
     <packaging>jar</packaging>
 
     <name>LifeStealRE</name>
@@ -101,7 +101,7 @@
         <dependency>
             <groupId>com.github.arcadelabs</groupId>
             <artifactId>LabAide</artifactId>
-            <version>pre-9</version>
+            <version>pre-10</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
