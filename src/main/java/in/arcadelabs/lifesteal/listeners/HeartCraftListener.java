@@ -42,11 +42,10 @@ public class HeartCraftListener implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onCraftEvent(final CraftItemEvent event) {
     if (!(Objects.equals(event.getRecipe().getResult(), LifeStealPlugin.getLifeSteal().getPlaceholderHeart()))) return;
-    Player player = event.getWhoClicked().getKiller();
+    Player player = (Player) event.getWhoClicked();
     if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft").size() != 0) {
       disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft");
     }
-    assert player != null;
     if (!disabledWorlds.contains(player.getWorld().getName())) {
       if (event.isShiftClick()) event.setCancelled(true);
       heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
