@@ -65,12 +65,16 @@ public class ProfileManager {
       databaseHandler.getProfileDao().refresh(profile);
     } else {
       profile.setLifeState(LifeState.LIVING);
-      profile.setCurrentHearts(lifeSteal.getConfig().getInt("DefaultHearts"));
+      if (Bukkit.getPlayer(profile.getUniqueID()).hasPlayedBefore())
+        profile.setCurrentHearts((int) lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
+      else profile.setCurrentHearts(lifeSteal.getConfig().getInt("DefaultHearts"));
       profile.setLostHearts(0);
       profile.setNormalHearts(0);
       profile.setBlessedHearts(0);
       profile.setCursedHearts(0);
-      profile.setPeakHeartsReached(lifeSteal.getConfig().getInt("DefaultHearts"));
+      if (Bukkit.getPlayer(profile.getUniqueID()).hasPlayedBefore())
+        profile.setPeakHeartsReached((int) lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
+      else  profile.setPeakHeartsReached(lifeSteal.getConfig().getInt("DefaultHearts"));
       databaseHandler.getProfileDao().create(profile);
       databaseHandler.getProfileDao().refresh(profile);
     }
