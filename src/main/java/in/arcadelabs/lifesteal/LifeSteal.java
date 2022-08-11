@@ -232,6 +232,7 @@ public class LifeSteal {
               new PlayerPotionEffectListener(),
               new PlayerResurrectListener(),
               new PlayerDamageListener(),
+              new ServerReloadListener(),
               new HeartConsumeListener(),
               new PlayerDeathListener(),
               new HeartPlaceListener(),
