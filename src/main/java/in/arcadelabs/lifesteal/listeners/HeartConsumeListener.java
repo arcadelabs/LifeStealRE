@@ -55,8 +55,10 @@ public class HeartConsumeListener implements Listener {
       if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
               .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
       if (player.getInventory().getItemInMainHand().getType().isEdible()) {
-        if (player.getFoodLevel() == 20) player.setFoodLevel(19);
-        instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
+        if (player.getFoodLevel() == 20) {
+          player.setFoodLevel(19);
+          instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
+        }
       } else {
         if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
           disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
