@@ -66,20 +66,21 @@ public final class LifeStealPlugin extends JavaPlugin {
 
     if (this.labaideExist) {
       lifeSteal.getDatabaseHandler().getHikariExecutor()
-              .execute(() -> lifeSteal.getProfileManager()
-                      .getProfileCache()
-                      .values().forEach(profile -> {
-                        try {
-                          lifeSteal.getProfileManager().saveProfile(profile);
-                        } catch (SQLException e) {
-                          e.printStackTrace();
-                        }
-                        try {
-                          lifeSteal.getDatabaseHandler().disconnect();
-                        } catch (Exception e) {
-                          e.printStackTrace();
-                        }
-                      }));
+              .execute(() -> lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
+                try {
+                  if (!lifeSteal.getProfileManager().getProfileCache().isEmpty())
+                    lifeSteal.getProfileManager().saveProfile(profile);
+                } catch (SQLException e) {
+                  lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(),
+                          NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                }
+                try {
+                  lifeSteal.getDatabaseHandler().disconnect();
+                } catch (Exception e) {
+                  lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(),
+                          NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                }
+              }));
     }
     this.getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
     this.getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
