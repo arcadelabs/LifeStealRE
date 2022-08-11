@@ -27,7 +27,7 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
 ## Features,
 
-![Progress](https://progress-bar.dev/70/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
+![Progress](https://progress-bar.dev/80/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
 
 - [x] HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages,
   and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an
@@ -44,12 +44,12 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 - [x] Hearts can have custom texture model ID which resource packs will use to replace the textures.
 - [x] 100% Customizable messages and sounds.
 - [x] Very configurable per world feature toggle.
+- [x] MySQL and SQLite database support.
+- [x] Player elimination, ban/spectator/spectate
+  body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - [ ] Heart consume animations and particle effects (work in progress, don't expect proper
   functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - [ ] Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- [ ] MySQL and SQLite database support. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- [ ] Player elimination, ban/spectator/spectate
-  body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - [ ] And tons of other stuff that I'm gonna send screenshot of because me lazy...
   I blured some stuff out because they're upcoming more exciting features 😈
 
