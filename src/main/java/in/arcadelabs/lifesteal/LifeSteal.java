@@ -301,5 +301,16 @@ public class LifeSteal {
     fancyStuff.setCursedHeartsStatus(heartItemManager.getCursedHearts().isEmpty());
 
     fancyStuff.consolePrint();
+
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, () ->
+            this.getDatabaseHandler().getHikariExecutor()
+                    .execute(() -> this.getProfileManager().getProfileCache().values().forEach(profile -> {
+                      try {
+                        if (!this.getProfileManager().getProfileCache().isEmpty())
+                          this.getProfileManager().saveProfile(profile);
+                      } catch (SQLException e) {
+                        logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                      }
+                    })), 1L, 6000L);
   }
 }
