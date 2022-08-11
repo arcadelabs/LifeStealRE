@@ -80,7 +80,7 @@ public class Withdraw extends BaseCommand {
 
         lifeSteal.getProfileManager().getProfileCache().get
                 (player.getUniqueId()).setCurrentHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + hearts));
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() - hearts));
         lifeSteal.getProfileManager().getProfileCache().get
                 (player.getUniqueId()).setLostHearts(
                 (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
