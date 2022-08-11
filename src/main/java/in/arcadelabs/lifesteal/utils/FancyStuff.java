@@ -29,19 +29,17 @@ public class FancyStuff {
   private final LifeStealPlugin instance;
   private final MiniMessage miniMessage;
   private final Logger noPrefixLogger;
+  private boolean configStatus, langStatus, heartsStatus,
+          databaseMode, databaseStatus, profilesStatus,
+          commandsStatus, listenersStatus, recipeStatus,
+          blessedHeartsStatus, normalHeartsStatus, cursedHeartsStatus;
+  private int blessedHeartsCount, normalHeartsCount, cursedHeartsCount;
 
   public FancyStuff(final LifeStealPlugin instance, final MiniMessage miniMessage) {
     this.instance = instance;
     this.miniMessage = miniMessage;
     this.noPrefixLogger = new Logger("LifeSteal", Component.empty(), null, null);
   }
-
-  private boolean configStatus, langStatus, heartsStatus,
-          databaseMode, databaseStatus, profilesStatus,
-          commandsStatus, listenersStatus, recipeStatus,
-          blessedHeartsStatus, normalHeartsStatus, cursedHeartsStatus;
-
-  private int blessedHeartsCount, normalHeartsCount, cursedHeartsCount;
 
   public void setConfigStatus(final boolean configStatus) {
     this.configStatus = configStatus;

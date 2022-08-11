@@ -18,8 +18,11 @@
 
 package in.arcadelabs.lifesteal;
 
+import in.arcadelabs.labaide.logger.Logger;
 import lombok.Getter;
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,10 +85,7 @@ public final class LifeStealPlugin extends JavaPlugin {
                 }
               }));
     }
-    this.getLogger().info(ChatColor.of("#f72585") + "  ___  _  _   __   ");
-    this.getLogger().info(ChatColor.of("#b5179e") + " / __)( \\/ ) /__\\  ");
-    this.getLogger().info(ChatColor.of("#7209b7") + "( (__  \\  / /(__)\\ ");
-    this.getLogger().info(ChatColor.of("#560bad") + " \\___) (__)(__)(__)... on the other side");
-    this.getLogger().info(ChatColor.of("#560bad") + " ");
+    lifeSteal.getLogger().log(Logger.Level.INFO,
+            MiniMessage.miniMessage().deserialize("<b><gradient:#f58c67:#f10f5d>Adios...</gradient></b>"));
   }
 }

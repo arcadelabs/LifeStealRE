@@ -50,7 +50,7 @@ public class PlayerDeathListener implements Listener {
       }
       lifeSteal.getProfileManager().getProfileCache().get
               (victim.getUniqueId()).setCurrentHearts(
-                      lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - 1);
+              lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - 1);
       lifeSteal.getProfileManager().getProfileCache().get
               (victim.getUniqueId()).setLostHearts(
               lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + 1);
@@ -68,7 +68,7 @@ public class PlayerDeathListener implements Listener {
           lifeSteal.getUtils().setPlayerHearts(victim, lifeSteal.getUtils().getPlayerHearts(victim) - lostHearts);
           lifeSteal.getProfileManager().getProfileCache().get
                   (victim.getUniqueId()).setCurrentHearts(
-                          lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
+                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
           lifeSteal.getProfileManager().getProfileCache().get
                   (victim.getUniqueId()).setLostHearts(
                   lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + lostHearts);
@@ -84,10 +84,10 @@ public class PlayerDeathListener implements Listener {
           lifeSteal.getUtils().transferHearts(victim, victim.getKiller());
           lifeSteal.getProfileManager().getProfileCache().get
                   (victim.getUniqueId()).setCurrentHearts(
-                          lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
+                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
           lifeSteal.getProfileManager().getProfileCache().get
                   (victim.getKiller().getUniqueId()).setCurrentHearts(
-                          lifeSteal.getProfileManager().getProfileCache().get(victim.getKiller().getUniqueId()).getCurrentHearts() + lostHearts);
+                  lifeSteal.getProfileManager().getProfileCache().get(victim.getKiller().getUniqueId()).getCurrentHearts() + lostHearts);
           lifeSteal.getProfileManager().getProfileCache().get
                   (victim.getUniqueId()).setLostHearts(
                   lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + lostHearts);

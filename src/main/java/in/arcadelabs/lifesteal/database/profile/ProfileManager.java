@@ -25,6 +25,7 @@ import in.arcadelabs.lifesteal.database.DatabaseHandler;
 import in.arcadelabs.lifesteal.utils.LifeState;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class ProfileManager {
 
     if (this.hasProfile(uuid)) {
       lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
-              "<gradient:#f58c67:#f10f5d>Loading profile for " + uuid + "...</gradient>"));
+              "<gradient:#f58c67:#f10f5d>Loading " + Bukkit.getPlayer(uuid).getName() + "'s profile ...</gradient>"));
       return databaseHandler.getProfileDao().queryForId(uuid);
     } else {
       lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
