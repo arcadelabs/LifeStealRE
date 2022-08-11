@@ -27,10 +27,13 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.reload")
@@ -46,7 +49,7 @@ public class Reload extends BaseCommand {
    */
   @Subcommand("reload")
   @Description("Reloads the instance")
-  @CommandCompletion("All|Language.yml|Config.yml|Hearts.yml")
+  @CommandCompletion("All|Language.yml|Config.yml|Hearts.yml|Database")
   public void onReload(final CommandSender sender, final String file) throws IOException {
     if (sender instanceof final Player player) {
       switch (file) {
@@ -72,6 +75,19 @@ public class Reload extends BaseCommand {
           lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
           player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
         }
+        case "Database" -> {
+          lifeSteal.getDatabaseHandler().getHikariExecutor()
+                  .execute(() -> lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
+                    try {
+                      if (!lifeSteal.getProfileManager().getProfileCache().isEmpty())
+                        lifeSteal.getProfileManager().saveProfile(profile);
+                    } catch (SQLException e) {
+                      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                    }
+                  }));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
+          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
+        }
       }
     } else {
       switch (file) {
@@ -92,6 +108,18 @@ public class Reload extends BaseCommand {
         case "Hearts.yml" -> {
           lifeSteal.getHeartConfig().reload();
           lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+        }
+        case "Database" -> {
+          lifeSteal.getDatabaseHandler().getHikariExecutor()
+                  .execute(() -> lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
+                    try {
+                      if (!lifeSteal.getProfileManager().getProfileCache().isEmpty())
+                        lifeSteal.getProfileManager().saveProfile(profile);
+                    } catch (SQLException e) {
+                      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                    }
+                  }));
+          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
         }
       }
     }
