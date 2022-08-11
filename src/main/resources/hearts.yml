@@ -1,4 +1,4 @@
-Version: 5
+Version: 6
 Hearts:
   #  FIXED_BLESSED | FIXED_NORMAL | FIXED_CURSED | RANDOM_BLESSED | RANDOM_NORMAL | RANDOM_CURSED | RANDOM_ALL
   Mode:
@@ -23,7 +23,7 @@ Hearts:
             - '<gradient:#f72585:#e01e37>═════════════════════════'
           #            For resourcepack usage.
           ModelData: 123456
-          HealthPoints: 2
+          HeartPoints: 1
           Effects:
             Regen:
               Type: regeneration
@@ -53,7 +53,7 @@ Hearts:
           #          https://minecraft-heads.com/custom-heads/search?searchword=heart
           #          Go down and check for 'value' fiels and copy paste that down below.
           SkullTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmQzNmMzMjkxZmUwMmQxNDJjNGFmMjhkZjJmNTViYjAzOTdlMTk4NTU0ZTgzNDU5OTBkYmJjZDRjMTQwMzE2YiJ9fX0="
-          HealthPoints: 2
+          HeartPoints: 1
           Effects:
             Speed:
               Type: speed
@@ -84,7 +84,7 @@ Hearts:
             - '<dark_green>  ◆ Hunger <blue>2 <gray>| <green>120s'
             - '<gradient:#f72585:#e01e37>═════════════════════════'
           ModelData: 123456
-          HealthPoints: 2
+          HeartPoints: 1
           Effects:
             Hunger:
               Type: hunger
@@ -109,7 +109,7 @@ Hearts:
             - '<dark_purple>  ◆ Blindness <blue>2 <gray>| <green>120s'
             - '<gradient:#f72585:#e01e37>═════════════════════════'
           ModelData: 123456
-          HealthPoints: 2
+          HeartPoints: 1
           Effects:
             Blind:
               Type: blindness

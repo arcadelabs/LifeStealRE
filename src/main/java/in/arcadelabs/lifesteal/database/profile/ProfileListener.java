@@ -18,9 +18,11 @@
 
 package in.arcadelabs.lifesteal.database.profile;
 
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,37 +35,35 @@ import java.sql.SQLException;
 
 public class ProfileListener implements Listener {
 
-  private final LifeSteal instance = LifeStealPlugin.getLifeSteal();
+  private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void handleJoin(PlayerJoinEvent event) {
 
-    if (!(LifeStealPlugin.getInstance()
-            .getServer()
-            .getPluginManager()
-            .isPluginEnabled(LifeStealPlugin.getInstance()))) {
-      event.getPlayer().kick(
-              Component.text("Server still loading, please join after some time",
-                      TextColor.color(102, 0, 205)), PlayerKickEvent.Cause.TIMEOUT);
+    if (!(instance.getServer().getPluginManager().isPluginEnabled(instance))) {
+      event.getPlayer().kick(Component.text("Server still loading, please join after some time",
+              TextColor.color(102, 0, 205)), PlayerKickEvent.Cause.TIMEOUT);
     }
     try {
-      instance.getProfileManager().getProfileCache()
-              .put(event.getPlayer().getUniqueId(), instance.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
+      lifeSteal.getProfileManager().getProfileCache()
+              .put(event.getPlayer().getUniqueId(),
+                      lifeSteal.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
     } catch (SQLException e) {
-      event.getPlayer().kick(
-              Component.text("FAILED TO LOAD YOUR ACCOUNT!",
-                      TextColor.color(255, 0, 0)), PlayerKickEvent.Cause.TIMEOUT);
-      e.printStackTrace();
+      event.getPlayer().kick(Component.text("FAILED TO LOAD YOUR ACCOUNT!",
+              TextColor.color(255, 0, 0)), PlayerKickEvent.Cause.TIMEOUT);
+      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
     }
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPlayerQuit(PlayerQuitEvent event) {
-    instance.getDatabaseHandler().getHikariExecutor().execute(() -> {
+    lifeSteal.getDatabaseHandler().getHikariExecutor().execute(() -> {
       try {
-        instance.getProfileManager().saveProfile(instance.getProfileManager().getProfileCache().get(event.getPlayer().getUniqueId()));
+        lifeSteal.getProfileManager().saveProfile(
+                lifeSteal.getProfileManager().getProfileCache().get(event.getPlayer().getUniqueId()));
       } catch (SQLException e) {
-        e.printStackTrace();
+        lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
       }
     });
   }

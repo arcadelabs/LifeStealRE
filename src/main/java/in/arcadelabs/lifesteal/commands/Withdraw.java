@@ -62,11 +62,12 @@ public class Withdraw extends BaseCommand {
       if (hearts * 2 >= lifeSteal.getUtils().getPlayerHearts(player)) {
         player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.NotEnoughHearts")));
       } else {
-        lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) - hearts * 2);
-        heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
-                .prepareIngedients()
-                .cookHeart(hearts * 2);
-        replacementHeart = heartItemManager.getHeartItem();
+        lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) - hearts);
+          heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
+                  .prepareIngedients()
+                  .cookHeart();
+          replacementHeart = heartItemManager.getHeartItem();
+          replacementHeart.setAmount(hearts);
 
         final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
         for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
@@ -77,6 +78,13 @@ public class Withdraw extends BaseCommand {
                 Placeholder.unparsed("hearts", String.valueOf(hearts)));
         lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
                 lifeSteal.getKey("Sounds.HeartWithdraw"));
+
+        lifeSteal.getProfileManager().getProfileCache().get
+                (player.getUniqueId()).setCurrentHearts(
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() - hearts));
+        lifeSteal.getProfileManager().getProfileCache().get
+                (player.getUniqueId()).setLostHearts(
+                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
       }
     } else {
       player.sendMessage(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));

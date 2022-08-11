@@ -18,12 +18,14 @@
 
 package in.arcadelabs.lifesteal.database.profile;
 
+import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
 import in.arcadelabs.lifesteal.utils.LifeState;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -34,11 +36,10 @@ import java.util.UUID;
 public class ProfileManager {
 
   @Getter(AccessLevel.NONE)
-  private final DatabaseHandler databaseHandler =
-          LifeStealPlugin.getLifeSteal().getDatabaseHandler();
+  private final DatabaseHandler databaseHandler = LifeStealPlugin.getLifeSteal().getDatabaseHandler();
 
   private final Map<UUID, Profile> profileCache = new HashMap<>();
-  private final LifeSteal instance = LifeStealPlugin.getLifeSteal();
+  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   public boolean hasProfile(UUID uuid) throws SQLException {
     return databaseHandler.getProfileDao().idExists(uuid);
@@ -48,30 +49,35 @@ public class ProfileManager {
     Profile profile = new Profile(uuid);
 
     if (this.hasProfile(uuid)) {
-      instance.getInstance().getLogger().info("Profile found for " + uuid + " !, Loading...");
+      lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
+              "<gradient:#f58c67:#f10f5d>Loading " + Bukkit.getPlayer(uuid).getName() + "'s profile ...</gradient>"));
       return databaseHandler.getProfileDao().queryForId(uuid);
     } else {
-      instance.getInstance().getLogger().info("Profile not found for " + uuid + " !, Creating...");
+      lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
+              "<gradient:#f58c67:#f10f5d>Profile not found for " + uuid + " ! Creating...</gradient>"));
       this.saveProfile(profile);
     }
     return profile;
   }
 
-  public Profile saveProfile(Profile profile) throws SQLException {
+  public void saveProfile(Profile profile) throws SQLException {
     if (this.hasProfile(profile.getUniqueID())) {
       databaseHandler.getProfileDao().update(profile);
       databaseHandler.getProfileDao().refresh(profile);
     } else {
       profile.setLifeState(LifeState.LIVING);
-      profile.setCurrentHearts(instance.getConfig().getInt("DefaultHealth"));
+      if (Bukkit.getPlayer(profile.getUniqueID()).hasPlayedBefore())
+        profile.setCurrentHearts((int) lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
+      else profile.setCurrentHearts(lifeSteal.getConfig().getInt("DefaultHearts"));
       profile.setLostHearts(0);
       profile.setNormalHearts(0);
       profile.setBlessedHearts(0);
       profile.setCursedHearts(0);
-      profile.setPeakHeartsReached(instance.getConfig().getInt("DefaultHealth"));
+      if (Bukkit.getPlayer(profile.getUniqueID()).hasPlayedBefore())
+        profile.setPeakHeartsReached((int) lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
+      else  profile.setPeakHeartsReached(lifeSteal.getConfig().getInt("DefaultHearts"));
       databaseHandler.getProfileDao().create(profile);
       databaseHandler.getProfileDao().refresh(profile);
     }
-    return profile;
   }
 }

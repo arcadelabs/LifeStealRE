@@ -147,7 +147,9 @@ public class SpiritFactory {
 
   public void restoreXP(final Player player) {
     if (!(player.getPersistentDataContainer().has(new NamespacedKey(instance, "lifesteal_player_xp")))) return;
-    player.setTotalExperience(player.getPersistentDataContainer().get(new NamespacedKey(instance, "lifesteal_player_xp"), PersistentDataType.INTEGER));
+    player.setTotalExperience(
+            player.getPersistentDataContainer().get(new NamespacedKey(instance,
+                    "lifesteal_player_xp"), PersistentDataType.INTEGER));
   }
 
   /**

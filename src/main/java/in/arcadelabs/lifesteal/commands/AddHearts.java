@@ -46,7 +46,7 @@ public class AddHearts extends BaseCommand {
   @CommandAlias("addhearts")
   public void onAddHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) + (hearts * 2));
+    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) + hearts);
     player.setHealth(Math.min(player.getHealth() +
             hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
@@ -58,5 +58,11 @@ public class AddHearts extends BaseCommand {
             playerName);
     lifeSteal.getInteraction().retuurn(Logger.Level.INFO, addHeartsMsg, player,
             lifeSteal.getKey("Sounds.AddHearts"));
+    lifeSteal.getProfileManager().getProfileCache().get
+            (player.getUniqueId()).setCurrentHearts(
+            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + hearts));
+    lifeSteal.getProfileManager().getProfileCache().get
+            (player.getUniqueId()).setPeakHeartsReached(
+            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getPeakHeartsReached() + hearts));
   }
 }

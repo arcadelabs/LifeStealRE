@@ -27,6 +27,7 @@ public class ArrowPickupEvent implements Listener {
 
   @EventHandler
   public void onArrowPickup(final PlayerPickupArrowEvent event) {
+    if (event.isCancelled()) return;
     if (!LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(event.getPlayer())) return;
     event.setCancelled(true);
   }

@@ -19,6 +19,7 @@
 package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,9 +30,15 @@ public class PlayerResurrectListener implements Listener {
   @EventHandler
   public void onPlayerResurrect(final EntityResurrectEvent event) {
     if (event.getEntity() instanceof final Player player) {
-      event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
-      player.sendMessage(LifeStealPlugin.getLifeSteal().getUtils().formatString(
-              LifeStealPlugin.getLifeSteal().getKey("Messages.DisabledStuff.Totem")));
+      if (event.isCancelled()) return;
+      if (player.getInventory().getItemInMainHand().getType() == Material.TOTEM_OF_UNDYING ||
+              player.getInventory().getItemInOffHand().getType() == Material.TOTEM_OF_UNDYING) {
+        if (LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem")) {
+          event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableTotem"));
+          player.sendMessage(LifeStealPlugin.getLifeSteal().getUtils().formatString(
+                  LifeStealPlugin.getLifeSteal().getKey("Messages.DisabledStuff.Totem")));
+        }
+      }
     }
   }
 }

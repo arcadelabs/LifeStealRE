@@ -32,9 +32,11 @@ public class PlayerPotionEffectListener implements Listener {
 
       if (event.getCause() == EntityPotionEffectEvent.Cause.MILK) {
         if (event.isCancelled()) return;
-        event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure"));
-        player.sendMessage(LifeStealPlugin.getLifeSteal().getUtils().formatString(
-                LifeStealPlugin.getLifeSteal().getKey("Messages.DisabledStuff.MilkCure")));
+        if (LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure")) {
+          event.setCancelled(LifeStealPlugin.getLifeSteal().getConfig().getBoolean("DisableMilkCure"));
+          player.sendMessage(LifeStealPlugin.getLifeSteal().getUtils().formatString(
+                  LifeStealPlugin.getLifeSteal().getKey("Messages.DisabledStuff.MilkCure")));
+        }
       }
       if (LifeStealPlugin.getLifeSteal().getSpiritFactory().getSpirits().contains(player)) {
         if (event.getCause() == EntityPotionEffectEvent.Cause.AREA_EFFECT_CLOUD ||
