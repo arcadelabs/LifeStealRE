@@ -21,7 +21,5 @@ package in.arcadelabs.lifesteal.utils;
 public enum LifeState {
 
   LIVING,
-  DEAD,
-  SPIRIT,
-  BANNED
+  DEAD
 }
