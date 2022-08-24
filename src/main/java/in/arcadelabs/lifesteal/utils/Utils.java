@@ -28,7 +28,6 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
@@ -149,9 +148,9 @@ public class Utils {
    */
   public void giveHeartEffects(final Player target, final ItemMeta heartMeta, final JavaPlugin instance) {
     final String itemType = heartMeta.getPersistentDataContainer().get
-            (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
+            (this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_itemtype"), PersistentDataType.STRING);
     final String itemIndex = heartMeta.getPersistentDataContainer().get
-            (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
+            (this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_itemindex"), PersistentDataType.STRING);
     final String effectsPath = "Hearts.Types." + itemType + "." + itemIndex + ".Properties.Effects";
     final Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getSection(effectsPath)).getRoutesAsStrings(false);
 

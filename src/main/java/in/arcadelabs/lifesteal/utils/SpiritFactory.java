@@ -24,7 +24,6 @@ import in.arcadelabs.lifesteal.LifeStealPlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -128,7 +127,7 @@ public class SpiritFactory {
         invOutput.writeObject(inventory.getItem(i));
       }
       invOutput.close();
-      player.getPersistentDataContainer().set(new NamespacedKey(instance, "lifesteal_player_inventory"),
+      player.getPersistentDataContainer().set(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory"),
               PersistentDataType.STRING,
               Base64Coder.encodeLines(invStream.toByteArray()));
       inventory.clear();
@@ -138,18 +137,18 @@ public class SpiritFactory {
   }
 
   public void saveXP(final Player player) {
-    final int XP = player.getTotalExperience();
-    player.getPersistentDataContainer().set(new NamespacedKey(instance, "lifesteal_player_xp"),
+    player.getPersistentDataContainer().set(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_xp"),
             PersistentDataType.INTEGER,
-            XP);
-    player.setTotalExperience(0);
+            ExperienceManager.getExp(player));
+    player.setExp(0);
+    player.setLevel(0);
   }
 
   public void restoreXP(final Player player) {
-    if (!(player.getPersistentDataContainer().has(new NamespacedKey(instance, "lifesteal_player_xp")))) return;
-    player.setTotalExperience(
-            player.getPersistentDataContainer().get(new NamespacedKey(instance,
-                    "lifesteal_player_xp"), PersistentDataType.INTEGER));
+    if (!(player.getPersistentDataContainer().has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_xp")))) return;
+    ExperienceManager.changeExp(player,
+            player.getPersistentDataContainer().get(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_xp"),
+                    PersistentDataType.INTEGER));
   }
 
   /**
@@ -160,9 +159,9 @@ public class SpiritFactory {
   public void loadInventory(final Player player) {
     final PlayerInventory inventory = player.getInventory();
     inventory.clear();
-    if (!player.getPersistentDataContainer().has(new NamespacedKey(instance, "lifesteal_player_inventory"))) return;
-    final String base64Inv = player.getPersistentDataContainer().get(new NamespacedKey(instance,
-            "lifesteal_player_inventory"), PersistentDataType.STRING);
+    if (!player.getPersistentDataContainer().has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory"))) return;
+    final String base64Inv = player.getPersistentDataContainer().get(
+            this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory"), PersistentDataType.STRING);
     try {
       assert base64Inv != null;
       try (final ByteArrayInputStream invStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64Inv));
@@ -172,10 +171,10 @@ public class SpiritFactory {
           try {
             inventory.setItem(i, (ItemStack) invOutput.readObject());
           } catch (ClassNotFoundException e) {
-            lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
+            this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
           }
         }
-        player.getPersistentDataContainer().remove(new NamespacedKey(instance, "lifesteal_player_inventory"));
+        player.getPersistentDataContainer().remove(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory"));
       }
     } catch (IOException e) {
       lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());

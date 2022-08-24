@@ -19,7 +19,6 @@
 package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -30,7 +29,7 @@ public class HeartPlaceListener implements Listener {
   @EventHandler
   public void onPlace(final BlockPlaceEvent event) {
     if (event.getItemInHand().getItemMeta().getPersistentDataContainer().has(
-            new NamespacedKey(LifeStealPlugin.getInstance(), "lifesteal_heart_item"), PersistentDataType.STRING)) {
+            LifeStealPlugin.getLifeSteal().getNamespacedKeyBuilder().getNewKey("heart_item"), PersistentDataType.STRING)) {
       event.setCancelled(true);
       event.getPlayer().sendMessage(LifeStealPlugin.getLifeSteal().getUtils().formatString(
               LifeStealPlugin.getLifeSteal().getKey("Messages.DisabledStuff.HeartItemPlace")));

@@ -128,7 +128,12 @@ public class HeartConsumeListener implements Listener {
     final ItemMeta heartMeta = event.getItem().getItemMeta();
 
     if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
-            .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
+            .has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_item"), PersistentDataType.STRING))) return;
+    if (!this.lifeSteal.getConfig().getInt("Max-Hearts").equals(-1) &&
+            this.lifeSteal.getConfig().getInt("Max-Hearts").equals((int) this.lifeSteal.getUtils().getPlayerHearts(player))) {
+      player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.MaxHeartsReached.Consume")));
+      event.setCancelled(true);
+    } else {
 
       if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
         this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");

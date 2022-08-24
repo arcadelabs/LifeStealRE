@@ -31,7 +31,7 @@ import in.arcadelabs.labaide.libs.boostedyaml.settings.loader.LoaderSettings;
 import in.arcadelabs.labaide.libs.boostedyaml.settings.updater.UpdaterSettings;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.labaide.metrics.BStats;
-import in.arcadelabs.labaide.updatechecker.UpdateChecker;
+import in.arcadelabs.labaide.namespacedkey.NamespacedKeyBuilder;
 import in.arcadelabs.lifesteal.commands.AddHearts;
 import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.GiveHearts;
@@ -278,7 +278,7 @@ public class LifeSteal {
 
     miniMessage = MiniMessage.miniMessage();
 
-    fancyStuff = new FancyStuff(instance, miniMessage);
+    this.namespacedKeyBuilder = new NamespacedKeyBuilder("lifesteal", this.instance);
 
     langInit();
 

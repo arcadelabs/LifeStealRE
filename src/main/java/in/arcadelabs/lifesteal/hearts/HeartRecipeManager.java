@@ -21,7 +21,6 @@ package in.arcadelabs.lifesteal.hearts;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ShapedRecipe;
 
 public class HeartRecipeManager {
@@ -31,9 +30,8 @@ public class HeartRecipeManager {
 
   public HeartRecipeManager() {
     this.lifeSteal = LifeStealPlugin.getLifeSteal();
-    this.heartRecipe = new ShapedRecipe(new NamespacedKey(LifeStealPlugin.getInstance(),
-            "lifesteal_heart_recipe"),
-            lifeSteal.getPlaceholderHeart());
+    this.heartRecipe = new ShapedRecipe(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_recipe"),
+            this.lifeSteal.getPlaceholderHeart());
     this.heartRecipe.shape("ABC", "DEF", "GHI");
     final char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     for (final char recipeIngredient : recipeIngredients) {
