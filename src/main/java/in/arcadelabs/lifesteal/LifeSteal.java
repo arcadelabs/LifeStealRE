@@ -46,7 +46,6 @@ import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import in.arcadelabs.lifesteal.hearts.HeartRecipeManager;
-import in.arcadelabs.lifesteal.hearts.SkullMaker;
 import in.arcadelabs.lifesteal.listeners.*;
 import in.arcadelabs.lifesteal.utils.FancyStuff;
 import in.arcadelabs.lifesteal.utils.Interaction;
@@ -66,7 +65,6 @@ import org.bukkit.plugin.PluginManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -84,10 +82,10 @@ public class LifeSteal {
   private HeartRecipeManager heartRecipeManager;
   private YamlDocument config, heartConfig, language;
   private BStats metrics;
-  private HeartItemCooker heartItemCooker;
+  private ItemBuilder itemBuilder;
   private ItemStack placeholderHeart;
   private Interaction interaction;
-  private SkullMaker skullMaker;
+  private HeadBuilder headBuilder;
   private SpiritFactory spiritFactory;
   private Logger logger;
   private HeartItemManager heartItemManager;
@@ -178,16 +176,16 @@ public class LifeSteal {
 
   private void placeholderHeartInit() {
     try {
-      final int amount = config.getInt("HeartsToGain", 2) / 2;
-      heartItemCooker = new HeartItemCooker(Material.valueOf(config.getString("Heart.Properties.ItemType")))
-              .setHeartName(utils.formatString(config.getString("Heart.Properties.Name")))
-              .setHeartLore(utils.stringToComponentList(config.getStringList("Heart.Properties.Lore"),
+      final int amount = this.config.getInt("HeartsToTransfer", 1);
+      this.itemBuilder = new ItemBuilder(Material.valueOf(this.config.getString("Heart.Properties.ItemType")))
+              .setName(this.utils.formatString(this.config.getString("Heart.Properties.Name")))
+              .setLore(this.utils.stringToComponentList(this.config.getStringList("Heart.Properties.Lore"),
                       "hp", amount))
-              .setModelData(config.getInt("Heart.Properties.ModelData"))
-              .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
-              .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), amount)
-              .cook();
-      placeholderHeart = heartItemCooker.getCookedItem();
+              .setModelData(this.config.getInt("Heart.Properties.ModelData"))
+              .setPDCObject(this.namespacedKeyBuilder.getNewKey("heart_item"), PersistentDataType.STRING, "No heart spoofing, dum dum.")
+              .setPDCObject(this.namespacedKeyBuilder.getNewKey("heart_healthpoints"), PersistentDataType.DOUBLE, (double) amount)
+              .build();
+      this.placeholderHeart = this.itemBuilder.getBuiltItem();
     } catch (IllegalArgumentException e) {
       logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
     }
@@ -298,7 +296,7 @@ public class LifeSteal {
 
     spiritFactory = new SpiritFactory();
 
-    metrics = new BStats(LifeStealPlugin.getInstance(), 15272);
+    this.headBuilder = new HeadBuilder(this.logger, Logger.Level.ERROR);
 
     registerCommands();
 
