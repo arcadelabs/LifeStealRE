@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.labaide.experience.ExperienceManager;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
@@ -206,12 +207,23 @@ public class Utils {
       case "NONE" -> player.saveData();
     }
 
-    switch (lifeSteal.getConfig().getString("ExperienceMode")) {
-      case "DROP" -> player.getWorld().spawn(player.getLocation(), ExperienceOrb.class)
-              .setExperience(player.getTotalExperience());
-      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveXP(player);
-      case "CLEAR" -> player.setTotalExperience(0);
-      case "NONE" -> player.saveData();
+    switch (this.lifeSteal.getConfig().getString("ExperienceMode")) {
+      case "DROP" -> {
+        player.getWorld().spawn(player.getLocation(), ExperienceOrb.class).setExperience(ExperienceManager.getExp(player));
+        player.setLevel(0);
+        player.setExp(0);
+        this.lifeSteal.getSpiritFactory().saveXP(player);
+      }
+      case "SAVE_TO_RESTORE" -> this.lifeSteal.getSpiritFactory().saveXP(player);
+      case "CLEAR" -> {
+        player.setExp(0);
+        player.setLevel(0);
+        this.lifeSteal.getSpiritFactory().saveXP(player);
+      }
+      case "NONE" -> {
+        player.saveData();
+        this.lifeSteal.getSpiritFactory().saveXP(player);
+      }
     }
 
     switch (lifeSteal.getConfig().getString("Elimination")) {
@@ -252,6 +264,13 @@ public class Utils {
       case "DROP" -> {
         event.setShouldDropExperience(true);
         event.setKeepLevel(false);
+        this.lifeSteal.getSpiritFactory().saveXP(player);
+      }
+      case "SAVE_TO_RESTORE" -> this.lifeSteal.getSpiritFactory().saveXP(player);
+      case "CLEAR" -> {
+        player.setExp(0);
+        player.setLevel(0);
+        this.lifeSteal.getSpiritFactory().saveXP(player);
       }
       case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveXP(player);
       case "CLEAR" -> player.setTotalExperience(0);
