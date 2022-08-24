@@ -18,16 +18,17 @@
 
 package in.arcadelabs.lifesteal.hearts;
 
+import in.arcadelabs.labaide.item.ItemBuilder;
 import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
+import in.arcadelabs.labaide.randomizer.ProbabilityCollection;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import in.arcadelabs.lifesteal.utils.ProbabilityCollection;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class HeartItemManager {
   private final ProbabilityCollection<Integer> randomBlessCol;
   private final ProbabilityCollection<Integer> randomNormalCol;
   private final ProbabilityCollection<Integer> randomCurseCol;
-  private HeartItemCooker heartItemCooker;
+  private ItemBuilder itemBuilder;
   private ItemStack heartItem;
   private String skullData;
   private Material heartType;
@@ -84,15 +85,15 @@ public class HeartItemManager {
     this.mode = mode;
 
     for (int i = 0; i < this.blessedHearts.size(); i++) {
-      this.randomBlessCol.add(Integer.valueOf(this.blessedRarity[i]), Integer.parseInt(this.blessedRarity[i]));
+      this.randomBlessCol.add(Integer.parseInt(this.blessedRarity[i]), Integer.parseInt(this.blessedRarity[i]));
     }
 
     for (int i = 0; i < this.normalHearts.size(); i++) {
-      this.randomNormalCol.add(Integer.valueOf(this.normalRarity[i]), Integer.parseInt(this.normalRarity[i]));
+      this.randomNormalCol.add(Integer.parseInt(this.normalRarity[i]), Integer.parseInt(this.normalRarity[i]));
     }
 
     for (int i = 0; i < this.cursedHearts.size(); i++) {
-      this.randomCurseCol.add(Integer.valueOf(this.cursedRarity[i]), Integer.parseInt(this.cursedRarity[i]));
+      this.randomCurseCol.add(Integer.parseInt(this.cursedRarity[i]), Integer.parseInt(this.cursedRarity[i]));
     }
   }
 
@@ -166,21 +167,21 @@ public class HeartItemManager {
    */
   public HeartItemManager cookHeart() {
     if (this.heartType == Material.PLAYER_HEAD) {
-      this.heartItemCooker = new HeartItemCooker(this.heartType, lifeSteal.getSkullMaker().createSkullMap(this.skullData));
+      this.itemBuilder = new ItemBuilder(this.heartType, lifeSteal.getHeadBuilder().createSkullMap(this.skullData));
     } else {
-      this.heartItemCooker = new HeartItemCooker(this.heartType);
+      this.itemBuilder = new ItemBuilder(this.heartType);
     }
-    this.heartItemCooker
-            .setHeartName(this.heartName.decoration(TextDecoration.ITALIC, false))
-            .setHeartLore(this.heartLore)
+    this.itemBuilder
+            .setName(this.heartName.decoration(TextDecoration.ITALIC, false))
+            .setLore(this.heartLore)
             .setModelData(this.modelData)
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemtype"), this.type)
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemindex"), this.index)
-            .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), this.healthPoints)
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_consumesound"), this.consumeSound)
-            .cook();
-    this.heartItem = this.heartItemCooker.getCookedItem();
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_item"), PersistentDataType.STRING, "No heart spoofing, dum dum.")
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_itemtype"), PersistentDataType.STRING, this.type)
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_itemindex"), PersistentDataType.STRING, this.index)
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_healthpoints"), PersistentDataType.DOUBLE, this.healthPoints)
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_consumesound"), PersistentDataType.STRING, this.consumeSound)
+            .build();
+    this.heartItem = this.itemBuilder.getBuiltItem();
     return this;
   }
 
@@ -192,21 +193,21 @@ public class HeartItemManager {
    */
   public HeartItemManager cookHeart(final int healthPoints) {
     if (this.heartType == Material.PLAYER_HEAD) {
-      this.heartItemCooker = new HeartItemCooker(this.heartType, lifeSteal.getSkullMaker().createSkullMap(this.skullData));
+      this.itemBuilder = new ItemBuilder(this.heartType, lifeSteal.getHeadBuilder().createSkullMap(this.skullData));
     } else {
-      this.heartItemCooker = new HeartItemCooker(this.heartType);
+      this.itemBuilder = new ItemBuilder(this.heartType);
     }
-    this.heartItemCooker
-            .setHeartName(this.heartName.decoration(TextDecoration.ITALIC, false))
-            .setHeartLore(this.heartLore)
+    this.itemBuilder
+            .setName(this.heartName.decoration(TextDecoration.ITALIC, false))
+            .setLore(this.heartLore)
             .setModelData(this.modelData)
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_item"), "No heart spoofing, dum dum.")
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemtype"), this.type)
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_itemindex"), this.index)
-            .setPDCDouble(new NamespacedKey(instance, "lifesteal_heart_healthpoints"), healthPoints)
-            .setPDCString(new NamespacedKey(instance, "lifesteal_heart_consumesound"), this.consumeSound)
-            .cook();
-    this.heartItem = this.heartItemCooker.getCookedItem();
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_item"), PersistentDataType.STRING, "No heart spoofing, dum dum.")
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_itemtype"), PersistentDataType.STRING, this.type)
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_itemindex"), PersistentDataType.STRING, this.index)
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_healthpoints"), PersistentDataType.DOUBLE, (double) healthPoints)
+            .setPDCObject(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_consumesound"), PersistentDataType.STRING, this.consumeSound)
+            .build();
+    this.heartItem = this.itemBuilder.getBuiltItem();
     return this;
   }
 

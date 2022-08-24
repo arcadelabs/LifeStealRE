@@ -55,8 +55,8 @@ public class DatabaseHandler {
     this.loadCredentials();
     HikariConfig hikariConfig = new HikariConfig();
 
-    if (dbEnabled) {
-      hikariConfig.setJdbcUrl("jdbc:mysql://" + address + ":" + port + "/" + database);
+    if (this.dbEnabled) {
+      hikariConfig.setJdbcUrl("jdbc:mysql://" + this.address + ":" + this.port + "/" + this.database);
     } else {
       File database = new File(LifeStealPlugin.getInstance().getDataFolder(), "database.db");
       if (!database.exists()) {
@@ -66,23 +66,23 @@ public class DatabaseHandler {
           ex.printStackTrace();
         }
       }
-      hikariConfig.setJdbcUrl("jdbc:sqlite:" + database);
+      hikariConfig.setJdbcUrl("jdbc:sqlite:" + this.database);
       hikariConfig.setDriverClassName("org.sqlite.JDBC");
     }
 
     hikariConfig.addDataSourceProperty("characterEncoding", "utf8");
     hikariConfig.addDataSourceProperty("useUnicode", true);
-    hikariConfig.addDataSourceProperty("useSSL", ssl);
+    hikariConfig.addDataSourceProperty("useSSL", this.ssl);
     hikariConfig.setMaximumPoolSize(10);
-    hikariConfig.setUsername(username);
-    hikariConfig.setPassword(password);
+    hikariConfig.setUsername(this.username);
+    hikariConfig.setPassword(this.password);
     hikariConfig.setPoolName("LifeSteal-Pool");
-    hikariDataSource = new HikariDataSource(hikariConfig);
+    this.hikariDataSource = new HikariDataSource(hikariConfig);
 
     try {
-      this.connectionSource = new DataSourceConnectionSource(hikariDataSource, hikariConfig.getJdbcUrl());
-      this.profileDao = DaoManager.createDao(connectionSource, Profile.class);
-      TableUtils.createTableIfNotExists(connectionSource, Profile.class);
+      this.connectionSource = new DataSourceConnectionSource(this.hikariDataSource, hikariConfig.getJdbcUrl());
+      this.profileDao = DaoManager.createDao(this.connectionSource, Profile.class);
+      TableUtils.createTableIfNotExists(this.connectionSource, Profile.class);
     } catch (Exception ex) {
       ex.printStackTrace();
     }
@@ -100,13 +100,13 @@ public class DatabaseHandler {
   }
 
   public void disconnect() {
-    if (connectionSource != null) connectionSource.closeQuietly();
-    if (hikariDataSource != null) hikariDataSource.close();
+    if (this.connectionSource != null) this.connectionSource.closeQuietly();
+    if (this.hikariDataSource != null) this.hikariDataSource.close();
   }
 
   public Connection getConnection() throws SQLException {
-    if (hikariDataSource != null) {
-      return hikariDataSource.getConnection();
+    if (this.hikariDataSource != null) {
+      return this.hikariDataSource.getConnection();
     }
     return null;
   }

@@ -1,4 +1,4 @@
-Version: 8
+Version: 10
 
 ToPlayerPrefix: "<reset><gradient:#f72585:#e01e37>➠ <player> | </gradient>"
 ToAllPrefix: "<reset><gradient:#f72585:#e01e37>➠ All | </gradient>"
@@ -10,6 +10,14 @@ Messages:
   RemoveHearts: "<gradient:#e01e37:#f52486>Removed <hearts> hearts from <player>"
   HeartWithdraw: "<gradient:#e01e37:#f52486>You've withdrawn <hearts>x hearts."
   NotEnoughHearts: "<gradient:#e01e37:#641220>You don't have enough hearts to withdraw."
+  MaxHeartsReached:
+    Consume: "<gradient:#e01e37:#641220>You've reached max hearts limit, you can't consume any more hearts."
+    OnDeath: "<gradient:#e01e37:#641220>You've reached max hearts limit, you can't gain any more hearts. <newline> A heart has been dropped at <red><location></red>."
+
+  CooldownMessage:
+    Heart-Consume: "<gradient:#e01e37:#641220>Please wait <seconds> seconds before consume another heart."
+    Heart-Craft: "<gradient:#e01e37:#641220>Please wait <seconds> seconds before crafting another heart."
+    Heart-Withdraw: "<gradient:#e01e37:#641220>Please wait <seconds> seconds before you can withdraw another heart."
 
   DisabledStuff:
     Totem: "<gradient:#e01e37:#641220>Totems won't save you bud."

@@ -27,6 +27,7 @@ import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -40,29 +41,28 @@ import org.bukkit.entity.Player;
 public class RemoveHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final StatisticsManager statisticsManager = this.lifeSteal.getStatisticsManager();
 
   @Subcommand("removehearts")
   @CommandCompletion("@players @nothing")
   @CommandAlias("removehearts")
   public void onRemoveHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) - (hearts * 2));
+    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) - (hearts * 2));
     player.setHealth(Math.min(player.getHealth() -
             hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
     final TagResolver.Single playerName = target.equals(sender) ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.player.name());
 
-    final Component removeHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.RemoveHearts"),
+    final Component removeHeartsMsg = MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.RemoveHearts"),
             Placeholder.unparsed("hearts", String.valueOf(hearts)),
             playerName);
-    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, removeHeartsMsg, player,
-            lifeSteal.getKey("Sounds.RemoveHearts"));
-    lifeSteal.getProfileManager().getProfileCache().get
-            (player.getUniqueId()).setCurrentHearts(
-            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() - hearts));
-    lifeSteal.getProfileManager().getProfileCache().get
-            (player.getUniqueId()).setLostHearts(
-            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
+    this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, removeHeartsMsg, player,
+            this.lifeSteal.getKey("Sounds.RemoveHearts"));
+
+    this.statisticsManager.setCurrentHearts(player, this.statisticsManager.getCurrentHearts(player) - hearts)
+            .setLostHearts(player, this.statisticsManager.getLostHearts(player) + hearts)
+            .update(player);
   }
 }

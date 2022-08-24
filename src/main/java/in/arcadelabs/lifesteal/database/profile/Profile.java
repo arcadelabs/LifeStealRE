@@ -58,7 +58,7 @@ public class Profile {
   public Profile() {
   }
 
-  public Profile(UUID uniqueID) {
+  public Profile(final UUID uniqueID) {
     this.uniqueID = uniqueID;
   }
 }

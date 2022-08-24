@@ -58,13 +58,13 @@ public class GiveHearts extends BaseCommand {
   }
 
   public void giveHearts(final CommandSender sender, final String type, final HeartItemManager.Mode mode, final Player target, final int amount) {
-    heartItemManager = new HeartItemManager(mode)
+    this.heartItemManager = new HeartItemManager(mode)
             .prepareIngedients()
             .cookHeart();
-    replacementHeart = heartItemManager.getHeartItem();
-    replacementHeart.setAmount(amount);
+    this.replacementHeart = heartItemManager.getHeartItem();
+    this.replacementHeart.setAmount(amount);
 
-    final Map<Integer, ItemStack> items = target.getInventory().addItem(replacementHeart);
+    final Map<Integer, ItemStack> items = target.getInventory().addItem(this.replacementHeart);
     for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
       target.getWorld().dropItemNaturally(target.getLocation(), leftovers.getValue());
     }
@@ -72,11 +72,11 @@ public class GiveHearts extends BaseCommand {
     final TagResolver.Single playerName = target == sender ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.name());
 
-    final Component giveHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.GiveHearts"),
+    final Component giveHeartsMsg = MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.GiveHearts"),
             Placeholder.unparsed("hearts", String.valueOf(amount)),
             Placeholder.unparsed("type", type),
             playerName);
-    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, giveHeartsMsg, target,
-            lifeSteal.getKey("Sounds.GiveHearts"));
+    this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, giveHeartsMsg, target,
+            this.lifeSteal.getKey("Sounds.GiveHearts"));
   }
 }

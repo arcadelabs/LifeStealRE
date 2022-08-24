@@ -41,29 +41,29 @@ public class ProfileListener implements Listener {
   @EventHandler(priority = EventPriority.LOWEST)
   public void handleJoin(PlayerJoinEvent event) {
 
-    if (!(instance.getServer().getPluginManager().isPluginEnabled(instance))) {
+    if (!(this.instance.getServer().getPluginManager().isPluginEnabled(this.instance))) {
       event.getPlayer().kick(Component.text("Server still loading, please join after some time",
               TextColor.color(102, 0, 205)), PlayerKickEvent.Cause.TIMEOUT);
     }
     try {
-      lifeSteal.getProfileManager().getProfileCache()
+      this.lifeSteal.getProfileManager().getProfileCache()
               .put(event.getPlayer().getUniqueId(),
-                      lifeSteal.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
+                      this.lifeSteal.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
     } catch (SQLException e) {
       event.getPlayer().kick(Component.text("FAILED TO LOAD YOUR ACCOUNT!",
               TextColor.color(255, 0, 0)), PlayerKickEvent.Cause.TIMEOUT);
-      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
     }
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPlayerQuit(PlayerQuitEvent event) {
-    lifeSteal.getDatabaseHandler().getHikariExecutor().execute(() -> {
+    this.lifeSteal.getDatabaseHandler().getHikariExecutor().execute(() -> {
       try {
-        lifeSteal.getProfileManager().saveProfile(
-                lifeSteal.getProfileManager().getProfileCache().get(event.getPlayer().getUniqueId()));
+        this.lifeSteal.getProfileManager().saveProfile(
+                this.lifeSteal.getProfileManager().getProfileCache().get(event.getPlayer().getUniqueId()));
       } catch (SQLException e) {
-        lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+        this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
       }
     });
   }

@@ -54,72 +54,76 @@ public class Reload extends BaseCommand {
     if (sender instanceof final Player player) {
       switch (file) {
         case "All" -> {
-          lifeSteal.getLanguage().reload();
-          lifeSteal.getConfig().reload();
-          lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
-          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
+          this.lifeSteal.getLanguage().reload();
+          this.lifeSteal.getConfig().reload();
+          this.lifeSteal.getHeartConfig().reload();
+          this.lifeSteal.reInit();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
+          player.sendMessage(this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
         }
         case "Language.yml" -> {
-          lifeSteal.getLanguage().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
-          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+          this.lifeSteal.getLanguage().reload();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+          player.sendMessage(this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
         }
         case "Config.yml" -> {
-          lifeSteal.getConfig().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
-          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+          this.lifeSteal.getConfig().reload();
+          this.lifeSteal.reInit();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+          player.sendMessage(this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
         }
         case "Hearts.yml" -> {
-          lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
-          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+          this.lifeSteal.getHeartConfig().reload();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+          player.sendMessage(this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
         }
         case "Database" -> {
-          lifeSteal.getDatabaseHandler().getHikariExecutor()
-                  .execute(() -> lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
+          this.lifeSteal.getDatabaseHandler().getHikariExecutor()
+                  .execute(() -> this.lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
                     try {
-                      if (!lifeSteal.getProfileManager().getProfileCache().isEmpty())
-                        lifeSteal.getProfileManager().saveProfile(profile);
+                      if (!this.lifeSteal.getProfileManager().getProfileCache().isEmpty())
+                        this.lifeSteal.getProfileManager().saveProfile(profile);
                     } catch (SQLException e) {
-                      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                      this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
                     }
                   }));
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
-          player.sendMessage(lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
+          player.sendMessage(this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
         }
       }
     } else {
       switch (file) {
         case "All" -> {
-          lifeSteal.getLanguage().reload();
-          lifeSteal.getConfig().reload();
-          lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
+          this.lifeSteal.getLanguage().reload();
+          this.lifeSteal.getConfig().reload();
+          this.lifeSteal.getHeartConfig().reload();
+          this.lifeSteal.reInit();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>LifeSteal Reimagined reloaded.</gradient>"));
         }
         case "Language.yml" -> {
-          lifeSteal.getLanguage().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
+          this.lifeSteal.getLanguage().reload();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Language.yml reloaded.</gradient>"));
         }
         case "Config.yml" -> {
-          lifeSteal.getConfig().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
+          this.lifeSteal.getConfig().reload();
+          this.lifeSteal.reInit();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Config.yml reloaded.</gradient>"));
         }
         case "Hearts.yml" -> {
-          lifeSteal.getHeartConfig().reload();
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
+          this.lifeSteal.getHeartConfig().reload();
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
         }
         case "Database" -> {
-          lifeSteal.getDatabaseHandler().getHikariExecutor()
-                  .execute(() -> lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
+          this.lifeSteal.getDatabaseHandler().getHikariExecutor()
+                  .execute(() -> this.lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
                     try {
-                      if (!lifeSteal.getProfileManager().getProfileCache().isEmpty())
-                        lifeSteal.getProfileManager().saveProfile(profile);
+                      if (!this.lifeSteal.getProfileManager().getProfileCache().isEmpty())
+                        this.lifeSteal.getProfileManager().saveProfile(profile);
                     } catch (SQLException e) {
-                      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                      this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
                     }
                   }));
-          lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
+          this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Database reloaded.</gradient>"));
         }
       }
     }

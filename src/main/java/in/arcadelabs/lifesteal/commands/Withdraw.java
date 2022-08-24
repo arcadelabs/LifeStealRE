@@ -25,6 +25,7 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -41,6 +42,7 @@ import java.util.Map;
 public class Withdraw extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final StatisticsManager statisticsManager = this.lifeSteal.getStatisticsManager();
   private HeartItemManager heartItemManager;
   private ItemStack replacementHeart;
   private List<String> disabledWorlds;
@@ -55,39 +57,41 @@ public class Withdraw extends BaseCommand {
   @CommandAlias("withdraw")
   public void onWithdraw(final CommandSender sender, final int hearts) {
     final Player player = (Player) sender;
-    if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw").size() != 0) {
-      disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw");
+    if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw").size() != 0) {
+      this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw");
     }
-    if (!(disabledWorlds.contains(player.getWorld().getName()))) {
-      if (hearts * 2 >= lifeSteal.getUtils().getPlayerHearts(player)) {
-        player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.NotEnoughHearts")));
+    if (!(this.disabledWorlds.contains(player.getWorld().getName()))) {
+      if (hearts >= this.lifeSteal.getUtils().getPlayerHearts(player)) {
+        player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.NotEnoughHearts")));
       } else {
-        lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) - hearts);
-          heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
+        if (!this.lifeSteal.getWithdrawCooldown().isOnCooldown(player.getUniqueId())) {
+          this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) - hearts);
+          this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
                   .prepareIngedients()
                   .cookHeart();
-          replacementHeart = heartItemManager.getHeartItem();
-          replacementHeart.setAmount(hearts);
+          this.replacementHeart = this.heartItemManager.getHeartItem();
+          this.replacementHeart.setAmount(hearts);
 
-        final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
-        for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
-          player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
-        }
-        lifeSteal.getUtils().spawnParticles(player, "soul");
-        final Component withdrawMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.HeartWithdraw"),
-                Placeholder.unparsed("hearts", String.valueOf(hearts)));
-        lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
-                lifeSteal.getKey("Sounds.HeartWithdraw"));
+          final Map<Integer, ItemStack> items = player.getInventory().addItem(this.replacementHeart);
+          for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+          }
+          this.lifeSteal.getUtils().spawnParticles(player, "soul");
+          final Component withdrawMsg = MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.HeartWithdraw"),
+                  Placeholder.unparsed("hearts", String.valueOf(hearts)));
+          this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
+                  this.lifeSteal.getKey("Sounds.HeartWithdraw"));
 
-        lifeSteal.getProfileManager().getProfileCache().get
-                (player.getUniqueId()).setCurrentHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() - hearts));
-        lifeSteal.getProfileManager().getProfileCache().get
-                (player.getUniqueId()).setLostHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
+          this.statisticsManager.setCurrentHearts(player, this.statisticsManager.getCurrentHearts(player) - hearts)
+                  .setLostHearts(player, this.statisticsManager.getLostHearts(player) + hearts)
+                  .update(player);
+
+          if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Withdraw") >= 0)
+            this.lifeSteal.getWithdrawCooldown().setCooldown(player.getUniqueId());
+        } else
+          player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Withdraw"),
+                Placeholder.component("seconds", Component.text(this.lifeSteal.getWithdrawCooldown().getRemainingTime(player.getUniqueId())))));
       }
-    } else {
-      player.sendMessage(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
-    }
+    } else player.sendMessage(MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
   }
 }

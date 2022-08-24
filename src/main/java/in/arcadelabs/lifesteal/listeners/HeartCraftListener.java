@@ -21,6 +21,8 @@ package in.arcadelabs.lifesteal.listeners;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,29 +36,38 @@ import java.util.Objects;
 public class HeartCraftListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
   private HeartItemManager heartItemManager;
   private ItemStack replacementHeart;
   private List<String> disabledWorlds;
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onCraftEvent(final CraftItemEvent event) {
-    if (!(Objects.equals(event.getRecipe().getResult(), LifeStealPlugin.getLifeSteal().getPlaceholderHeart()))) return;
+    if (!(Objects.equals(event.getRecipe().getResult(), this.lifeSteal.getPlaceholderHeart()))) return;
     Player player = (Player) event.getWhoClicked();
-    if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft").size() != 0) {
-      disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft");
+    if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft").size() != 0) {
+      this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Craft");
     }
-    if (!disabledWorlds.contains(player.getWorld().getName())) {
+    if (!this.disabledWorlds.contains(player.getWorld().getName())) {
       if (event.isShiftClick()) event.setCancelled(true);
-      heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
-              .getHeartConfig().getString("Hearts.Mode.OnCraft")))
-              .prepareIngedients()
-              .cookHeart();
-      replacementHeart = heartItemManager.getHeartItem();
-      event.getInventory().setResult(replacementHeart);
+      if (!this.lifeSteal.getCraftCooldown().isOnCooldown(player.getUniqueId())) {
+        this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal
+                .getHeartConfig().getString("Hearts.Mode.OnCraft")))
+                .prepareIngedients()
+                .cookHeart();
+        this.replacementHeart = this.heartItemManager.getHeartItem();
+        event.getInventory().setResult(this.replacementHeart);
+
+        if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Craft") >= 0)
+          this.lifeSteal.getCraftCooldown().setCooldown(player.getUniqueId());
+        
+      } else {
+        player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Craft"),
+                Placeholder.component("seconds", Component.text(this.lifeSteal.getCraftCooldown().getRemainingTime(player.getUniqueId())))));
+        event.setCancelled(true);
+      }
     } else {
       event.setCancelled(true);
-      player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Craft")));
+      player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Craft")));
     }
   }
 }

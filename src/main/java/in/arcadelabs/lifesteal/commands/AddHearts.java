@@ -27,6 +27,7 @@ import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -40,29 +41,28 @@ import org.bukkit.entity.Player;
 public class AddHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final StatisticsManager statisticsManager = this.lifeSteal.getStatisticsManager();
 
   @Subcommand("addhearts")
   @CommandCompletion("@players @nothing")
   @CommandAlias("addhearts")
   public void onAddHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) + hearts);
+    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) + hearts);
     player.setHealth(Math.min(player.getHealth() +
             hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
     final TagResolver.Single playerName = target.player == sender ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", player.name());
 
-    final Component addHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.AddHearts"),
+    final Component addHeartsMsg = MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.AddHearts"),
             Placeholder.unparsed("hearts", String.valueOf(hearts)),
             playerName);
-    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, addHeartsMsg, player,
-            lifeSteal.getKey("Sounds.AddHearts"));
-    lifeSteal.getProfileManager().getProfileCache().get
-            (player.getUniqueId()).setCurrentHearts(
-            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + hearts));
-    lifeSteal.getProfileManager().getProfileCache().get
-            (player.getUniqueId()).setPeakHeartsReached(
-            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getPeakHeartsReached() + hearts));
+    this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, addHeartsMsg, player,
+            this.lifeSteal.getKey("Sounds.AddHearts"));
+
+    this.statisticsManager.setCurrentHearts(player, this.statisticsManager.getCurrentHearts(player) + hearts)
+            .setPeakReachedHearts(player, this.statisticsManager.getPeakReachedHearts(player) + hearts)
+            .update(player);
   }
 }

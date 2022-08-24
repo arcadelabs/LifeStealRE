@@ -18,8 +18,6 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
-import in.arcadelabs.lifesteal.LifeSteal;
-import in.arcadelabs.lifesteal.LifeStealPlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,8 +27,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 
 public class ServerReloadListener implements Listener {
-
-  private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @EventHandler
   public void onReload(final ServerLoadEvent event) {
