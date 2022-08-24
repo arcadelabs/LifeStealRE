@@ -85,15 +85,15 @@ public class HeartItemManager {
     this.mode = mode;
 
     for (int i = 0; i < this.blessedHearts.size(); i++) {
-      this.randomBlessCol.add(Integer.valueOf(this.blessedRarity[i]), Integer.parseInt(this.blessedRarity[i]));
+      this.randomBlessCol.add(Integer.parseInt(this.blessedRarity[i]), Integer.parseInt(this.blessedRarity[i]));
     }
 
     for (int i = 0; i < this.normalHearts.size(); i++) {
-      this.randomNormalCol.add(Integer.valueOf(this.normalRarity[i]), Integer.parseInt(this.normalRarity[i]));
+      this.randomNormalCol.add(Integer.parseInt(this.normalRarity[i]), Integer.parseInt(this.normalRarity[i]));
     }
 
     for (int i = 0; i < this.cursedHearts.size(); i++) {
-      this.randomCurseCol.add(Integer.valueOf(this.cursedRarity[i]), Integer.parseInt(this.cursedRarity[i]));
+      this.randomCurseCol.add(Integer.parseInt(this.cursedRarity[i]), Integer.parseInt(this.cursedRarity[i]));
     }
   }
 

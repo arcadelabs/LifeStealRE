@@ -48,14 +48,14 @@ public class AddHearts extends BaseCommand {
   @CommandAlias("addhearts")
   public void onAddHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) + hearts);
+    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) + hearts);
     player.setHealth(Math.min(player.getHealth() +
             hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
     final TagResolver.Single playerName = target.player == sender ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", player.name());
 
-    final Component addHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.AddHearts"),
+    final Component addHeartsMsg = MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.AddHearts"),
             Placeholder.unparsed("hearts", String.valueOf(hearts)),
             playerName);
     this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, addHeartsMsg, player,

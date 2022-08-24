@@ -37,7 +37,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
-import java.util.Objects;
 
 public class HeartConsumeListener implements Listener {
 

@@ -35,25 +35,26 @@ import java.util.UUID;
 @Getter
 public class ProfileManager {
 
-  @Getter(AccessLevel.NONE)
-  private final DatabaseHandler databaseHandler = LifeStealPlugin.getLifeSteal().getDatabaseHandler();
-
-  private final Map<UUID, Profile> profileCache = new HashMap<>();
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
+  @Getter(AccessLevel.NONE)
+  private final DatabaseHandler databaseHandler = this.lifeSteal.getDatabaseHandler();
+  private final Map<UUID, Profile> profileCache = new HashMap<>();
+
+
   public boolean hasProfile(UUID uuid) throws SQLException {
-    return databaseHandler.getProfileDao().idExists(uuid);
+    return this.databaseHandler.getProfileDao().idExists(uuid);
   }
 
   public Profile getProfile(UUID uuid) throws SQLException {
     Profile profile = new Profile(uuid);
 
     if (this.hasProfile(uuid)) {
-      lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
+      this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getMiniMessage().deserialize(
               "<gradient:#f58c67:#f10f5d>Loading " + Bukkit.getPlayer(uuid).getName() + "'s profile ...</gradient>"));
-      return databaseHandler.getProfileDao().queryForId(uuid);
+      return this.databaseHandler.getProfileDao().queryForId(uuid);
     } else {
-      lifeSteal.getLogger().log(Logger.Level.INFO, lifeSteal.getMiniMessage().deserialize(
+      this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getMiniMessage().deserialize(
               "<gradient:#f58c67:#f10f5d>Profile not found for " + uuid + " ! Creating...</gradient>"));
       this.saveProfile(profile);
     }
@@ -62,22 +63,22 @@ public class ProfileManager {
 
   public void saveProfile(Profile profile) throws SQLException {
     if (this.hasProfile(profile.getUniqueID())) {
-      databaseHandler.getProfileDao().update(profile);
-      databaseHandler.getProfileDao().refresh(profile);
+      this.databaseHandler.getProfileDao().update(profile);
+      this.databaseHandler.getProfileDao().refresh(profile);
     } else {
       profile.setLifeState(LifeState.LIVING);
       if (Bukkit.getPlayer(profile.getUniqueID()).hasPlayedBefore())
-        profile.setCurrentHearts((int) lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
-      else profile.setCurrentHearts(lifeSteal.getConfig().getInt("DefaultHearts"));
+        profile.setCurrentHearts((int) this.lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
+      else profile.setCurrentHearts(this.lifeSteal.getConfig().getInt("DefaultHearts"));
       profile.setLostHearts(0);
       profile.setNormalHearts(0);
       profile.setBlessedHearts(0);
       profile.setCursedHearts(0);
       if (Bukkit.getPlayer(profile.getUniqueID()).hasPlayedBefore())
-        profile.setPeakHeartsReached((int) lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
-      else  profile.setPeakHeartsReached(lifeSteal.getConfig().getInt("DefaultHearts"));
-      databaseHandler.getProfileDao().create(profile);
-      databaseHandler.getProfileDao().refresh(profile);
+        profile.setPeakHeartsReached((int) this.lifeSteal.getUtils().getPlayerHearts(Bukkit.getPlayer(profile.getUniqueID())));
+      else profile.setPeakHeartsReached(this.lifeSteal.getConfig().getInt("DefaultHearts"));
+      this.databaseHandler.getProfileDao().create(profile);
+      this.databaseHandler.getProfileDao().refresh(profile);
     }
   }
 }

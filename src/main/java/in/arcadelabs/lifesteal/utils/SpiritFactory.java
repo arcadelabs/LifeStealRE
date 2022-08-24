@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.labaide.experience.ExperienceManager;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
@@ -41,19 +42,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpiritFactory {
-  private static final LifeStealPlugin instance = LifeStealPlugin.getInstance();
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final List<Player> spirits = new ArrayList<>();
   private ItemStack spiritModel;
 
   private ItemStack bakeSpiritModel() {
-    spiritModel = new ItemStack(Material.valueOf(lifeSteal.getConfig().getString("Spirits.Spirit-Model.ItemType")));
-    spiritModel.getItemMeta().displayName(lifeSteal.getUtils().formatString
-            (lifeSteal.getConfig().getString("Spirits.Spirit-Model.Name")));
-    spiritModel.getItemMeta().lore(lifeSteal.getUtils().stringToComponentList
-            (lifeSteal.getConfig().getStringList("Spirits.Spirit-Model.Lore"), true));
-    spiritModel.getItemMeta().setCustomModelData(lifeSteal.getConfig().getInt("Spirits.Spirit-Model.ModelData"));
-    return spiritModel;
+    this.spiritModel = new ItemStack(Material.valueOf(this.lifeSteal.getConfig().getString("Spirits.Spirit-Model.ItemType")));
+    this.spiritModel.getItemMeta().displayName(this.lifeSteal.getUtils().formatString
+            (this.lifeSteal.getConfig().getString("Spirits.Spirit-Model.Name")));
+    this.spiritModel.getItemMeta().lore(this.lifeSteal.getUtils().stringToComponentList
+            (this.lifeSteal.getConfig().getStringList("Spirits.Spirit-Model.Lore"), true));
+    this.spiritModel.getItemMeta().setCustomModelData(this.lifeSteal.getConfig().getInt("Spirits.Spirit-Model.ModelData"));
+    return this.spiritModel;
   }
 
   /**
@@ -62,22 +62,22 @@ public class SpiritFactory {
    * @param player the player
    */
   public void addSpirit(final Player player) {
-    if (spirits.contains(player)) return;
-    spirits.add(player);
-    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
+    if (this.spirits.contains(player)) return;
+    this.spirits.add(player);
+    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
     player.setGameMode(GameMode.valueOf(lifeSteal.getConfig().getString("Spirits.GameMode", "ADVENTURE")));
-    player.setInvisible(lifeSteal.getConfig().getBoolean("Spirits.Invisible", true));
-    player.setInvulnerable(lifeSteal.getConfig().getBoolean("Spirits.Invulnerable", true));
-    player.setCanPickupItems(lifeSteal.getConfig().getBoolean("Spirits.CanPickupItems", false));
-    player.setCollidable(lifeSteal.getConfig().getBoolean("Spirits.Collidable", false));
-    player.setSleepingIgnored(lifeSteal.getConfig().getBoolean("Spirits.SleepingIgnored", true));
-    player.setSilent(lifeSteal.getConfig().getBoolean("Spirits.Silent", true));
-    if (lifeSteal.getConfig().getBoolean("Spirits.Black-Hearts", true))
+    player.setInvisible(this.lifeSteal.getConfig().getBoolean("Spirits.Invisible", true));
+    player.setInvulnerable(this.lifeSteal.getConfig().getBoolean("Spirits.Invulnerable", true));
+    player.setCanPickupItems(this.lifeSteal.getConfig().getBoolean("Spirits.CanPickupItems", false));
+    player.setCollidable(this.lifeSteal.getConfig().getBoolean("Spirits.Collidable", false));
+    player.setSleepingIgnored(this.lifeSteal.getConfig().getBoolean("Spirits.SleepingIgnored", true));
+    player.setSilent(this.lifeSteal.getConfig().getBoolean("Spirits.Silent", true));
+    if (this.lifeSteal.getConfig().getBoolean("Spirits.Black-Hearts", true))
       player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, Integer.MAX_VALUE, Integer.MIN_VALUE,
               false,
               false,
               false));
-    if (!lifeSteal.getConfig().getBoolean("Spirits.Spirit-Model.Enabled")) return;
+    if (!this.lifeSteal.getConfig().getBoolean("Spirits.Spirit-Model.Enabled")) return;
     player.getInventory().setHelmet(bakeSpiritModel());
   }
 
@@ -87,9 +87,9 @@ public class SpiritFactory {
    * @param player the player
    */
   public void removeSpirit(final Player player) {
-    if (!spirits.contains(player)) return;
-    spirits.remove(player);
-    lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getConfig().getInt("DefaultHealth", 20));
+    if (!this.spirits.contains(player)) return;
+    this.spirits.remove(player);
+    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getConfig().getInt("DefaultHealth", 20));
     player.setInvisible(false);
     player.setInvulnerable(false);
     player.setGameMode(GameMode.SURVIVAL);
@@ -108,7 +108,7 @@ public class SpiritFactory {
    * @return the spirits
    */
   public List<Player> getSpirits() {
-    return spirits;
+    return this.spirits;
   }
 
   /**
@@ -177,7 +177,7 @@ public class SpiritFactory {
         player.getPersistentDataContainer().remove(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory"));
       }
     } catch (IOException e) {
-      lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
+      this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage()), e.fillInStackTrace());
     }
   }
 }

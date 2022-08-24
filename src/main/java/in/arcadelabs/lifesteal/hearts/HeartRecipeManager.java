@@ -36,7 +36,7 @@ public class HeartRecipeManager {
     final char[] recipeIngredients = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     for (final char recipeIngredient : recipeIngredients) {
       this.heartRecipe.setIngredient(recipeIngredient,
-              Material.valueOf((String) lifeSteal.getConfig().get("Heart.Recipe." + recipeIngredient)));
+              Material.valueOf((String) this.lifeSteal.getConfig().get("Heart.Recipe." + recipeIngredient)));
     }
   }
 

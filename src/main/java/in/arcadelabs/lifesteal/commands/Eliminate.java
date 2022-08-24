@@ -45,11 +45,11 @@ public class Eliminate extends BaseCommand {
   @CommandAlias("eliminate")
   public void onEliminate(final CommandSender sender, final OnlinePlayer target) {
     if (sender instanceof Player player) {
-      lifeSteal.getUtils().handleElimination(target.getPlayer());
-      lifeSteal.getInteraction().broadcast("Messages.Elimination.ByPlayer", target.getPlayer(), player);
+      this.lifeSteal.getUtils().handleElimination(target.getPlayer());
+      this.lifeSteal.getInteraction().broadcast("Messages.Elimination.ByPlayer", target.getPlayer(), player);
     } else {
-      lifeSteal.getUtils().handleElimination(target.getPlayer());
-      lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCommand", target.getPlayer());
+      this.lifeSteal.getUtils().handleElimination(target.getPlayer());
+      this.lifeSteal.getInteraction().broadcast("Messages.Elimination.ByCommand", target.getPlayer());
     }
   }
 }

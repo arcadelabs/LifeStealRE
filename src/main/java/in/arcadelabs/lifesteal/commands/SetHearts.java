@@ -45,16 +45,16 @@ public class SetHearts extends BaseCommand {
   @CommandAlias("sethearts")
   public void onSetHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    lifeSteal.getUtils().setPlayerHearts(player, hearts);
+    this.lifeSteal.getUtils().setPlayerHearts(player, hearts);
     player.setHealth(hearts * 2);
 
     final TagResolver.Single playerName = target.equals(sender) ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.player.name());
 
-    final Component setHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.SetHearts"),
+    final Component setHeartsMsg = MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.SetHearts"),
             Placeholder.unparsed("hearts", String.valueOf(hearts)),
             playerName);
-    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, setHeartsMsg, player,
-            lifeSteal.getKey("Sounds.SetHearts"));
+    this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, setHeartsMsg, player,
+            this.lifeSteal.getKey("Sounds.SetHearts"));
   }
 }

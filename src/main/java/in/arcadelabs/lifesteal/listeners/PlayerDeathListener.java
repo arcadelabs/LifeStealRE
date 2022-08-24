@@ -44,13 +44,13 @@ public class PlayerDeathListener implements Listener {
   public void onPlayerKilled(final PlayerDeathEvent event) {
 
     final Player victim = event.getEntity();
-    final int lostHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
-    if (lifeSteal.getUtils().getPlayerHearts(victim) == 1) {
+    final int lostHearts = this.lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
+    if (this.lifeSteal.getUtils().getPlayerHearts(victim) == lostHearts) {
       if (victim.getKiller() == null) {
-        lifeSteal.getInteraction().broadcast(
-                lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
+        this.lifeSteal.getInteraction().broadcast(
+                this.lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
       } else {
-        lifeSteal.getInteraction().broadcast(lifeSteal.getKey("Messages.Elimination.ByPlayer"), victim);
+        this.lifeSteal.getInteraction().broadcast(this.lifeSteal.getKey("Messages.Elimination.ByPlayer"), victim);
       }
       this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
               .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)
@@ -58,11 +58,11 @@ public class PlayerDeathListener implements Listener {
       this.lifeSteal.getUtils().handleElimination(victim, event);
     } else {
       if (victim.getKiller() == null) {
-        if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other").size() != 0) {
-          disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other");
+        if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other").size() != 0) {
+          this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other");
         }
-        if (!(disabledWorlds.contains(victim.getWorld().getName()))) {
-          heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
+        if (!(this.disabledWorlds.contains(victim.getWorld().getName()))) {
+          this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
                   .prepareIngedients()
                   .cookHeart();
           this.replacementHeart = this.heartItemManager.getHeartItem();
@@ -74,11 +74,11 @@ public class PlayerDeathListener implements Listener {
 
           victim.getWorld().dropItemNaturally(victim.getLocation(), this.replacementHeart);
         } else {
-          victim.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Other")));
+          victim.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Other")));
         }
       } else {
-        if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill").size() != 0) {
-          disabledWorldsNatural = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill");
+        if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill").size() != 0) {
+          this.disabledWorldsNatural = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill");
         }
         if (!(this.disabledWorldsNatural.contains(victim.getWorld().getName()))) {
           if (!this.lifeSteal.getConfig().getInt("Max-Hearts").equals(-1) &&

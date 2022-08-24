@@ -5,15 +5,13 @@ body:
     attributes:
       value: >-
         Before reporting a bug here, please make sure you are on the latest
-        version of respective MCP product
-    validations:
-      required: false
+        version of Lifesteal Reimagined.
   - type: textarea
     attributes:
       label: Description
       description: Please describe what issue you're facing.
     validations:
-      required: false
+      required: true
   - type: input
     attributes:
       label: Stackrace print/logs link
@@ -55,10 +53,10 @@ body:
       required: false
   - type: input
     attributes:
-      label: LifeSteal++ version
+      label: LifeSteal Reimagined version
       description: >-
         Type `/lifesteal version` in console or in-game to get current version
-        of the LifeSteal++ plugin.
+        of the LifeSteal Reimagined plugin.
     validations:
       required: true
   - type: input
@@ -80,7 +78,7 @@ body:
       label: Agreement
       description: Please agree to the following.
       options:
-        - label: I am running the latest version of LifeSteal++ plugin.
+        - label: I am running the latest version of LifeSteal Reimagined plugin.
           required: true
         - label: I am running the latest version of LabAide plugin.
           required: true

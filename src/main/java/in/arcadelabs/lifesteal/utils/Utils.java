@@ -52,8 +52,8 @@ public class Utils {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final MiniMessage miniMessage = MiniMessage.miniMessage();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
-  private final int looseHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
-  private final int gainHearts = lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
+  private final int looseHearts = this.lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
+  private final int gainHearts = this.lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
 
   /**
    * Gets player hearts.
@@ -82,8 +82,8 @@ public class Utils {
    * @param killer the killer
    */
   public void transferHearts(final Player victim, final Player killer) {
-    setPlayerHearts(killer, getPlayerHearts(killer) + gainHearts);
-    setPlayerHearts(victim, getPlayerHearts(victim) - looseHearts);
+    setPlayerHearts(killer, getPlayerHearts(killer) + this.gainHearts);
+    setPlayerHearts(victim, getPlayerHearts(victim) - this.looseHearts);
   }
 
   /**
@@ -94,7 +94,7 @@ public class Utils {
    */
   public void commandDispatcher(final String URI, final Player player) {
     Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-            legecySerializer.serialize(miniMessage.deserialize(URI, Placeholder.component("player", player.name()))));
+            this.legecySerializer.serialize(this.miniMessage.deserialize(URI, Placeholder.component("player", player.name()))));
   }
 
   /**
@@ -108,7 +108,7 @@ public class Utils {
   public List<Component> stringToComponentList(final List<String> stringList, final String placeholder, final int placeholderValue) {
     final List<Component> formattedList = new ArrayList<>();
     for (final String list : stringList) {
-      formattedList.add(miniMessage.deserialize(list,
+      formattedList.add(this.miniMessage.deserialize(list,
               Placeholder.component(placeholder, Component.text(placeholderValue))));
     }
     return formattedList;
@@ -124,8 +124,8 @@ public class Utils {
   public List<Component> stringToComponentList(final List<String> stringList, final boolean noItalics) {
     final List<Component> formattedList = new ArrayList<>();
     for (final String list : stringList) {
-      if (noItalics) formattedList.add(miniMessage.deserialize(list).decoration(TextDecoration.ITALIC, false));
-      else formattedList.add(miniMessage.deserialize(list));
+      if (noItalics) formattedList.add(this.miniMessage.deserialize(list).decoration(TextDecoration.ITALIC, false));
+      else formattedList.add(this.miniMessage.deserialize(list));
     }
     return formattedList;
   }
@@ -137,7 +137,7 @@ public class Utils {
    * @return the component
    */
   public Component formatString(final String string) {
-    return miniMessage.deserialize(string);
+    return this.miniMessage.deserialize(string);
   }
 
   /**
@@ -153,16 +153,16 @@ public class Utils {
     final String itemIndex = heartMeta.getPersistentDataContainer().get
             (this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_itemindex"), PersistentDataType.STRING);
     final String effectsPath = "Hearts.Types." + itemType + "." + itemIndex + ".Properties.Effects";
-    final Set<String> indexSet = Objects.requireNonNull(lifeSteal.getHeartConfig().getSection(effectsPath)).getRoutesAsStrings(false);
+    final Set<String> indexSet = Objects.requireNonNull(this.lifeSteal.getHeartConfig().getSection(effectsPath)).getRoutesAsStrings(false);
 
     for (int i = 0; i < indexSet.size(); i++) {
       final String[] indexList = indexSet.toArray(new String[0]);
       target.addPotionEffect(new PotionEffect(Objects.requireNonNull
-              (PotionEffectType.getByName(Objects.requireNonNull(lifeSteal.getHeartConfig().getString(effectsPath + "." + indexList[i] + ".Type")))),
-              lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Duration") * 20,
-              lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Power"),
-              lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false),
-              lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false)));
+              (PotionEffectType.getByName(Objects.requireNonNull(this.lifeSteal.getHeartConfig().getString(effectsPath + "." + indexList[i] + ".Type")))),
+              this.lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Duration") * 20,
+              this.lifeSteal.getHeartConfig().getInt(effectsPath + "." + indexList[i] + ".Power"),
+              this.lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false),
+              this.lifeSteal.getHeartConfig().getBoolean(effectsPath + "." + indexList[i] + ".ShowParticles", false)));
     }
   }
 
@@ -196,13 +196,15 @@ public class Utils {
    * @param player the player
    */
   public void handleElimination(final Player player) {
-    switch (lifeSteal.getConfig().getString("InventoryMode")) {
+    switch (this.lifeSteal.getConfig().getString("InventoryMode")) {
       case "DROP" -> {
         if (player.getInventory().isEmpty()) return;
-        for (final ItemStack stuff : player.getInventory().getContents())
+        for (final ItemStack stuff : player.getInventory().getContents()) {
+          assert stuff != null;
           player.getWorld().dropItemNaturally(player.getLocation(), stuff);
+        }
       }
-      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveInventory(player);
+      case "SAVE_TO_RESTORE" -> this.lifeSteal.getSpiritFactory().saveInventory(player);
       case "CLEAR" -> player.getInventory().clear();
       case "NONE" -> player.saveData();
     }
@@ -226,22 +228,22 @@ public class Utils {
       }
     }
 
-    switch (lifeSteal.getConfig().getString("Elimination")) {
+    switch (this.lifeSteal.getConfig().getString("Elimination")) {
       case "BANNED" -> {
-        commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.BANNED));
+        commandDispatcher(this.lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.BANNED));
       }
       case "DEAD" -> {
         player.setGameMode(GameMode.ADVENTURE);
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
       }
       case "SPIRIT" -> {
-        lifeSteal.getSpiritFactory().addSpirit(player);
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.SPIRIT));
+        this.lifeSteal.getSpiritFactory().addSpirit(player);
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.SPIRIT));
       }
       case "AfterLife" -> {
-        lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+        this.lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
       }
     }
   }
@@ -253,14 +255,14 @@ public class Utils {
    * @param event  the event
    */
   public void handleElimination(final Player player, final PlayerDeathEvent event) {
-    switch (lifeSteal.getConfig().getString("InventoryMode")) {
+    switch (this.lifeSteal.getConfig().getString("InventoryMode")) {
       case "DROP" -> event.setKeepInventory(false);
-      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveInventory(player);
+      case "SAVE_TO_RESTORE" -> this.lifeSteal.getSpiritFactory().saveInventory(player);
       case "CLEAR" -> player.getInventory().clear();
       case "NONE" -> player.saveData();
     }
 
-    switch (lifeSteal.getConfig().getString("ExperienceMode")) {
+    switch (this.lifeSteal.getConfig().getString("ExperienceMode")) {
       case "DROP" -> {
         event.setShouldDropExperience(true);
         event.setKeepLevel(false);
@@ -272,27 +274,28 @@ public class Utils {
         player.setLevel(0);
         this.lifeSteal.getSpiritFactory().saveXP(player);
       }
-      case "SAVE_TO_RESTORE" -> lifeSteal.getSpiritFactory().saveXP(player);
-      case "CLEAR" -> player.setTotalExperience(0);
-      case "NONE" -> player.saveData();
+      case "NONE" -> {
+        player.saveData();
+        this.lifeSteal.getSpiritFactory().saveXP(player);
+      }
     }
 
-    switch (lifeSteal.getConfig().getString("Elimination")) {
+    switch (this.lifeSteal.getConfig().getString("Elimination")) {
       case "BANNED" -> {
-        commandDispatcher(lifeSteal.getConfig().getString("Ban-Command-URI"), player);
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.BANNED));
+        commandDispatcher(this.lifeSteal.getConfig().getString("Ban-Command-URI"), player);
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.BANNED));
       }
       case "DEAD" -> {
         player.setGameMode(GameMode.ADVENTURE);
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
       }
       case "SPIRIT" -> {
-        lifeSteal.getSpiritFactory().addSpirit(player);
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.SPIRIT));
+        this.lifeSteal.getSpiritFactory().addSpirit(player);
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.SPIRIT));
       }
       case "AfterLife" -> {
-        lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
-        lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
+        this.lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
+        this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.DEAD));
       }
     }
   }
@@ -303,18 +306,18 @@ public class Utils {
    * @param player the player
    */
   public void handleRevive(final Player player) {
-    switch (lifeSteal.getConfig().getString("Elimination")) {
+    switch (this.lifeSteal.getConfig().getString("Elimination")) {
       case "BANNED" -> {
-        commandDispatcher(lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
-        Bukkit.broadcast(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.Revive.ByUnban"),
+        commandDispatcher(this.lifeSteal.getConfig().getString("UnBan-Command-URI"), player);
+        Bukkit.broadcast(this.miniMessage.deserialize(this.lifeSteal.getKey("Messages.Revive.ByUnban"),
                 Placeholder.component("player", player.displayName())));
       }
       case "DEAD" -> player.setGameMode(GameMode.SURVIVAL);
-      case "SPIRIT" -> lifeSteal.getSpiritFactory().removeSpirit(player);
-      case "AfterLife" -> lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
+      case "SPIRIT" -> this.lifeSteal.getSpiritFactory().removeSpirit(player);
+      case "AfterLife" -> this.lifeSteal.getLogger().log(Logger.Level.DEBUG, Component.text("TTPP"));
     }
 
-    lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.LIVING));
+    this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState((LifeState.LIVING));
   }
 
   /**

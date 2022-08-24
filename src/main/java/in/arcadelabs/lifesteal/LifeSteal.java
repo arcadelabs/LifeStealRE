@@ -58,10 +58,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,51 +98,51 @@ public class LifeSteal {
 
   private void langInit() {
     try {
-      language = YamlDocument.create(new File(instance.getDataFolder(), "language.yml"),
-              Objects.requireNonNull(instance.getResource("language.yml")),
+      this.language = YamlDocument.create(new File(this.instance.getDataFolder(), "language.yml"),
+              Objects.requireNonNull(this.instance.getResource("language.yml")),
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      logger = new Logger("LifeSteal",
-              miniMessage.deserialize("<b><color:#e01e37>❥</color> </b>"),
+      this.logger = new Logger("LifeSteal",
+              this.miniMessage.deserialize("<b><color:#e01e37>❥</color> </b>"),
               getKey("ToAllPrefix"),
               getKey("ToPlayerPrefix"));
-      fancyStuff.setLangStatus(true);
+      this.fancyStuff.setLangStatus(true);
     } catch (IOException e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setLangStatus(false);
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setLangStatus(false);
     }
   }
 
   private void configInit() {
     try {
-      config = YamlDocument.create(new File(instance.getDataFolder(), "config.yml"),
-              Objects.requireNonNull(instance.getResource("config.yml")),
+      this.config = YamlDocument.create(new File(this.instance.getDataFolder(), "config.yml"),
+              Objects.requireNonNull(this.instance.getResource("config.yml")),
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      utils = new Utils();
-      fancyStuff.setConfigStatus(true);
+      this.utils = new Utils();
+      this.fancyStuff.setConfigStatus(true);
     } catch (Exception e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setConfigStatus(false);
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setConfigStatus(false);
     }
   }
 
   private void heartsYMLInit() {
     try {
-      heartConfig = YamlDocument.create(new File(instance.getDataFolder(), "hearts.yml"),
-              Objects.requireNonNull(instance.getResource("hearts.yml")),
+      this.heartConfig = YamlDocument.create(new File(this.instance.getDataFolder(), "hearts.yml"),
+              Objects.requireNonNull(this.instance.getResource("hearts.yml")),
               GeneralSettings.DEFAULT,
               LoaderSettings.builder().setAutoUpdate(true).build(),
               DumperSettings.DEFAULT,
               UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
-      fancyStuff.setHeartsStatus(true);
+      this.fancyStuff.setHeartsStatus(true);
     } catch (Exception e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setHeartsStatus(false);
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setHeartsStatus(false);
     }
   }
 
@@ -153,24 +155,24 @@ public class LifeSteal {
   private void databaseInit() {
     try {
       disableDatabaseLogger(true);
-      databaseHandler = new DatabaseHandler(LifeStealPlugin.getInstance());
-      fancyStuff.setDatabaseMode(databaseHandler.isDbEnabled());
-      fancyStuff.setDatabaseStatus(true);
+      this.databaseHandler = new DatabaseHandler(this.instance);
+      this.fancyStuff.setDatabaseMode(this.databaseHandler.isDbEnabled());
+      this.fancyStuff.setDatabaseStatus(true);
     } catch (Exception e) {
       disableDatabaseLogger(false);
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setDatabaseMode(databaseHandler.isDbEnabled());
-      fancyStuff.setDatabaseStatus(false);
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setDatabaseMode(this.databaseHandler.isDbEnabled());
+      this.fancyStuff.setDatabaseStatus(false);
     }
   }
 
   private void profilesInit() {
     try {
-      profileManager = new ProfileManager();
-      fancyStuff.setProfilesStatus(true);
+      this.profileManager = new ProfileManager();
+      this.fancyStuff.setProfilesStatus(true);
     } catch (Exception e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setProfilesStatus(false);
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setProfilesStatus(false);
     }
   }
 
@@ -187,30 +189,19 @@ public class LifeSteal {
               .build();
       this.placeholderHeart = this.itemBuilder.getBuiltItem();
     } catch (IllegalArgumentException e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
     }
   }
 
   private void recipesInit() {
     try {
-      heartRecipeManager = new HeartRecipeManager();
-      Bukkit.removeRecipe(heartRecipeManager.getHeartRecipe().getKey());
-      LifeStealPlugin.getInstance().getServer().addRecipe(heartRecipeManager.getHeartRecipe());
-      fancyStuff.setRecipeStatus(true);
+      this.heartRecipeManager = new HeartRecipeManager();
+      Bukkit.removeRecipe(this.heartRecipeManager.getHeartRecipe().getKey());
+      this.instance.getServer().addRecipe(this.heartRecipeManager.getHeartRecipe());
+      this.fancyStuff.setRecipeStatus(true);
     } catch (Exception e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setRecipeStatus(false);
-    }
-  }
-
-  private void updateCheckerInit() {
-    try {
-      new UpdateChecker(LifeStealPlugin.getInstance(), new URL("https://docs.taggernation.com/greetings-update.yml"), 6000)
-              .setNotificationPermission("greetings.update")
-              .enableOpNotification(true)
-              .setup();
-    } catch (IOException e) {
-      instance.getLogger().warning(e.toString());
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setRecipeStatus(false);
     }
   }
 
@@ -227,14 +218,15 @@ public class LifeSteal {
               new Revive(),
       };
 
-      instance.getLogger().setLevel(Level.OFF);
-      final PaperCommandManager pcm = new PaperCommandManager(instance);
+      this.instance.getLogger().setLevel(Level.OFF);
+      final PaperCommandManager pcm = new PaperCommandManager(this.instance);
+      Arrays.stream(commands).forEach(pcm::unregisterCommand);
       Arrays.stream(commands).forEach(pcm::registerCommand);
-      instance.getLogger().setLevel(Level.ALL);
-      fancyStuff.setCommandsStatus(true);
+      this.instance.getLogger().setLevel(Level.ALL);
+      this.fancyStuff.setCommandsStatus(true);
     } catch (SecurityException e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setCommandsStatus(false);
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setCommandsStatus(false);
     }
   }
 
@@ -253,16 +245,18 @@ public class LifeSteal {
               new ArrowPickupEvent(),
               new ProfileListener(),
       };
-      Arrays.stream(listeners).forEach(listener -> pluginManager.registerEvents(listener, instance));
-      fancyStuff.setListenersStatus(true);
+
+      if (!HandlerList.getHandlerLists().isEmpty()) HandlerList.unregisterAll(this.instance);
+      Arrays.stream(listeners).forEach(listener -> this.pluginManager.registerEvents(listener, this.instance));
+      this.fancyStuff.setListenersStatus(true);
     } catch (Exception e) {
-      logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      fancyStuff.setListenersStatus(false);
+      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setListenersStatus(false);
     }
   }
 
   public String getKey(String path) {
-    return language.getString(path);
+    return this.language.getString(path);
   }
 
   /**
@@ -270,23 +264,25 @@ public class LifeSteal {
    */
   public void init() {
 
-    instance = LifeStealPlugin.getInstance();
+    this.instance = LifeStealPlugin.getInstance();
 
-    pluginManager = Bukkit.getPluginManager();
+    this.pluginManager = Bukkit.getPluginManager();
 
-    miniMessage = MiniMessage.miniMessage();
+    this.miniMessage = MiniMessage.miniMessage();
+
+    this.fancyStuff = new FancyStuff(this.instance, this.miniMessage);
 
     this.namespacedKeyBuilder = new NamespacedKeyBuilder("lifesteal", this.instance);
 
-    langInit();
+    this.langInit();
 
-    configInit();
+    this.configInit();
 
-    heartsYMLInit();
+    this.heartsYMLInit();
 
-    databaseInit();
+    this.databaseInit();
 
-    profilesInit();
+    this.profilesInit();
 
     this.statisticsManager = new StatisticsManager(this.config.getBoolean("DATABASE.REALTIME"));
 
@@ -294,38 +290,54 @@ public class LifeSteal {
     this.consumeCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Consume"));
     this.withdrawCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Withdraw"));
 
-    spiritFactory = new SpiritFactory();
+    this.interaction = new Interaction(this.config.getBoolean("Clean-Console"));
 
     this.headBuilder = new HeadBuilder(this.logger, Logger.Level.ERROR);
 
-    registerCommands();
+    this.spiritFactory = new SpiritFactory();
 
-    registerListeners();
+    this.metrics = new BStats(this.instance, 15272);
 
-    placeholderHeartInit();
+    this.registerCommands();
 
-    recipesInit();
+    this.registerListeners();
 
-    heartItemManager = new HeartItemManager(HeartItemManager.Mode.RANDOM_ALL);
+    this.placeholderHeartInit();
 
-    fancyStuff.setBlessedHeartsCount(heartItemManager.getBlessedHearts().size());
-    fancyStuff.setNormalHeartsCount(heartItemManager.getNormalHearts().size());
-    fancyStuff.setCursedHeartsCount(heartItemManager.getCursedHearts().size());
-    fancyStuff.setBlessedHeartsStatus(heartItemManager.getBlessedHearts().isEmpty());
-    fancyStuff.setNormalHeartsStatus(heartItemManager.getNormalHearts().isEmpty());
-    fancyStuff.setCursedHeartsStatus(heartItemManager.getCursedHearts().isEmpty());
+    this.recipesInit();
 
-    fancyStuff.consolePrint();
+    this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.RANDOM_ALL);
 
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, () ->
-            this.getDatabaseHandler().getHikariExecutor()
-                    .execute(() -> this.getProfileManager().getProfileCache().values().forEach(profile -> {
-                      try {
-                        if (!this.getProfileManager().getProfileCache().isEmpty())
-                          this.getProfileManager().saveProfile(profile);
-                      } catch (SQLException e) {
-                        logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-                      }
-                    })), 1L, 6000L);
+    this.fancyStuff.setBlessedHeartsCount(this.heartItemManager.getBlessedHearts().size());
+    this.fancyStuff.setNormalHeartsCount(this.heartItemManager.getNormalHearts().size());
+    this.fancyStuff.setCursedHeartsCount(this.heartItemManager.getCursedHearts().size());
+    this.fancyStuff.setBlessedHeartsStatus(this.heartItemManager.getBlessedHearts().isEmpty());
+    this.fancyStuff.setNormalHeartsStatus(this.heartItemManager.getNormalHearts().isEmpty());
+    this.fancyStuff.setCursedHeartsStatus(this.heartItemManager.getCursedHearts().isEmpty());
+
+    this.fancyStuff.consolePrint();
+
+    new BukkitRunnable() {
+      @Override
+      public void run() {
+        getDatabaseHandler().getHikariExecutor()
+                .execute(() -> getProfileManager().getProfileCache().values().forEach(profile -> {
+                  try {
+                    if (!getProfileManager().getProfileCache().isEmpty())
+                      getProfileManager().saveProfile(profile);
+                  } catch (SQLException e) {
+                    logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+                  }
+                }));
+      }
+    }.runTaskTimer(this.instance, 1L, 6000L);
+  }
+
+  public void reInit() {
+    this.craftCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Craft"));
+    this.consumeCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Consume"));
+    this.withdrawCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Withdraw"));
+    this.interaction = new Interaction(this.config.getBoolean("Clean-Console"));
+    this.statisticsManager = new StatisticsManager(this.config.getBoolean("DATABASE.REALTIME"));
   }
 }

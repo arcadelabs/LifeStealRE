@@ -57,20 +57,20 @@ public class Withdraw extends BaseCommand {
   @CommandAlias("withdraw")
   public void onWithdraw(final CommandSender sender, final int hearts) {
     final Player player = (Player) sender;
-    if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw").size() != 0) {
-      disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw");
+    if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw").size() != 0) {
+      this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw");
     }
-    if (!(disabledWorlds.contains(player.getWorld().getName()))) {
-      if (hearts * 2 >= lifeSteal.getUtils().getPlayerHearts(player)) {
-        player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.NotEnoughHearts")));
+    if (!(this.disabledWorlds.contains(player.getWorld().getName()))) {
+      if (hearts >= this.lifeSteal.getUtils().getPlayerHearts(player)) {
+        player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.NotEnoughHearts")));
       } else {
         if (!this.lifeSteal.getWithdrawCooldown().isOnCooldown(player.getUniqueId())) {
           this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) - hearts);
           this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
                   .prepareIngedients()
                   .cookHeart();
-          replacementHeart = heartItemManager.getHeartItem();
-          replacementHeart.setAmount(hearts);
+          this.replacementHeart = this.heartItemManager.getHeartItem();
+          this.replacementHeart.setAmount(hearts);
 
           final Map<Integer, ItemStack> items = player.getInventory().addItem(this.replacementHeart);
           for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
@@ -92,8 +92,6 @@ public class Withdraw extends BaseCommand {
           player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Withdraw"),
                 Placeholder.component("seconds", Component.text(this.lifeSteal.getWithdrawCooldown().getRemainingTime(player.getUniqueId())))));
       }
-    } else {
-      player.sendMessage(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
-    }
+    } else player.sendMessage(MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
   }
 }
