@@ -1,4 +1,4 @@
-Version: 8
+Version: 10
 
 ToPlayerPrefix: "<reset><gradient:#f72585:#e01e37>➠ <player> | </gradient>"
 ToAllPrefix: "<reset><gradient:#f72585:#e01e37>➠ All | </gradient>"
