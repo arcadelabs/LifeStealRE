@@ -43,7 +43,7 @@ import in.arcadelabs.lifesteal.commands.Withdraw;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
 import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.database.profile.ProfileManager;
-import in.arcadelabs.lifesteal.hearts.HeartItemCooker;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import in.arcadelabs.lifesteal.hearts.HeartRecipeManager;
 import in.arcadelabs.lifesteal.hearts.SkullMaker;
@@ -290,7 +290,7 @@ public class LifeSteal {
 
     profilesInit();
 
-    interaction = new Interaction(config.getBoolean("Clean-Console"));
+    this.statisticsManager = new StatisticsManager(this.config.getBoolean("DATABASE.REALTIME"));
 
     this.craftCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Craft"));
     this.consumeCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Consume"));

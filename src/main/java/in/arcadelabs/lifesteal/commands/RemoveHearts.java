@@ -27,6 +27,7 @@ import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -40,6 +41,7 @@ import org.bukkit.entity.Player;
 public class RemoveHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final StatisticsManager statisticsManager = this.lifeSteal.getStatisticsManager();
 
   @Subcommand("removehearts")
   @CommandCompletion("@players @nothing")
@@ -56,13 +58,11 @@ public class RemoveHearts extends BaseCommand {
     final Component removeHeartsMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.RemoveHearts"),
             Placeholder.unparsed("hearts", String.valueOf(hearts)),
             playerName);
-    lifeSteal.getInteraction().retuurn(Logger.Level.INFO, removeHeartsMsg, player,
-            lifeSteal.getKey("Sounds.RemoveHearts"));
-    lifeSteal.getProfileManager().getProfileCache().get
-            (player.getUniqueId()).setCurrentHearts(
-            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() - hearts));
-    lifeSteal.getProfileManager().getProfileCache().get
-            (player.getUniqueId()).setLostHearts(
-            (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
+    this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, removeHeartsMsg, player,
+            this.lifeSteal.getKey("Sounds.RemoveHearts"));
+
+    this.statisticsManager.setCurrentHearts(player, this.statisticsManager.getCurrentHearts(player) - hearts)
+            .setLostHearts(player, this.statisticsManager.getLostHearts(player) + hearts)
+            .update(player);
   }
 }

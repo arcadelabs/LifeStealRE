@@ -21,6 +21,8 @@ package in.arcadelabs.lifesteal.listeners;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
+import in.arcadelabs.lifesteal.hearts.Heart;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -41,6 +43,7 @@ public class HeartConsumeListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final LifeStealPlugin instance = LifeStealPlugin.getInstance();
+  private final StatisticsManager statisticsManager = this.lifeSteal.getStatisticsManager();
   private List<String> disabledWorlds;
 
   @EventHandler
@@ -138,29 +141,21 @@ public class HeartConsumeListener implements Listener {
           this.lifeSteal.getUtils().giveHeartEffects(player, heartMeta, this.instance);
           this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, heart.getConsumeMessages(), player, heart.getConsumeSound());
 
-      lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player)
-              + healthPoints);
-      lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
-      lifeSteal.getInteraction().retuurn(Logger.Level.INFO, consumeMessages, player, consumeSound);
+          this.statisticsManager.setCurrentHearts(player, this.statisticsManager.getCurrentHearts(player) + (int) heart.getHealthPoints())
+                  .setPeakReachedHearts(player, this.statisticsManager.getPeakReachedHearts(player) + (int) heart.getHealthPoints())
+                  .update(player);
 
-      lifeSteal.getProfileManager().getProfileCache().get
-              (player.getUniqueId()).setCurrentHearts(
-              (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + (int) healthPoints));
-      lifeSteal.getProfileManager().getProfileCache().get
-              (player.getUniqueId()).setPeakHeartsReached(
-              (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getPeakHeartsReached() + (int) healthPoints));
-
-      switch (type != null ? type : "Normal") {
-        case "Blessed" -> lifeSteal.getProfileManager().getProfileCache().get
-                (player.getUniqueId()).setBlessedHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getBlessedHearts() + (int) healthPoints));
-        case "Normal" -> lifeSteal.getProfileManager().getProfileCache().get
-                (player.getUniqueId()).setNormalHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getNormalHearts() + (int) healthPoints));
-        case "Cursed" -> lifeSteal.getProfileManager().getProfileCache().get
-                (player.getUniqueId()).setCursedHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCursedHearts() + (int) healthPoints));
-      }
+          switch (heart.getType() != null ? heart.getType() : "Normal") {
+            case "Blessed" ->
+                    this.statisticsManager.setBlessedHearts(player, this.statisticsManager.getBlessedHearts(player) + (int) heart.getHealthPoints())
+                            .update(player);
+            case "Normal" ->
+                    this.statisticsManager.setNormalHearts(player, this.statisticsManager.getNormalHearts(player) + (int) heart.getHealthPoints())
+                            .update(player);
+            case "Cursed" ->
+                    this.statisticsManager.setCursedHearts(player, this.statisticsManager.getCursedHearts(player) + (int) heart.getHealthPoints())
+                            .update(player);
+          }
 
           Bukkit.getScheduler().scheduleSyncDelayedTask(this.instance, () ->
                   player.setHealth(Math.min(player.getHealth() +

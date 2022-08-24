@@ -25,6 +25,7 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -41,6 +42,7 @@ import java.util.Map;
 public class Withdraw extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final StatisticsManager statisticsManager = this.lifeSteal.getStatisticsManager();
   private HeartItemManager heartItemManager;
   private ItemStack replacementHeart;
   private List<String> disabledWorlds;
@@ -70,15 +72,19 @@ public class Withdraw extends BaseCommand {
           replacementHeart = heartItemManager.getHeartItem();
           replacementHeart.setAmount(hearts);
 
-        final Map<Integer, ItemStack> items = player.getInventory().addItem(replacementHeart);
-        for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
-          player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
-        }
-        lifeSteal.getUtils().spawnParticles(player, "soul");
-        final Component withdrawMsg = MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.HeartWithdraw"),
-                Placeholder.unparsed("hearts", String.valueOf(hearts)));
-        lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
-                lifeSteal.getKey("Sounds.HeartWithdraw"));
+          final Map<Integer, ItemStack> items = player.getInventory().addItem(this.replacementHeart);
+          for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), leftovers.getValue());
+          }
+          this.lifeSteal.getUtils().spawnParticles(player, "soul");
+          final Component withdrawMsg = MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.HeartWithdraw"),
+                  Placeholder.unparsed("hearts", String.valueOf(hearts)));
+          this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
+                  this.lifeSteal.getKey("Sounds.HeartWithdraw"));
+
+          this.statisticsManager.setCurrentHearts(player, this.statisticsManager.getCurrentHearts(player) - hearts)
+                  .setLostHearts(player, this.statisticsManager.getLostHearts(player) + hearts)
+                  .update(player);
 
           if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Withdraw") >= 0)
             this.lifeSteal.getWithdrawCooldown().setCooldown(player.getUniqueId());

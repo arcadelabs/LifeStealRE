@@ -20,6 +20,7 @@ package in.arcadelabs.lifesteal.listeners;
 
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -34,6 +35,7 @@ import java.util.List;
 public class PlayerDeathListener implements Listener {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
+  private final StatisticsManager statisticsManager = this.lifeSteal.getStatisticsManager();
   private HeartItemManager heartItemManager;
   private ItemStack replacementHeart;
   private List<String> disabledWorlds, disabledWorldsNatural;
@@ -50,13 +52,10 @@ public class PlayerDeathListener implements Listener {
       } else {
         lifeSteal.getInteraction().broadcast(lifeSteal.getKey("Messages.Elimination.ByPlayer"), victim);
       }
-      lifeSteal.getProfileManager().getProfileCache().get
-              (victim.getUniqueId()).setCurrentHearts(
-              lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - 1);
-      lifeSteal.getProfileManager().getProfileCache().get
-              (victim.getUniqueId()).setLostHearts(
-              lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + 1);
-      lifeSteal.getUtils().handleElimination(victim, event);
+      this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
+              .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)
+              .update(victim);
+      this.lifeSteal.getUtils().handleElimination(victim, event);
     } else {
       if (victim.getKiller() == null) {
         if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other").size() != 0) {
@@ -66,15 +65,14 @@ public class PlayerDeathListener implements Listener {
           heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
                   .prepareIngedients()
                   .cookHeart();
-          replacementHeart = heartItemManager.getHeartItem();
-          lifeSteal.getUtils().setPlayerHearts(victim, lifeSteal.getUtils().getPlayerHearts(victim) - lostHearts);
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (victim.getUniqueId()).setCurrentHearts(
-                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (victim.getUniqueId()).setLostHearts(
-                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + lostHearts);
-          victim.getWorld().dropItemNaturally(victim.getLocation(), replacementHeart);
+          this.replacementHeart = this.heartItemManager.getHeartItem();
+          this.lifeSteal.getUtils().setPlayerHearts(victim, this.lifeSteal.getUtils().getPlayerHearts(victim) - lostHearts);
+
+          this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
+                  .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)
+                  .update(victim);
+
+          victim.getWorld().dropItemNaturally(victim.getLocation(), this.replacementHeart);
         } else {
           victim.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Other")));
         }
