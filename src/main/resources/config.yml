@@ -14,8 +14,17 @@ DATABASE:
 # State how many hearts players should transfer on player death.
 HeartsToTransfer: 1
 DefaultHearts: 10
+# put -1 for no limit.
+Max-Hearts: -1
 DisableTotem: true
 DisableMilkCure: true
+
+# put -1 for no cooldown.
+# Values should be in seconds.
+Cooldowns:
+  Heart-Consume: -1
+  Heart-Craft: -1
+  Heart-Withdraw: -1
 
 # Put [] to disable any of these.
 Disabled-Worlds:

@@ -21,6 +21,8 @@ package in.arcadelabs.lifesteal.listeners;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,12 +50,22 @@ public class HeartCraftListener implements Listener {
     }
     if (!disabledWorlds.contains(player.getWorld().getName())) {
       if (event.isShiftClick()) event.setCancelled(true);
-      heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(LifeStealPlugin.getLifeSteal()
-              .getHeartConfig().getString("Hearts.Mode.OnCraft")))
-              .prepareIngedients()
-              .cookHeart();
-      replacementHeart = heartItemManager.getHeartItem();
-      event.getInventory().setResult(replacementHeart);
+      if (!this.lifeSteal.getCraftCooldown().isOnCooldown(player.getUniqueId())) {
+        this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal
+                .getHeartConfig().getString("Hearts.Mode.OnCraft")))
+                .prepareIngedients()
+                .cookHeart();
+        this.replacementHeart = this.heartItemManager.getHeartItem();
+        event.getInventory().setResult(this.replacementHeart);
+
+        if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Craft") >= 0)
+          this.lifeSteal.getCraftCooldown().setCooldown(player.getUniqueId());
+        
+      } else {
+        player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Craft"),
+                Placeholder.component("seconds", Component.text(this.lifeSteal.getCraftCooldown().getRemainingTime(player.getUniqueId())))));
+        event.setCancelled(true);
+      }
     } else {
       event.setCancelled(true);
       player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Craft")));

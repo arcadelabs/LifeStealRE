@@ -22,8 +22,8 @@ import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -53,60 +53,65 @@ public class HeartConsumeListener implements Listener {
       final ItemMeta heartMeta = player.getInventory().getItemInMainHand().getItemMeta();
 
       if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
-              .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
-      if (player.getInventory().getItemInMainHand().getType().isEdible()) {
-        if (player.getFoodLevel() == 20) {
-          player.setFoodLevel(19);
-          instance.getServer().getScheduler().scheduleSyncDelayedTask(instance, () -> player.setFoodLevel(20), 1L);
-        }
+              .has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_item"), PersistentDataType.STRING))) return;
+      if (!this.lifeSteal.getConfig().getInt("Max-Hearts").equals(-1) &&
+              this.lifeSteal.getConfig().getInt("Max-Hearts") <= this.lifeSteal.getUtils().getPlayerHearts(player)) {
+        player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.MaxHeartsReached.Consume")));
+        event.setCancelled(true);
       } else {
-        if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
-          disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
-        }
-        if (!(disabledWorlds.contains(player.getWorld().getName()))) {
-          final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-                  (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
-          final String type = heartMeta.getPersistentDataContainer().get
-                  (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
-          final String index = heartMeta.getPersistentDataContainer().get
-                  (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
-          final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-                  (new NamespacedKey(instance, "lifesteal_heart_consumesound"), PersistentDataType.STRING));
-          final List<Component> consumeMessages = lifeSteal.getUtils().stringToComponentList(lifeSteal.getHeartConfig().getStringList
-                  ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage"), false);
-
-          lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player)
-                  + healthPoints);
-          player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
-          lifeSteal.getUtils().spawnParticles(player, "heart");
-          lifeSteal.getUtils().giveHeartEffects(player, heartMeta, instance);
-          lifeSteal.getInteraction().retuurn(Logger.Level.INFO, consumeMessages, player, consumeSound);
-
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (player.getUniqueId()).setCurrentHearts(
-                  (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() + (int) healthPoints));
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (player.getUniqueId()).setPeakHeartsReached(
-                  (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getPeakHeartsReached() + (int) healthPoints));
-
-          switch (type != null ? type : "Normal") {
-            case "Blessed" -> lifeSteal.getProfileManager().getProfileCache().get
-                    (player.getUniqueId()).setBlessedHearts(
-                    (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getBlessedHearts() + (int) healthPoints));
-            case "Normal" -> lifeSteal.getProfileManager().getProfileCache().get
-                    (player.getUniqueId()).setNormalHearts(
-                    (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getNormalHearts() + (int) healthPoints));
-            case "Cursed" -> lifeSteal.getProfileManager().getProfileCache().get
-                    (player.getUniqueId()).setCursedHearts(
-                    (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCursedHearts() + (int) healthPoints));
+        if (player.getInventory().getItemInMainHand().getType().isEdible()) {
+          if (player.getFoodLevel() == 20) {
+            player.setFoodLevel(19);
+            this.instance.getServer().getScheduler().scheduleSyncDelayedTask(this.instance, () -> player.setFoodLevel(20), 1L);
           }
-
-          Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () ->
-                  player.setHealth(Math.min(player.getHealth() +
-                          healthPoints, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
         } else {
-          event.setCancelled(true);
-          player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Consume")));
+          if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
+            this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
+          }
+          if (!(this.disabledWorlds.contains(player.getWorld().getName()))) {
+
+            if (!this.lifeSteal.getConsumeCooldown().isOnCooldown(player.getUniqueId())) {
+              final Heart heart = new Heart(heartMeta);
+
+              this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player)
+                      + heart.getHealthPoints());
+              player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+              this.lifeSteal.getUtils().spawnParticles(player, "heart");
+              this.lifeSteal.getUtils().giveHeartEffects(player, heartMeta, this.instance);
+              this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, heart.getConsumeMessages(), player, heart.getConsumeSound());
+
+              this.statisticsManager.setCurrentHearts(player, this.statisticsManager.getCurrentHearts(player) + (int) heart.getHealthPoints())
+                      .setPeakReachedHearts(player, this.statisticsManager.getPeakReachedHearts(player) + (int) heart.getHealthPoints())
+                      .update(player);
+
+              switch (heart.getType() != null ? heart.getType() : "Normal") {
+                case "Blessed" ->
+                        this.statisticsManager.setBlessedHearts(player, this.statisticsManager.getBlessedHearts(player) + (int) heart.getHealthPoints())
+                                .update(player);
+                case "Normal" ->
+                        this.statisticsManager.setNormalHearts(player, this.statisticsManager.getNormalHearts(player) + (int) heart.getHealthPoints())
+                                .update(player);
+                case "Cursed" ->
+                        this.statisticsManager.setCursedHearts(player, this.statisticsManager.getCursedHearts(player) + (int) heart.getHealthPoints())
+                                .update(player);
+              }
+
+              Bukkit.getScheduler().scheduleSyncDelayedTask(this.instance, () ->
+                      player.setHealth(Math.min(player.getHealth() +
+                              heart.getHealthPoints(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
+
+              if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Consume") >= 0)
+                this.lifeSteal.getConsumeCooldown().setCooldown(player.getUniqueId());
+
+            } else {
+              event.setCancelled(true);
+              player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Consume"),
+                      Placeholder.component("seconds", Component.text(this.lifeSteal.getConsumeCooldown().getRemainingTime(player.getUniqueId())))));
+            }
+          } else {
+            event.setCancelled(true);
+            player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Consume")));
+          }
         }
       }
     } else event.setCancelled(true);
@@ -122,20 +127,16 @@ public class HeartConsumeListener implements Listener {
     if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
             .has(new NamespacedKey(instance, "lifesteal_heart_item"), PersistentDataType.STRING))) return;
 
-    if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
-      disabledWorlds = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
-    }
-    if (!(disabledWorlds.contains(player.getWorld().getName()))) {
-      final double healthPoints = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_healthpoints"), PersistentDataType.DOUBLE));
-      final String type = heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_itemtype"), PersistentDataType.STRING);
-      final String index = heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_itemindex"), PersistentDataType.STRING);
-      final String consumeSound = Objects.requireNonNull(heartMeta.getPersistentDataContainer().get
-              (new NamespacedKey(instance, "lifesteal_heart_consumesound"), PersistentDataType.STRING));
-      final List<Component> consumeMessages = lifeSteal.getUtils().stringToComponentList(lifeSteal.getHeartConfig().getStringList
-              ("Hearts.Types." + type + "." + index + ".Properties.ConsumeMessage"), false);
+      if (this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume").size() != 0) {
+        this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Consume");
+      }
+      if (!(this.disabledWorlds.contains(player.getWorld().getName()))) {
+        if (!this.lifeSteal.getConsumeCooldown().isOnCooldown(player.getUniqueId())) {
+          final Heart heart = new Heart(heartMeta);
+          this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player)
+                  + heart.getHealthPoints());
+          this.lifeSteal.getUtils().giveHeartEffects(player, heartMeta, this.instance);
+          this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, heart.getConsumeMessages(), player, heart.getConsumeSound());
 
       lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player)
               + healthPoints);
@@ -161,12 +162,22 @@ public class HeartConsumeListener implements Listener {
                 (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCursedHearts() + (int) healthPoints));
       }
 
-      Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () ->
-              player.setHealth(Math.min(player.getHealth() +
-                      healthPoints, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
-    } else {
-      event.setCancelled(true);
-      player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Consume")));
+          Bukkit.getScheduler().scheduleSyncDelayedTask(this.instance, () ->
+                  player.setHealth(Math.min(player.getHealth() +
+                          heart.getHealthPoints(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())), 20L);
+
+          if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Consume") >= 0)
+            this.lifeSteal.getConsumeCooldown().setCooldown(player.getUniqueId());
+
+        } else {
+          event.setCancelled(true);
+          player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Consume"),
+                  Placeholder.component("seconds", Component.text(this.lifeSteal.getConsumeCooldown().getRemainingTime(player.getUniqueId())))));
+        }
+      } else {
+        event.setCancelled(true);
+        player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Consume")));
+      }
     }
   }
 }

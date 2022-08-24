@@ -21,6 +21,8 @@ package in.arcadelabs.lifesteal.listeners;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -80,25 +82,38 @@ public class PlayerDeathListener implements Listener {
         if (lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill").size() != 0) {
           disabledWorldsNatural = lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Player-Kill");
         }
-        if (!(disabledWorldsNatural.contains(victim.getWorld().getName()))) {
-          lifeSteal.getUtils().transferHearts(victim, victim.getKiller());
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (victim.getUniqueId()).setCurrentHearts(
-                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getCurrentHearts() - lostHearts);
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (victim.getKiller().getUniqueId()).setCurrentHearts(
-                  lifeSteal.getProfileManager().getProfileCache().get(victim.getKiller().getUniqueId()).getCurrentHearts() + lostHearts);
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (victim.getUniqueId()).setLostHearts(
-                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getLostHearts() + lostHearts);
-          lifeSteal.getProfileManager().getProfileCache().get
-                  (victim.getUniqueId()).setPeakHeartsReached(
-                  lifeSteal.getProfileManager().getProfileCache().get(victim.getUniqueId()).getPeakHeartsReached() + lostHearts);
+        if (!(this.disabledWorldsNatural.contains(victim.getWorld().getName()))) {
+          if (!this.lifeSteal.getConfig().getInt("Max-Hearts").equals(-1) &&
+                  this.lifeSteal.getConfig().getInt("Max-Hearts").equals((int) this.lifeSteal.getUtils().getPlayerHearts(victim.getKiller()))) {
+            victim.getKiller().sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.MaxHeartsReached.OnDeath"),
+                    Placeholder.component("location", Component.text(
+                            "x:" +
+                                    Math.round(event.getPlayer().getLocation().getX()) +
+                                    ", y:" + Math.round(event.getPlayer().getLocation().getY()) +
+                                    ", z:" + Math.round(event.getPlayer().getLocation().getZ())))));
+            this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
+                    .prepareIngedients()
+                    .cookHeart();
+            this.replacementHeart = this.heartItemManager.getHeartItem();
+            this.lifeSteal.getUtils().setPlayerHearts(victim, this.lifeSteal.getUtils().getPlayerHearts(victim) - lostHearts);
+
+            this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
+                    .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)
+                    .update(victim);
+            victim.getWorld().dropItemNaturally(victim.getLocation(), this.replacementHeart);
+          } else {
+            this.lifeSteal.getUtils().transferHearts(victim, victim.getKiller());
+            this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
+                    .setCurrentHearts(victim.getKiller(), this.statisticsManager.getCurrentHearts(victim.getKiller()) + lostHearts)
+                    .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)
+                    .setPeakReachedHearts(victim.getKiller(), this.statisticsManager.getPeakReachedHearts(victim.getKiller()) + lostHearts)
+                    .update(victim);
+          }
         } else {
-          victim.getKiller().sendMessage(lifeSteal.getUtils().formatString(
-                  lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Killer")));
-          victim.sendMessage(lifeSteal.getUtils().formatString(
-                  lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Victim")));
+          victim.getKiller().sendMessage(this.lifeSteal.getUtils().formatString(
+                  this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Killer")));
+          victim.sendMessage(this.lifeSteal.getUtils().formatString(
+                  this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Drops.Player-Kill.Victim")));
         }
       }
     }

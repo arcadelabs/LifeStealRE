@@ -18,6 +18,9 @@
 
 package in.arcadelabs.lifesteal;
 
+import in.arcadelabs.labaide.cooldown.CooldownManager;
+import in.arcadelabs.labaide.item.HeadBuilder;
+import in.arcadelabs.labaide.item.ItemBuilder;
 import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.labaide.libs.aikar.acf.PaperCommandManager;
 import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
@@ -89,6 +92,9 @@ public class LifeSteal {
   private Logger logger;
   private HeartItemManager heartItemManager;
   private FancyStuff fancyStuff;
+  private NamespacedKeyBuilder namespacedKeyBuilder;
+  private CooldownManager craftCooldown, consumeCooldown, withdrawCooldown;
+  private StatisticsManager statisticsManager;
 
   private void langInit() {
     try {
@@ -286,7 +292,9 @@ public class LifeSteal {
 
     interaction = new Interaction(config.getBoolean("Clean-Console"));
 
-    skullMaker = new SkullMaker();
+    this.craftCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Craft"));
+    this.consumeCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Consume"));
+    this.withdrawCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Withdraw"));
 
     spiritFactory = new SpiritFactory();
 

@@ -62,8 +62,9 @@ public class Withdraw extends BaseCommand {
       if (hearts * 2 >= lifeSteal.getUtils().getPlayerHearts(player)) {
         player.sendMessage(lifeSteal.getUtils().formatString(lifeSteal.getKey("Messages.NotEnoughHearts")));
       } else {
-        lifeSteal.getUtils().setPlayerHearts(player, lifeSteal.getUtils().getPlayerHearts(player) - hearts);
-          heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
+        if (!this.lifeSteal.getWithdrawCooldown().isOnCooldown(player.getUniqueId())) {
+          this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) - hearts);
+          this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
                   .prepareIngedients()
                   .cookHeart();
           replacementHeart = heartItemManager.getHeartItem();
@@ -79,12 +80,11 @@ public class Withdraw extends BaseCommand {
         lifeSteal.getInteraction().retuurn(Logger.Level.INFO, withdrawMsg, player,
                 lifeSteal.getKey("Sounds.HeartWithdraw"));
 
-        lifeSteal.getProfileManager().getProfileCache().get
-                (player.getUniqueId()).setCurrentHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts() - hearts));
-        lifeSteal.getProfileManager().getProfileCache().get
-                (player.getUniqueId()).setLostHearts(
-                (lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts() + hearts));
+          if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Withdraw") >= 0)
+            this.lifeSteal.getWithdrawCooldown().setCooldown(player.getUniqueId());
+        } else
+          player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Withdraw"),
+                Placeholder.component("seconds", Component.text(this.lifeSteal.getWithdrawCooldown().getRemainingTime(player.getUniqueId())))));
       }
     } else {
       player.sendMessage(MiniMessage.miniMessage().deserialize(lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
