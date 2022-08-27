@@ -19,11 +19,15 @@
 package in.arcadelabs.lifesteal;
 
 import in.arcadelabs.labaide.logger.Logger;
+import in.arcadelabs.lifesteal.api.LifeStealAPI;
+import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
+import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -41,7 +45,6 @@ public final class LifeStealPlugin extends JavaPlugin {
   @Override
   public void onEnable() {
     instance = this;
-
     if (Bukkit.getPluginManager().getPlugin("LabAide") == null) {
       this.labaideExist = false;
       this.getLogger().severe("LabAide was not found! Disabling LifeStealRE...");
@@ -62,6 +65,17 @@ public final class LifeStealPlugin extends JavaPlugin {
       this.getLogger().warning(e.toString());
       e.printStackTrace();
     }
+    this.getServer().getServicesManager().register(LifeStealAPI.class, new LifeStealAPI() {
+      @Override
+      public StatisticsManager getStatisticsManager() {
+        return lifeSteal.getStatisticsManager();
+      }
+
+      @Override
+      public HeartItemManager getHeartItemManager() {
+        return lifeSteal.getHeartItemManager();
+      }
+    }, this, ServicePriority.High);
   }
 
   @Override
