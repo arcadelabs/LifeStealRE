@@ -25,13 +25,11 @@ of them is 100% customizable, and each heart can give unique effects as well.
 
 Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
-## Features,
+## ⚙️ Features
 
 ![Progress](https://progress-bar.dev/80/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
 
-- [x] HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages,
-  and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an
-  heart that doesn't work as long as it shows the errors in gradients.
+- [x] HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages.
 - [x] Customizable heart recipe.
 - [x] Blessed, normal and cursed heart types.
 - [x] Unlimited amount of 100% customizable hearts.
@@ -49,19 +47,25 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
   body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - [ ] Heart consume animations and particle effects (work in progress, don't expect proper
   functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- [ ] Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
+- [ ] Profile system (statistics etc.)
 - [ ] And tons of other stuff that I'm gonna send screenshot of because me lazy...
   I blured some stuff out because they're upcoming more exciting features 😈
 
 > ![image](https://user-images.githubusercontent.com/69498033/177811484-f9ef5fbc-3881-4d1e-b988-dd414502fb0d.png)
 
-## Installation.
+## ⚒️ Installation
 
 1. Download and install [LabAide](https://github.com/arcadelabs/LabAide/releases) library plugin build.
 2. Download and install [latest](https://github.com/arcadelabs/LifeSteal/releases/tag/latest) LifeStealRE plugin build.
 3. Expect it to work, if it doesn't I hearby authorize you to yell at me.
 
-## Servers using LifeStealRE ,
+## API
+```java
+LifeStealAPI api = Bukkit.getServicesManager().getRegistration(LifeStealAPI .class).getProvider();
+
+```
+
+## Servers using LifeStealRE
 
 ![bStats Players](https://img.shields.io/bstats/players/15272?style=for-the-badge)
 ![bStats Servers](https://img.shields.io/bstats/servers/15272?style=for-the-badge)
@@ -69,7 +73,7 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 > **Note**
 > _Contact me to include your server name and IP here._
 
-## Final thoughts,
+## Final thoughts
 
 This is my ([@RealRONiN](https://github.com/RealRONiN)'s) 2nd public project (first one is Greetings and it's private
 for god knows what reasons.),
