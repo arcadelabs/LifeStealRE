@@ -6,8 +6,12 @@
 
     <groupId>in.arcadelabs</groupId>
     <artifactId>LifeStealRE</artifactId>
+    <packaging>pom</packaging>
     <version>1.8</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>lifesteal-api</module>
+        <module>lifesteal-core</module>
+    </modules>
 
     <name>LifeStealRE</name>
 
@@ -60,7 +64,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>lifesteal-core/src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
