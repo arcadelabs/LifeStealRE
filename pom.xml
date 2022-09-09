@@ -1,26 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  *          LifeSteal - Yet another lifecore smp core.
+  *                Copyright (C) 2022  Arcade Labs
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  -->
+
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>in.arcadelabs</groupId>
     <artifactId>LifeStealRE</artifactId>
+    <name>LifeStealRE</name>
     <packaging>pom</packaging>
     <version>1.8</version>
+    <description>Just another LifeSteal SMP core plugin.</description>
+
     <modules>
         <module>lifesteal-api</module>
         <module>lifesteal-core</module>
     </modules>
 
-    <name>LifeStealRE</name>
+    <organization>
+        <name>ArcadeLabs Studios</name>
+        <url>https://github.com/arcadelabs</url>
+    </organization>
 
-    <description>Just another LifeSteal SMP core plugin.</description>
+    <developers>
+        <developer>
+            <name>Aniket</name>
+            <email>roninowns@gmail.com</email>
+            <organization>ArcadeLabs Studios</organization>
+            <organizationUrl>https://github.com/arcadelabs</organizationUrl>
+            <timezone>IST</timezone>
+        </developer>
+        <developer>
+            <name>Infinity</name>
+            <email>xa583179@gmail.com</email>
+            <organization>ArcadeLabs Studios</organization>
+            <organizationUrl>https://github.com/arcadelabs</organizationUrl>
+            <timezone>IST</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+            <distribution>manual</distribution>
+        </license>
+    </licenses>
+
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jar.finalName>${project.name}-v${project.version}</jar.finalName>
     </properties>
+
     <url>https://arcadelabs.in</url>
 
     <build>
@@ -36,14 +88,6 @@
                         <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <!--                <configuration>-->
-                <!--                    <outputDirectory>C:\Users\anike\OneDrive\Desktop\TGN SV\plugins</outputDirectory>-->
-                <!--                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -65,9 +65,10 @@ This implementation has the following features:
 ## Features
 
 > Easy methods for editing, updating, retrieve & deleting data.
-This implementation makes easy to edit, update or retrieve & delete data without even using the weird sql query syntax!.
+> This implementation makes easy to edit, update or retrieve & delete data without even using the weird sql query syntax!.
 
 - Creating a Profile
+
 ```java
 Profile profile = new Profile(uuid);
  LifeStealPlugin.getLifeSteal()
@@ -77,6 +78,7 @@ Profile profile = new Profile(uuid);
 ```
 
 - Updating & Refreshing Profile
+
 ```java
 Profile profile = new Profile(uuid);
 
@@ -107,6 +109,7 @@ LifeStealPlugin.getLifeSteal()
 This method of retrieving profile from database will make a new query to fetch the data;
 It is very inconvenient cause it can cause lag between database and plugin if frequently used.
 To retrieve data of an online player, use the second method..
+
 ```java
 Profile profile = LifeStealPlugin
   .getLifeSteal()
@@ -119,6 +122,7 @@ Profile profile = LifeStealPlugin
 Cache is a Map<UUID, Profile> in which the profiles are stored with the player uuid as key;
 LifeSteal provides an runnable task which saves the cache profile to the actual database every
 10 seconds which doesn't cause lag; to retrieve data from cache follow the code below.
+
 ```java
 Profile profile = LifeStealPlugin
   .getLifeSteal()
@@ -128,6 +132,7 @@ Profile profile = LifeStealPlugin
 ```
 
 > Deleting Profile from database
+
 ```java
 Profile profile = new Profile(uuid);
 LifeStealPlugin.getLifeSteal()

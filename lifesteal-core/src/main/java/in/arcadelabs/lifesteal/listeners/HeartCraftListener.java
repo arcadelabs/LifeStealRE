@@ -59,7 +59,7 @@ public class HeartCraftListener implements Listener {
 
         if (this.lifeSteal.getConfig().getInt("Cooldowns.Heart-Craft") >= 0)
           this.lifeSteal.getCraftCooldown().setCooldown(player.getUniqueId());
-        
+
       } else {
         player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Craft"),
                 Placeholder.component("seconds", Component.text(this.lifeSteal.getCraftCooldown().getRemainingTime(player.getUniqueId())))));

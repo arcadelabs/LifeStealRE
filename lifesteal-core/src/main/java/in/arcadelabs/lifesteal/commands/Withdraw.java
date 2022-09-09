@@ -90,8 +90,9 @@ public class Withdraw extends BaseCommand {
             this.lifeSteal.getWithdrawCooldown().setCooldown(player.getUniqueId());
         } else
           player.sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.CooldownMessage.Heart-Withdraw"),
-                Placeholder.component("seconds", Component.text(this.lifeSteal.getWithdrawCooldown().getRemainingTime(player.getUniqueId())))));
+                  Placeholder.component("seconds", Component.text(this.lifeSteal.getWithdrawCooldown().getRemainingTime(player.getUniqueId())))));
       }
-    } else player.sendMessage(MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
+    } else
+      player.sendMessage(MiniMessage.miniMessage().deserialize(this.lifeSteal.getKey("Messages.DisabledStuff.Worlds.Heart-Withdraw")));
   }
 }
