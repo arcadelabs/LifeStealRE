@@ -1,5 +1,5 @@
 name: LifeSteal
-version: '${project.version}'
+version: '${project.parent.version}'
 main: in.arcadelabs.lifesteal.LifeStealPlugin
 api-version: 1.18
 softdepend: [ LabAide ]
