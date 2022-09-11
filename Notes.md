@@ -65,7 +65,8 @@ This implementation has the following features:
 ## Features
 
 > Easy methods for editing, updating, retrieve & deleting data.
-> This implementation makes easy to edit, update or retrieve & delete data without even using the weird sql query syntax!.
+> This implementation makes easy to edit, update or retrieve & delete data without even using the weird sql query
+> syntax!.
 
 - Creating a Profile
 

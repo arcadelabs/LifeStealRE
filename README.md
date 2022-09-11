@@ -61,6 +61,47 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 2. Download and install [latest](https://github.com/arcadelabs/LifeSteal/releases/tag/latest) LifeStealRE plugin build.
 3. Expect it to work, if it doesn't I hearby authorize you to yell at me.
 
+## For developers,
+
+1. `git clone https://github.com/arcadelabs/LifeStealRE.git`
+2. `mvn clean install`
+
+> Maven
+> ```xml
+> <dependency>
+>    <groupId>in.arcadelabs</groupId>
+>    <artifactId>lifesteal-api</artifactId>
+>    <version>1.9</version>
+>    <scope>provided</scope>
+> </dependency>
+>```
+
+> Get instance of LifeStealAPI
+> ```java
+> LifeStealAPI api = Bukkit.getServicesManager().getRegistration(LifeStealAPI .class).getProvider();
+> ```
+
+> Heart item manager
+> ```java
+>     HeartItemManager heartItemManager = lifeStealAPI.getHeartItemManager();
+> 
+>     ItemStack blessedHeart = heartItemManager.setMode(HeartItemManager.Mode.RANDOM_BLESSED) //Set heart type mode.
+>             .prepareIngedients()
+>             .cookHeart()
+>             .getHeartItem();
+> 
+>     int cursedHeartsCount = heartItemManager.getCursedHearts().size(); //Amount of cursed hearts loaded from hearts.yml
+> ```
+
+> Statistics manager
+> ```java
+>     StatisticsManager statisticsManager = lifeStealAPI.getStatisticsManager().isRealTime(true); //Set if it should update the db in real time.
+> 
+>     statisticsManager.setLostHearts(player, statisticsManager.getLostHearts(player) + 1); //This updates player statistics in database (MySQL or SQLite, whichever is set in main plugin).
+> 
+>     statisticsManager.setLifeState(player, LifeState.SPIRIT);
+> ```
+
 ## Servers using LifeStealRE ,
 
 ![bStats Players](https://img.shields.io/bstats/players/15272?style=for-the-badge)

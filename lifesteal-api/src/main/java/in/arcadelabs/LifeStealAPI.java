@@ -23,8 +23,18 @@ import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 
 public interface LifeStealAPI {
 
+  /**
+   * Gets statistics manager.
+   *
+   * @return the statistics manager
+   */
   StatisticsManager getStatisticsManager();
 
+  /**
+   * Gets heart item manager.
+   *
+   * @return the heart item manager
+   */
   HeartItemManager getHeartItemManager();
 
 }

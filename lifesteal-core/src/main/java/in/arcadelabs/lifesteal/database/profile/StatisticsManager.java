@@ -33,15 +33,23 @@ import java.util.UUID;
 public class StatisticsManager {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private final boolean realtimeUpdate;
+  private boolean realtimeUpdate;
 
   /**
    * Instantiates a new Statistics manager.
+   */
+  public StatisticsManager() {
+  }
+
+  /**
+   * Is real time statistics manager.
    *
    * @param realtimeUpdate the realtime update
+   * @return the statistics manager
    */
-  public StatisticsManager(boolean realtimeUpdate) {
+  public StatisticsManager isRealTime(boolean realtimeUpdate) {
     this.realtimeUpdate = realtimeUpdate;
+    return this;
   }
 
   /**

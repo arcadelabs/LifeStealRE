@@ -19,8 +19,8 @@
 
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -78,7 +78,7 @@
                 <version>3.2.4</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
@@ -97,13 +97,13 @@
         <dependency>
             <groupId>in.arcadelabs</groupId>
             <artifactId>lifesteal-core</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>in.arcadelabs</groupId>
             <artifactId>lifesteal-api</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

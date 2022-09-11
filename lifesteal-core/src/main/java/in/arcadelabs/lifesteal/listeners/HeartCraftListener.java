@@ -50,8 +50,9 @@ public class HeartCraftListener implements Listener {
     if (!this.disabledWorlds.contains(player.getWorld().getName())) {
       if (event.isShiftClick()) event.setCancelled(true);
       if (!this.lifeSteal.getCraftCooldown().isOnCooldown(player.getUniqueId())) {
-        this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal
-                .getHeartConfig().getString("Hearts.Mode.OnCraft")))
+        this.heartItemManager = new HeartItemManager()
+                .setMode(HeartItemManager.Mode.valueOf(this.lifeSteal
+                        .getHeartConfig().getString("Hearts.Mode.OnCraft")))
                 .prepareIngedients()
                 .cookHeart();
         this.replacementHeart = this.heartItemManager.getHeartItem();
