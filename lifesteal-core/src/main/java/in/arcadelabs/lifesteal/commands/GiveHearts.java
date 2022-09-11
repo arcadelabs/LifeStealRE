@@ -58,7 +58,8 @@ public class GiveHearts extends BaseCommand {
   }
 
   public void giveHearts(final CommandSender sender, final String type, final HeartItemManager.Mode mode, final Player target, final int amount) {
-    this.heartItemManager = new HeartItemManager(mode)
+    this.heartItemManager = new HeartItemManager()
+            .setMode(mode)
             .prepareIngedients()
             .cookHeart();
     this.replacementHeart = heartItemManager.getHeartItem();

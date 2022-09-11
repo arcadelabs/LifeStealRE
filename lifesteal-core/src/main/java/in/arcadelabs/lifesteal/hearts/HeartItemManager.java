@@ -65,10 +65,8 @@ public class HeartItemManager {
 
   /**
    * Instantiates a new Heart item manager.
-   *
-   * @param mode the mode
    */
-  public HeartItemManager(final Mode mode) {
+  public HeartItemManager() {
     this.lifeSteal = LifeStealPlugin.getLifeSteal();
     this.instance = LifeStealPlugin.getInstance();
     this.heartConfig = this.lifeSteal.getHeartConfig();
@@ -82,8 +80,6 @@ public class HeartItemManager {
     this.randomNormalCol = new ProbabilityCollection<>();
     this.randomCurseCol = new ProbabilityCollection<>();
 
-    this.mode = mode;
-
     for (int i = 0; i < this.blessedHearts.size(); i++) {
       this.randomBlessCol.add(Integer.parseInt(this.blessedRarity[i]), Integer.parseInt(this.blessedRarity[i]));
     }
@@ -95,6 +91,17 @@ public class HeartItemManager {
     for (int i = 0; i < this.cursedHearts.size(); i++) {
       this.randomCurseCol.add(Integer.parseInt(this.cursedRarity[i]), Integer.parseInt(this.cursedRarity[i]));
     }
+  }
+
+  /**
+   * Sets mode.
+   *
+   * @param mode the mode
+   * @return the mode
+   */
+  public HeartItemManager setMode(final Mode mode) {
+    this.mode = mode;
+    return this;
   }
 
   /**

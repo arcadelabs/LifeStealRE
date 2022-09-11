@@ -3,14 +3,14 @@ Version: 10
 Clean-Console: false
 
 DATABASE:
-# true = MySQL, false = SQLite
+  # true = MySQL, false = SQLite
   ENABLED: false
   ADDRESS: '127.0.0.1'
   PORT: 3306
   DATABASE: 'lifesteal'
   USERNAME: 'username'
   PASSWORD: 'password'
-# Should it force save every stat update in realtime?
+  # Should it force save every stat update in realtime?
   REALTIME: false
 
 # State how many hearts players should transfer on player death.

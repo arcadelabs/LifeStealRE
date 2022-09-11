@@ -62,7 +62,8 @@ public class PlayerDeathListener implements Listener {
           this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Drops.Other");
         }
         if (!(this.disabledWorlds.contains(victim.getWorld().getName()))) {
-          this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
+          this.heartItemManager = new HeartItemManager()
+                  .setMode(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
                   .prepareIngedients()
                   .cookHeart();
           this.replacementHeart = this.heartItemManager.getHeartItem();
@@ -89,7 +90,8 @@ public class PlayerDeathListener implements Listener {
                                     Math.round(event.getPlayer().getLocation().getX()) +
                                     ", y:" + Math.round(event.getPlayer().getLocation().getY()) +
                                     ", z:" + Math.round(event.getPlayer().getLocation().getZ())))));
-            this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
+            this.heartItemManager = new HeartItemManager()
+                    .setMode(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
                     .prepareIngedients()
                     .cookHeart();
             this.replacementHeart = this.heartItemManager.getHeartItem();

@@ -27,7 +27,7 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
 ## Features,
 
-![Progress](https://progress-bar.dev/80/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
+![Progress](https://progress-bar.dev/85/?title=done&width=220&color=f72585&suffix=%%20almost%20there...)
 
 - [x] HEX support! gradients etc, it all works! use [Web UI](https://webui.adventure.kyori.net) to edit the messages,
   and yes, this is the most important feature, I don't care your players spent diamonds and wither stars to craft an
@@ -60,6 +60,47 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 1. Download and install [LabAide](https://github.com/arcadelabs/LabAide/releases) library plugin build.
 2. Download and install [latest](https://github.com/arcadelabs/LifeSteal/releases/tag/latest) LifeStealRE plugin build.
 3. Expect it to work, if it doesn't I hearby authorize you to yell at me.
+
+## For developers,
+
+1. `git clone https://github.com/arcadelabs/LifeStealRE.git`
+2. `mvn clean install`
+
+> Maven
+> ```xml
+> <dependency>
+>    <groupId>in.arcadelabs</groupId>
+>    <artifactId>lifesteal-api</artifactId>
+>    <version>1.9</version>
+>    <scope>provided</scope>
+> </dependency>
+>```
+
+> Get instance of LifeStealAPI
+> ```java
+> LifeStealAPI api = Bukkit.getServicesManager().getRegistration(LifeStealAPI .class).getProvider();
+> ```
+
+> Heart item manager
+> ```java
+>     HeartItemManager heartItemManager = lifeStealAPI.getHeartItemManager();
+> 
+>     ItemStack blessedHeart = heartItemManager.setMode(HeartItemManager.Mode.RANDOM_BLESSED) //Set heart type mode.
+>             .prepareIngedients()
+>             .cookHeart()
+>             .getHeartItem();
+> 
+>     int cursedHeartsCount = heartItemManager.getCursedHearts().size(); //Amount of cursed hearts loaded from hearts.yml
+> ```
+
+> Statistics manager
+> ```java
+>     StatisticsManager statisticsManager = lifeStealAPI.getStatisticsManager().isRealTime(true); //Set if it should update the db in real time.
+> 
+>     statisticsManager.setLostHearts(player, statisticsManager.getLostHearts(player) + 1); //This updates player statistics in database (MySQL or SQLite, whichever is set in main plugin).
+> 
+>     statisticsManager.setLifeState(player, LifeState.SPIRIT);
+> ```
 
 ## Servers using LifeStealRE ,
 

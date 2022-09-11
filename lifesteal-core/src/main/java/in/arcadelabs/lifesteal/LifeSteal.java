@@ -284,7 +284,7 @@ public class LifeSteal {
 
     this.profilesInit();
 
-    this.statisticsManager = new StatisticsManager(this.config.getBoolean("DATABASE.REALTIME"));
+    this.statisticsManager = new StatisticsManager().isRealTime(this.config.getBoolean("DATABASE.REALTIME"));
 
     this.craftCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Craft"));
     this.consumeCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Consume"));
@@ -306,7 +306,7 @@ public class LifeSteal {
 
     this.recipesInit();
 
-    this.heartItemManager = new HeartItemManager(HeartItemManager.Mode.RANDOM_ALL);
+    this.heartItemManager = new HeartItemManager();
 
     this.fancyStuff.setBlessedHeartsCount(this.heartItemManager.getBlessedHearts().size());
     this.fancyStuff.setNormalHeartsCount(this.heartItemManager.getNormalHearts().size());
@@ -338,6 +338,6 @@ public class LifeSteal {
     this.consumeCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Consume"));
     this.withdrawCooldown = new CooldownManager(this.config.getInt("Cooldowns.Heart-Withdraw"));
     this.interaction = new Interaction(this.config.getBoolean("Clean-Console"));
-    this.statisticsManager = new StatisticsManager(this.config.getBoolean("DATABASE.REALTIME"));
+    this.statisticsManager = new StatisticsManager().isRealTime(this.config.getBoolean("DATABASE.REALTIME"));
   }
 }

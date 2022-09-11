@@ -145,7 +145,8 @@ public class SpiritFactory {
   }
 
   public void restoreXP(final Player player) {
-    if (!(player.getPersistentDataContainer().has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_xp")))) return;
+    if (!(player.getPersistentDataContainer().has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_xp"))))
+      return;
     ExperienceManager.changeExp(player,
             player.getPersistentDataContainer().get(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_xp"),
                     PersistentDataType.INTEGER));
@@ -159,7 +160,8 @@ public class SpiritFactory {
   public void loadInventory(final Player player) {
     final PlayerInventory inventory = player.getInventory();
     inventory.clear();
-    if (!player.getPersistentDataContainer().has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory"))) return;
+    if (!player.getPersistentDataContainer().has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory")))
+      return;
     final String base64Inv = player.getPersistentDataContainer().get(
             this.lifeSteal.getNamespacedKeyBuilder().getNewKey("player_inventory"), PersistentDataType.STRING);
     try {
