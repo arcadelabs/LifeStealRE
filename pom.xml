@@ -25,17 +25,17 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>in.arcadelabs</groupId>
+    <groupId>in.arcadelabs.lifesteal</groupId>
     <artifactId>LifeStealRE</artifactId>
     <name>LifeStealRE</name>
     <packaging>pom</packaging>
     <version>1.9</version>
-    <description>Just another LifeSteal SMP core plugin.</description>
+    <description>LifeSteal Reimagined.</description>
 
     <modules>
-        <module>lifesteal-api</module>
-        <module>lifesteal-core</module>
-        <module>lifesteal-plugin</module>
+        <module>api</module>
+        <module>core</module>
+        <module>build</module>
     </modules>
 
     <organization>
@@ -109,7 +109,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>lifesteal-core/src/main/resources</directory>
+                <directory>core/src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -127,6 +127,11 @@
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>arcadelabs-mvn-releases</id>
+            <name>ArcadeLabs Repository</name>
+            <url>https://repo.zorino.in/releases</url>
         </repository>
     </repositories>
 
@@ -150,9 +155,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.arcadelabs</groupId>
+            <groupId>in.arcadelabs.labaide</groupId>
             <artifactId>LabAide</artifactId>
-            <version>pre-14</version>
+            <version>2.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -164,7 +169,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.18.0</version>
+            <version>2.19.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

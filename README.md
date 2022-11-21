@@ -63,44 +63,50 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
 
 ## For developers,
 
-1. `git clone https://github.com/arcadelabs/LifeStealRE.git`
-2. `mvn clean install`
+[![LabAide version](https://repo.zorino.in/api/badge/latest/releases/in/arcadelabs/lifesteal/lifesteal-api?color=40c14a&name=LifeStealRE%20version)](https://github.com/arcadelabs/LifeStealRE/releases/latest)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/arcadelabs/LifeStealRE/Publish%20LifeStealRE%20to%20Maven%20repository/master?color=45b94e)](https://repo.zorino.in/#/releases/in/arcadelabs/lifesteal/lifesteal-api)
 
-> Maven
+
+### Maven
+
+> ```xml
+> <repository>
+>     <id>arcadelabs-mvn-releases</id>
+>     <name>ArcadeLabs Repository</name>
+>     <url>https://repo.zorino.in/releases</url>
+> </repository>
+> ```
+
 > ```xml
 > <dependency>
->    <groupId>in.arcadelabs</groupId>
->    <artifactId>lifesteal-api</artifactId>
->    <version>1.9</version>
->    <scope>provided</scope>
+>     <groupId>in.arcadelabs.lifesteal</groupId>
+>     <artifactId>lifesteal-api</artifactId>
+>     <version>[VERSION]</version>
+>     <scope>provided</scope>
 > </dependency>
->```
+> ```
+
+### Gradle
+
+> ```groovy
+> maven {
+>     url 'https://repo.zorino.in/releases'
+> }
+> ```
+
+> ```groovy
+> dependencies {
+>     compileOnly 'in.arcadelabs.lifesteal:lifesteal-api:[VERSION]'
+> }
+> ```
 
 > Get instance of LifeStealAPI
 > ```java
 > LifeStealAPI api = Bukkit.getServicesManager().getRegistration(LifeStealAPI .class).getProvider();
 > ```
 
-> Heart item manager
-> ```java
->     HeartItemManager heartItemManager = lifeStealAPI.getHeartItemManager();
-> 
->     ItemStack blessedHeart = heartItemManager.setMode(HeartItemManager.Mode.RANDOM_BLESSED) //Set heart type mode.
->             .prepareIngedients()
->             .cookHeart()
->             .getHeartItem();
-> 
->     int cursedHeartsCount = heartItemManager.getCursedHearts().size(); //Amount of cursed hearts loaded from hearts.yml
-> ```
-
-> Statistics manager
-> ```java
->     StatisticsManager statisticsManager = lifeStealAPI.getStatisticsManager().isRealTime(true); //Set if it should update the db in real time.
-> 
->     statisticsManager.setLostHearts(player, statisticsManager.getLostHearts(player) + 1); //This updates player statistics in database (MySQL or SQLite, whichever is set in main plugin).
-> 
->     statisticsManager.setLifeState(player, LifeState.SPIRIT);
-> ```
+> **Note**
+> Javadocs & examples coming soon...
 
 ## Servers using LifeStealRE ,
 
