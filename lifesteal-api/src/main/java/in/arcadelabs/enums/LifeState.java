@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package in.arcadelabs.lifesteal.utils;
+package in.arcadelabs.enums;
 
 public enum LifeState {
 

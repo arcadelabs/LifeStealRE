@@ -18,11 +18,11 @@
 
 package in.arcadelabs.lifesteal.database.profile;
 
+import in.arcadelabs.enums.LifeState;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.database.DatabaseHandler;
-import in.arcadelabs.lifesteal.utils.LifeState;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;

@@ -21,7 +21,7 @@ package in.arcadelabs.lifesteal.database.profile;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import in.arcadelabs.lifesteal.utils.LifeState;
+import in.arcadelabs.enums.LifeState;
 import lombok.Data;
 
 import java.util.UUID;

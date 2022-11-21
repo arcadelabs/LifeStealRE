@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.enums.Mode;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
@@ -63,7 +64,7 @@ public class PlayerDeathListener implements Listener {
         }
         if (!(this.disabledWorlds.contains(victim.getWorld().getName()))) {
           this.heartItemManager = new HeartItemManager()
-                  .setMode(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
+                  .setMode(Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
                   .prepareIngedients()
                   .cookHeart();
           this.replacementHeart = this.heartItemManager.getHeartItem();
@@ -91,7 +92,7 @@ public class PlayerDeathListener implements Listener {
                                     ", y:" + Math.round(event.getPlayer().getLocation().getY()) +
                                     ", z:" + Math.round(event.getPlayer().getLocation().getZ())))));
             this.heartItemManager = new HeartItemManager()
-                    .setMode(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
+                    .setMode(Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnDeath")))
                     .prepareIngedients()
                     .cookHeart();
             this.replacementHeart = this.heartItemManager.getHeartItem();

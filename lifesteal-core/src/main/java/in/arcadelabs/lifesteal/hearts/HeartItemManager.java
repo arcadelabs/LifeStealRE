@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.hearts;
 
+import in.arcadelabs.enums.Mode;
 import in.arcadelabs.labaide.item.ItemBuilder;
 import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.labaide.randomizer.ProbabilityCollection;
@@ -225,16 +226,6 @@ public class HeartItemManager {
    */
   public ItemStack getHeartItem() {
     return this.heartItem;
-  }
-
-  public enum Mode {
-    FIXED_BLESSED,
-    FIXED_NORMAL,
-    FIXED_CURSED,
-    RANDOM_BLESSED,
-    RANDOM_NORMAL,
-    RANDOM_CURSED,
-    RANDOM_ALL
   }
 
 }

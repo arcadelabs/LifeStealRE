@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.commands;
 
+import in.arcadelabs.enums.Mode;
 import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandAlias;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandPermission;
@@ -67,7 +68,7 @@ public class Withdraw extends BaseCommand {
         if (!this.lifeSteal.getWithdrawCooldown().isOnCooldown(player.getUniqueId())) {
           this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) - hearts);
           this.heartItemManager = new HeartItemManager()
-                  .setMode(HeartItemManager.Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
+                  .setMode(Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
                   .prepareIngedients()
                   .cookHeart();
           this.replacementHeart = this.heartItemManager.getHeartItem();

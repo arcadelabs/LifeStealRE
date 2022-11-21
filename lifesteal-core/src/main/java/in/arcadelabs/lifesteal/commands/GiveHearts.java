@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.commands;
 
+import in.arcadelabs.enums.Mode;
 import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandAlias;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandCompletion;
@@ -51,13 +52,13 @@ public class GiveHearts extends BaseCommand {
   @CommandAlias("givehearts")
   public void onGiveHearts(final CommandSender sender, final OnlinePlayer target, final String type, final int amount) {
     switch (type) {
-      case "Blessed" -> giveHearts(sender, "blessed", HeartItemManager.Mode.RANDOM_BLESSED, target.player, amount);
-      case "Normal" -> giveHearts(sender, "normal", HeartItemManager.Mode.RANDOM_NORMAL, target.player, amount);
-      case "Cursed" -> giveHearts(sender, "cursed", HeartItemManager.Mode.RANDOM_CURSED, target.player, amount);
+      case "Blessed" -> giveHearts(sender, "blessed", Mode.RANDOM_BLESSED, target.player, amount);
+      case "Normal" -> giveHearts(sender, "normal", Mode.RANDOM_NORMAL, target.player, amount);
+      case "Cursed" -> giveHearts(sender, "cursed", Mode.RANDOM_CURSED, target.player, amount);
     }
   }
 
-  public void giveHearts(final CommandSender sender, final String type, final HeartItemManager.Mode mode, final Player target, final int amount) {
+  public void giveHearts(final CommandSender sender, final String type, final Mode mode, final Player target, final int amount) {
     this.heartItemManager = new HeartItemManager()
             .setMode(mode)
             .prepareIngedients()

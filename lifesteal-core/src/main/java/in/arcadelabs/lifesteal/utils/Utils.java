@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.utils;
 
+import in.arcadelabs.enums.LifeState;
 import in.arcadelabs.labaide.experience.ExperienceManager;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;

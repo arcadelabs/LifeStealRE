@@ -331,6 +331,10 @@ public class LifeSteal {
                 }));
       }
     }.runTaskTimer(this.instance, 1L, 6000L);
+
+    // init api ;)
+    new LifeStealAPIMP(this);
+
   }
 
   public void reInit() {

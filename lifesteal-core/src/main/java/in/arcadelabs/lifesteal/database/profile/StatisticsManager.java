@@ -18,10 +18,11 @@
 
 package in.arcadelabs.lifesteal.database.profile;
 
+import in.arcadelabs.enums.LifeState;
+import in.arcadelabs.interfaces.IStatisticsManager;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import in.arcadelabs.lifesteal.utils.LifeState;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class StatisticsManager {
+public class StatisticsManager implements IStatisticsManager {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private boolean realtimeUpdate;
@@ -47,6 +48,7 @@ public class StatisticsManager {
    * @param realtimeUpdate the realtime update
    * @return the statistics manager
    */
+  @Override
   public StatisticsManager isRealTime(boolean realtimeUpdate) {
     this.realtimeUpdate = realtimeUpdate;
     return this;
@@ -59,6 +61,7 @@ public class StatisticsManager {
    * @param lifeState the life state
    * @return the life state
    */
+  @Override
   public StatisticsManager setLifeState(final UUID uuid, final LifeState lifeState) {
     this.lifeSteal.getProfileManager().getProfileCache().get(uuid).setLifeState(lifeState);
     return this;
@@ -71,6 +74,7 @@ public class StatisticsManager {
    * @param lifeState the life state
    * @return the life state
    */
+  @Override
   public StatisticsManager setLifeState(final Player player, final LifeState lifeState) {
     this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLifeState(lifeState);
     return this;
@@ -83,6 +87,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the current hearts
    */
+  @Override
   public StatisticsManager setCurrentHearts(final UUID uuid, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(uuid).setCurrentHearts(hearts);
     return this;
@@ -95,6 +100,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the current hearts
    */
+  @Override
   public StatisticsManager setCurrentHearts(final Player player, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setCurrentHearts(hearts);
     return this;
@@ -107,6 +113,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the lost hearts
    */
+  @Override
   public StatisticsManager setLostHearts(final UUID uuid, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(uuid).setLostHearts(hearts);
     return this;
@@ -119,6 +126,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the lost hearts
    */
+  @Override
   public StatisticsManager setLostHearts(final Player player, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setLostHearts(hearts);
     return this;
@@ -131,6 +139,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the normal hearts
    */
+  @Override
   public StatisticsManager setNormalHearts(final UUID uuid, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(uuid).setNormalHearts(hearts);
     return this;
@@ -143,6 +152,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the normal hearts
    */
+  @Override
   public StatisticsManager setNormalHearts(final Player player, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setNormalHearts(hearts);
     return this;
@@ -155,6 +165,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the blessed hearts
    */
+  @Override
   public StatisticsManager setBlessedHearts(final UUID uuid, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(uuid).setBlessedHearts(hearts);
     return this;
@@ -167,6 +178,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the blessed hearts
    */
+  @Override
   public StatisticsManager setBlessedHearts(final Player player, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setBlessedHearts(hearts);
     return this;
@@ -179,6 +191,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the cursed hearts
    */
+  @Override
   public StatisticsManager setCursedHearts(final UUID uuid, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(uuid).setCursedHearts(hearts);
     return this;
@@ -191,6 +204,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the cursed hearts
    */
+  @Override
   public StatisticsManager setCursedHearts(final Player player, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setCursedHearts(hearts);
     return this;
@@ -203,6 +217,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the peak reached hearts
    */
+  @Override
   public StatisticsManager setPeakReachedHearts(final UUID uuid, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(uuid).setPeakHeartsReached(hearts);
     return this;
@@ -215,6 +230,7 @@ public class StatisticsManager {
    * @param hearts the hearts
    * @return the peak reached hearts
    */
+  @Override
   public StatisticsManager setPeakReachedHearts(final Player player, final int hearts) {
     this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).setPeakHeartsReached(hearts);
     return this;
@@ -225,6 +241,7 @@ public class StatisticsManager {
    *
    * @param uuid the uuid
    */
+  @Override
   public void update(final UUID uuid) {
     if (this.realtimeUpdate) {
       this.lifeSteal.getDatabaseHandler().getHikariExecutor().execute(() -> {
@@ -243,6 +260,7 @@ public class StatisticsManager {
    *
    * @param player the player
    */
+  @Override
   public void update(final Player player) {
     if (this.realtimeUpdate) {
       this.lifeSteal.getDatabaseHandler().getHikariExecutor().execute(() -> {
@@ -262,6 +280,7 @@ public class StatisticsManager {
    * @param uuid the uuid
    * @return the life state
    */
+  @Override
   public LifeState getLifeState(final UUID uuid) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(uuid).getLifeState();
   }
@@ -272,6 +291,7 @@ public class StatisticsManager {
    * @param player the player
    * @return the life state
    */
+  @Override
   public LifeState getLifeState(final Player player) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLifeState();
   }
@@ -282,6 +302,7 @@ public class StatisticsManager {
    * @param uuid the uuid
    * @return the current hearts
    */
+  @Override
   public int getCurrentHearts(final UUID uuid) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(uuid).getCurrentHearts();
   }
@@ -292,6 +313,7 @@ public class StatisticsManager {
    * @param player the player
    * @return the current hearts
    */
+  @Override
   public int getCurrentHearts(final Player player) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCurrentHearts();
   }
@@ -302,6 +324,7 @@ public class StatisticsManager {
    * @param uuid the uuid
    * @return the lost hearts
    */
+  @Override
   public int getLostHearts(final UUID uuid) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(uuid).getLostHearts();
   }
@@ -312,6 +335,7 @@ public class StatisticsManager {
    * @param player the player
    * @return the lost hearts
    */
+  @Override
   public int getLostHearts(final Player player) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getLostHearts();
   }
@@ -322,6 +346,7 @@ public class StatisticsManager {
    * @param uuid the uuid
    * @return the normal hearts
    */
+  @Override
   public int getNormalHearts(final UUID uuid) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(uuid).getNormalHearts();
   }
@@ -332,6 +357,7 @@ public class StatisticsManager {
    * @param player the player
    * @return the normal hearts
    */
+  @Override
   public int getNormalHearts(final Player player) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getNormalHearts();
   }
@@ -342,6 +368,7 @@ public class StatisticsManager {
    * @param uuid the uuid
    * @return the blessed hearts
    */
+  @Override
   public int getBlessedHearts(final UUID uuid) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(uuid).getBlessedHearts();
   }
@@ -352,6 +379,7 @@ public class StatisticsManager {
    * @param player the player
    * @return the blessed hearts
    */
+  @Override
   public int getBlessedHearts(final Player player) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getBlessedHearts();
   }
@@ -362,6 +390,7 @@ public class StatisticsManager {
    * @param uuid the uuid
    * @return the cursed hearts
    */
+  @Override
   public int getCursedHearts(final UUID uuid) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(uuid).getCursedHearts();
   }
@@ -372,6 +401,7 @@ public class StatisticsManager {
    * @param player the player
    * @return the cursed hearts
    */
+  @Override
   public int getCursedHearts(final Player player) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getCursedHearts();
   }
@@ -382,6 +412,7 @@ public class StatisticsManager {
    * @param uuid the uuid
    * @return the peak reached hearts
    */
+  @Override
   public int getPeakReachedHearts(final UUID uuid) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(uuid).getPeakHeartsReached();
   }
@@ -392,6 +423,7 @@ public class StatisticsManager {
    * @param player the player
    * @return the peak reached hearts
    */
+  @Override
   public int getPeakReachedHearts(final Player player) {
     return this.lifeSteal.getProfileManager().getProfileCache().get(player.getUniqueId()).getPeakHeartsReached();
   }

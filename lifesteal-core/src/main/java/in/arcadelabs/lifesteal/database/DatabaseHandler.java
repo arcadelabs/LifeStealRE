@@ -48,7 +48,6 @@ public class DatabaseHandler {
 
   private String address, database, username, password;
   private int port;
-  @Getter
   private boolean ssl, dbEnabled;
 
   public DatabaseHandler(LifeStealPlugin lifeStealPlugin) {
@@ -58,7 +57,7 @@ public class DatabaseHandler {
     if (this.dbEnabled) {
       hikariConfig.setJdbcUrl("jdbc:mysql://" + this.address + ":" + this.port + "/" + this.database);
     } else {
-      File database = new File(LifeStealPlugin.getInstance().getDataFolder(), "database.db");
+      File database = new File(lifeStealPlugin.getDataFolder(), "database.db");
       if (!database.exists()) {
         try {
           database.createNewFile();
@@ -102,12 +101,5 @@ public class DatabaseHandler {
   public void disconnect() {
     if (this.connectionSource != null) this.connectionSource.closeQuietly();
     if (this.hikariDataSource != null) this.hikariDataSource.close();
-  }
-
-  public Connection getConnection() throws SQLException {
-    if (this.hikariDataSource != null) {
-      return this.hikariDataSource.getConnection();
-    }
-    return null;
   }
 }

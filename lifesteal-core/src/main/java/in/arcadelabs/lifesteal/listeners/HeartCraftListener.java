@@ -18,6 +18,7 @@
 
 package in.arcadelabs.lifesteal.listeners;
 
+import in.arcadelabs.enums.Mode;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
@@ -51,7 +52,7 @@ public class HeartCraftListener implements Listener {
       if (event.isShiftClick()) event.setCancelled(true);
       if (!this.lifeSteal.getCraftCooldown().isOnCooldown(player.getUniqueId())) {
         this.heartItemManager = new HeartItemManager()
-                .setMode(HeartItemManager.Mode.valueOf(this.lifeSteal
+                .setMode(Mode.valueOf(this.lifeSteal
                         .getHeartConfig().getString("Hearts.Mode.OnCraft")))
                 .prepareIngedients()
                 .cookHeart();
