@@ -67,12 +67,12 @@
     </licenses>
 
     <dependencies>
-        <dependency>
-            <groupId>in.arcadelabs</groupId>
-            <artifactId>lifesteal-core</artifactId>
-            <version>1.9</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>in.arcadelabs</groupId>-->
+        <!--            <artifactId>lifesteal-core</artifactId>-->
+        <!--            <version>1.9</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <properties>
