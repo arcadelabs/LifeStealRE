@@ -26,8 +26,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
+        <groupId>in.arcadelabs.lifesteal</groupId>
         <artifactId>LifeStealRE</artifactId>
-        <groupId>in.arcadelabs</groupId>
         <version>1.9</version>
     </parent>
 
@@ -81,7 +81,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>in.arcadelabs</groupId>
+            <groupId>in.arcadelabs.lifesteal</groupId>
             <artifactId>lifesteal-api</artifactId>
             <version>1.9</version>
             <scope>provided</scope>

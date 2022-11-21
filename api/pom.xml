@@ -26,8 +26,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
+        <groupId>in.arcadelabs.lifesteal</groupId>
         <artifactId>LifeStealRE</artifactId>
-        <groupId>in.arcadelabs</groupId>
         <version>1.9</version>
     </parent>
 
