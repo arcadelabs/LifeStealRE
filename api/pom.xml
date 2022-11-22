@@ -66,14 +66,6 @@
         </license>
     </licenses>
 
-    <distributionManagement>
-        <repository>
-            <id>arcadelabs-mvn-releases</id>
-            <name>ArcadeLabs Repository</name>
-            <url>https://repo.zorino.in/releases</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
