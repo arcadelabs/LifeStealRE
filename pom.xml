@@ -31,6 +31,7 @@
     <packaging>pom</packaging>
     <version>1.9</version>
     <description>LifeSteal Reimagined.</description>
+    <url>https://arcadelabs.in</url>
 
     <modules>
         <module>api</module>
@@ -74,7 +75,13 @@
         <jar.finalName>${project.name}-v${project.version}</jar.finalName>
     </properties>
 
-    <url>https://arcadelabs.in</url>
+    <distributionManagement>
+        <repository>
+            <id>arcadelabs-mvn-releases</id>
+            <name>ArcadeLabs Repository</name>
+            <url>https://repo.zorino.in/releases</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <plugins>
