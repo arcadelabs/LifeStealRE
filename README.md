@@ -1,4 +1,4 @@
-<img src="https://github.com/arcadelabs/LifeSteal/blob/master/branding/LifeStealLogo.svg" align="left" height="240px" alt="ArcadeLabs">
+<img src="https://github.com/arcadelabs/LifeSteal/blob/master/branding/LifeStealLogo.png" align="left" height="240px" alt="ArcadeLabs">
 <!-- <h1 align="right"><strong>Lifesteal Reimagined</strong><br>Not your regular LifeSteal core.</h1> -->
 <div align="center">
 
@@ -6,11 +6,14 @@
 
 ### Not your regular LifeSteal core.
 
-![Status](https://img.shields.io/badge/STATUS-BETA-3a0ca3?style=for-the-badge)
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/arcadelabs/LifeSteal?include_prereleases&style=for-the-badge)
-![GitHub downloads](https://img.shields.io/github/downloads/arcadelabs/LifeSteal/total?style=for-the-badge) <br>
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/arcadelabs/LifeSteal?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/arcadelabs/LifeSteal?style=for-the-badge)
+[![Status](https://img.shields.io/badge/STATUS-BETA-3a0ca3?style=for-the-badge)](https://github.com/arcadelabs/LifeStealRE/tags)
+[![GitHub release](https://img.shields.io/github/v/release/arcadelabs/LifeStealRE?include_prereleases&style=for-the-badge)](https://github.com/arcadelabs/LifeStealRE/releases/latest) <br>
+[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/arcadelabs/LifeStealRE?style=for-the-badge)](https://www.codefactor.io/repository/github/arcadelabs/lifestealre)
+[![GitHub downloads](https://img.shields.io/github/downloads/arcadelabs/LifeStealRE/total?style=for-the-badge)](https://github.com/arcadelabs/LifeStealRE/releases/latest)
+[![GitHub issues](https://img.shields.io/github/issues/arcadelabs/LifeStealRE?style=for-the-badge)](https://github.com/arcadelabs/LifeStealRE/issues) <br>
+[![Modrinth](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/available/modrinth_vector.svg)](https://modrinth.com/plugin/lifestealre)
+[![Discord Plural](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/social/discord-plural_vector.svg)](https://dsc.gg/arcadelabs)
+[![Twitter Plural](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/social/twitter-plural_vector.svg)](https://twitter.com/AskArcadeLabs)
 
 </div>
 <br>
