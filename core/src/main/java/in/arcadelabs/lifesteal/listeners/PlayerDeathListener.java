@@ -46,7 +46,7 @@ public class PlayerDeathListener implements Listener {
 
     final Player victim = event.getEntity();
     final int lostHearts = this.lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
-    if (this.lifeSteal.getUtils().getPlayerHearts(victim) == lostHearts) {
+    if (this.lifeSteal.getLifeStealAPI().getPlayerHearts(victim) == lostHearts) {
       if (victim.getKiller() == null) {
         this.lifeSteal.getInteraction().broadcast(
                 this.lifeSteal.getUtils().getEliminationMessage(victim.getLastDamageCause().getCause()), victim);
@@ -68,7 +68,7 @@ public class PlayerDeathListener implements Listener {
                   .prepareIngedients()
                   .cookHeart();
           this.replacementHeart = this.heartItemManager.getHeartItem();
-          this.lifeSteal.getUtils().setPlayerHearts(victim, this.lifeSteal.getUtils().getPlayerHearts(victim) - lostHearts);
+          this.lifeSteal.getLifeStealAPI().setPlayerHearts(victim, this.lifeSteal.getLifeStealAPI().getPlayerHearts(victim) - lostHearts);
 
           this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
                   .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)
@@ -84,7 +84,7 @@ public class PlayerDeathListener implements Listener {
         }
         if (!(this.disabledWorldsNatural.contains(victim.getWorld().getName()))) {
           if (!this.lifeSteal.getConfig().getInt("Max-Hearts").equals(-1) &&
-                  this.lifeSteal.getConfig().getInt("Max-Hearts").equals((int) this.lifeSteal.getUtils().getPlayerHearts(victim.getKiller()))) {
+                  this.lifeSteal.getConfig().getInt("Max-Hearts").equals((int) this.lifeSteal.getLifeStealAPI().getPlayerHearts(victim.getKiller()))) {
             victim.getKiller().sendMessage(this.lifeSteal.getMiniMessage().deserialize(this.lifeSteal.getKey("Messages.MaxHeartsReached.OnDeath"),
                     Placeholder.component("location", Component.text(
                             "x:" +
@@ -96,14 +96,14 @@ public class PlayerDeathListener implements Listener {
                     .prepareIngedients()
                     .cookHeart();
             this.replacementHeart = this.heartItemManager.getHeartItem();
-            this.lifeSteal.getUtils().setPlayerHearts(victim, this.lifeSteal.getUtils().getPlayerHearts(victim) - lostHearts);
+            this.lifeSteal.getLifeStealAPI().setPlayerHearts(victim, this.lifeSteal.getLifeStealAPI().getPlayerHearts(victim) - lostHearts);
 
             this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
                     .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)
                     .update(victim);
             victim.getWorld().dropItemNaturally(victim.getLocation(), this.replacementHeart);
           } else {
-            this.lifeSteal.getUtils().transferHearts(victim, victim.getKiller());
+            this.lifeSteal.getLifeStealAPI().transferHearts(victim, victim.getKiller(), lostHearts);
             this.statisticsManager.setCurrentHearts(victim, this.statisticsManager.getCurrentHearts(victim) - lostHearts)
                     .setCurrentHearts(victim.getKiller(), this.statisticsManager.getCurrentHearts(victim.getKiller()) + lostHearts)
                     .setLostHearts(victim, this.statisticsManager.getLostHearts(victim) + lostHearts)

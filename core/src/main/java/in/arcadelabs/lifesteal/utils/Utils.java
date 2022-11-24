@@ -18,11 +18,11 @@
 
 package in.arcadelabs.lifesteal.utils;
 
-import in.arcadelabs.lifesteal.api.enums.LifeState;
 import in.arcadelabs.labaide.experience.ExperienceManager;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import in.arcadelabs.lifesteal.api.enums.LifeState;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -30,7 +30,6 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -53,39 +52,6 @@ public class Utils {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
   private final MiniMessage miniMessage = MiniMessage.miniMessage();
   private final LegacyComponentSerializer legecySerializer = LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build();
-  private final int looseHearts = this.lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
-  private final int gainHearts = this.lifeSteal.getConfig().getInt("HeartsToTransfer", 1);
-
-  /**
-   * Gets player hearts.
-   *
-   * @param player the player
-   * @return the player hearts
-   */
-  public double getPlayerHearts(final Player player) {
-    return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue() / 2;
-  }
-
-  /**
-   * Sets player hearts.
-   *
-   * @param player the player
-   * @param health the health
-   */
-  public void setPlayerHearts(final Player player, final double health) {
-    Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health * 2);
-  }
-
-  /**
-   * Transfer hearts.
-   *
-   * @param victim the victim
-   * @param killer the killer
-   */
-  public void transferHearts(final Player victim, final Player killer) {
-    setPlayerHearts(killer, getPlayerHearts(killer) + this.gainHearts);
-    setPlayerHearts(victim, getPlayerHearts(victim) - this.looseHearts);
-  }
 
   /**
    * Command dispatcher.

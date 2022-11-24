@@ -58,7 +58,7 @@ public class HeartConsumeListener implements Listener {
               .has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_item"), PersistentDataType.STRING)))
         return;
       if (!this.lifeSteal.getConfig().getInt("Max-Hearts").equals(-1) &&
-              this.lifeSteal.getConfig().getInt("Max-Hearts") <= this.lifeSteal.getUtils().getPlayerHearts(player)) {
+              this.lifeSteal.getConfig().getInt("Max-Hearts") <= this.lifeSteal.getLifeStealAPI().getPlayerHearts(player)) {
         player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.MaxHeartsReached.Consume")));
         event.setCancelled(true);
       } else {
@@ -76,7 +76,7 @@ public class HeartConsumeListener implements Listener {
             if (!this.lifeSteal.getConsumeCooldown().isOnCooldown(player.getUniqueId())) {
               final Heart heart = new Heart(heartMeta);
 
-              this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player)
+              this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, this.lifeSteal.getLifeStealAPI().getPlayerHearts(player)
                       + heart.getHealthPoints());
               player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
               this.lifeSteal.getUtils().spawnParticles(player, "heart");
@@ -130,7 +130,7 @@ public class HeartConsumeListener implements Listener {
     if (!(heartMeta != null && heartMeta.getPersistentDataContainer()
             .has(this.lifeSteal.getNamespacedKeyBuilder().getNewKey("heart_item"), PersistentDataType.STRING))) return;
     if (!this.lifeSteal.getConfig().getInt("Max-Hearts").equals(-1) &&
-            this.lifeSteal.getConfig().getInt("Max-Hearts").equals((int) this.lifeSteal.getUtils().getPlayerHearts(player))) {
+            this.lifeSteal.getConfig().getInt("Max-Hearts").equals((int) this.lifeSteal.getLifeStealAPI().getPlayerHearts(player))) {
       player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.MaxHeartsReached.Consume")));
       event.setCancelled(true);
     } else {
@@ -141,7 +141,7 @@ public class HeartConsumeListener implements Listener {
       if (!(this.disabledWorlds.contains(player.getWorld().getName()))) {
         if (!this.lifeSteal.getConsumeCooldown().isOnCooldown(player.getUniqueId())) {
           final Heart heart = new Heart(heartMeta);
-          this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player)
+          this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, this.lifeSteal.getLifeStealAPI().getPlayerHearts(player)
                   + heart.getHealthPoints());
           this.lifeSteal.getUtils().giveHeartEffects(player, heartMeta, this.instance);
           this.lifeSteal.getInteraction().retuurn(Logger.Level.INFO, heart.getConsumeMessages(), player, heart.getConsumeSound());

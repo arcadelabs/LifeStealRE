@@ -48,9 +48,9 @@ public class RemoveHearts extends BaseCommand {
   @CommandAlias("removehearts")
   public void onRemoveHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) - (hearts * 2));
-    player.setHealth(Math.min(player.getHealth() -
-            hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+    this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, this.lifeSteal.getLifeStealAPI().getPlayerHearts(player) - (hearts * 2));
+    player.setHealth(Math.min(player.getHealth() - hearts,
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
     final TagResolver.Single playerName = target.equals(sender) ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.player.name());
