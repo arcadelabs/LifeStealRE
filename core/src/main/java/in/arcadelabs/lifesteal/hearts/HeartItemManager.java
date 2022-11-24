@@ -37,14 +37,10 @@ import java.util.Set;
 public class HeartItemManager {
 
   private final LifeSteal lifeSteal;
-  private final LifeStealPlugin instance;
   private final YamlDocument heartConfig;
-  @Getter
-  private final Set<String> blessedHearts;
-  @Getter
-  private final Set<String> normalHearts;
-  @Getter
-  private final Set<String> cursedHearts;
+  @Getter private final Set<String> blessedHearts;
+  @Getter private final Set<String> normalHearts;
+  @Getter private final Set<String> cursedHearts;
   private final String[] blessedRarity;
   private final String[] normalRarity;
   private final String[] cursedRarity;
@@ -69,7 +65,6 @@ public class HeartItemManager {
    */
   public HeartItemManager() {
     this.lifeSteal = LifeStealPlugin.getLifeSteal();
-    this.instance = LifeStealPlugin.getInstance();
     this.heartConfig = this.lifeSteal.getHeartConfig();
     this.blessedHearts = this.heartConfig.getSection("Hearts.Types.Blessed").getRoutesAsStrings(false);
     this.normalHearts = this.heartConfig.getSection("Hearts.Types.Normal").getRoutesAsStrings(false);

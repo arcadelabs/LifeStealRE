@@ -19,11 +19,32 @@
 package in.arcadelabs.lifesteal.api.enums;
 
 public enum Mode {
+    /**
+     * Fixed blessed mode.
+     */
     FIXED_BLESSED,
+    /**
+     * Fixed normal mode.
+     */
     FIXED_NORMAL,
+    /**
+     * Fixed cursed mode.
+     */
     FIXED_CURSED,
+    /**
+     * Random blessed mode.
+     */
     RANDOM_BLESSED,
+    /**
+     * Random normal mode.
+     */
     RANDOM_NORMAL,
+    /**
+     * Random cursed mode.
+     */
     RANDOM_CURSED,
+    /**
+     * Random all mode.
+     */
     RANDOM_ALL
 }

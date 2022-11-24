@@ -20,8 +20,20 @@ package in.arcadelabs.lifesteal.api.enums;
 
 public enum LifeState {
 
+  /**
+   * Living life state.
+   */
   LIVING,
+  /**
+   * Dead life state.
+   */
   DEAD,
+  /**
+   * Spirit life state.
+   */
   SPIRIT,
+  /**
+   * Banned life state.
+   */
   BANNED
 }
