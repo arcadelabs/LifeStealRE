@@ -1,4 +1,4 @@
-<img src="https://github.com/arcadelabs/LifeStealRE/blob/master/branding/LifeStealLogo.png" align="left" height="240px" alt="ArcadeLabs">
+<img src="https://github.com/arcadelabs/LifeStealRE/blob/master/branding/LifestealLogo.png" align="left" height="240px" alt="ArcadeLabs">
 <!-- <h1 align="right"><strong>Lifesteal Reimagined</strong><br>Not your regular LifeSteal core.</h1> -->
 <div align="center">
 
