@@ -18,7 +18,6 @@
 
 package in.arcadelabs.lifesteal.commands;
 
-import in.arcadelabs.lifesteal.api.enums.Mode;
 import in.arcadelabs.labaide.libs.aikar.acf.BaseCommand;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandAlias;
 import in.arcadelabs.labaide.libs.aikar.acf.annotation.CommandCompletion;
@@ -28,24 +27,19 @@ import in.arcadelabs.labaide.libs.aikar.acf.bukkit.contexts.OnlinePlayer;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
-import in.arcadelabs.lifesteal.hearts.HeartItemManager;
+import in.arcadelabs.lifesteal.api.enums.Mode;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Map;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.givehearts")
 public class GiveHearts extends BaseCommand {
 
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
-  private HeartItemManager heartItemManager;
-  private ItemStack replacementHeart;
 
   @Subcommand("givehearts")
   @CommandCompletion("@players Blessed|Normal|Cursed @nothing")
@@ -59,17 +53,7 @@ public class GiveHearts extends BaseCommand {
   }
 
   public void giveHearts(final CommandSender sender, final String type, final Mode mode, final Player target, final int amount) {
-    this.heartItemManager = new HeartItemManager()
-            .setMode(mode)
-            .prepareIngedients()
-            .cookHeart();
-    this.replacementHeart = heartItemManager.getHeartItem();
-    this.replacementHeart.setAmount(amount);
-
-    final Map<Integer, ItemStack> items = target.getInventory().addItem(this.replacementHeart);
-    for (final Map.Entry<Integer, ItemStack> leftovers : items.entrySet()) {
-      target.getWorld().dropItemNaturally(target.getLocation(), leftovers.getValue());
-    }
+    this.lifeSteal.getLifeStealAPI().giveHearts(target, mode, amount);
 
     final TagResolver.Single playerName = target == sender ?
             Placeholder.component("player", Component.text("you")) : Placeholder.component("player", target.name());

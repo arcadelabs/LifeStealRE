@@ -18,9 +18,11 @@
 
 package in.arcadelabs.lifesteal.api;
 
+import in.arcadelabs.lifesteal.api.enums.Mode;
 import in.arcadelabs.lifesteal.api.interfaces.IStatisticsManager;
 import in.arcadelabs.labaide.cooldown.CooldownManager;
 import lombok.NonNull;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
@@ -67,4 +69,37 @@ public interface ILifeStealAPI {
    * @return {@link CooldownManager} instance of heart withdraw cooldown
    */
   @NonNull CooldownManager getWithdrawCooldown();
+
+  /**
+   * Gets player hearts.
+   *
+   * @param player the player
+   * @return the player hearts
+   */
+  double getPlayerHearts(final Player player);
+
+  /**
+   * Sets player hearts.
+   *
+   * @param player the player
+   * @param hearts the hearts
+   */
+  void setPlayerHearts(final Player player, final double hearts);
+
+  /**
+   * Transfer hearts.
+   *
+   * @param victim the victim
+   * @param killer the killer
+   */
+  void transferHearts(final Player victim, final Player killer, double hearts);
+
+  /**
+   * Give hearts.
+   *
+   * @param target the target
+   * @param mode   the mode
+   * @param amount the amount
+   */
+  void giveHearts(Player target, Mode mode, int amount);
 }

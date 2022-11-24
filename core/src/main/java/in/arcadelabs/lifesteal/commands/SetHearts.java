@@ -45,7 +45,7 @@ public class SetHearts extends BaseCommand {
   @CommandAlias("sethearts")
   public void onSetHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    this.lifeSteal.getUtils().setPlayerHearts(player, hearts);
+    this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, hearts);
     player.setHealth(hearts * 2);
 
     final TagResolver.Single playerName = target.equals(sender) ?

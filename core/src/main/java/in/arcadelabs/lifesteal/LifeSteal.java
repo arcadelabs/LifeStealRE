@@ -32,6 +32,7 @@ import in.arcadelabs.labaide.libs.boostedyaml.settings.updater.UpdaterSettings;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.labaide.metrics.BStats;
 import in.arcadelabs.labaide.namespacedkey.NamespacedKeyBuilder;
+import in.arcadelabs.lifesteal.api.ILifeStealAPI;
 import in.arcadelabs.lifesteal.commands.AddHearts;
 import in.arcadelabs.lifesteal.commands.Eliminate;
 import in.arcadelabs.lifesteal.commands.GiveHearts;
@@ -95,6 +96,7 @@ public class LifeSteal {
   private NamespacedKeyBuilder namespacedKeyBuilder;
   private CooldownManager craftCooldown, consumeCooldown, withdrawCooldown;
   private StatisticsManager statisticsManager;
+  private ILifeStealAPI lifeStealAPI;
 
   private void langInit() {
     try {
@@ -332,8 +334,7 @@ public class LifeSteal {
       }
     }.runTaskTimer(this.instance, 1L, 6000L);
 
-    // init api ;)
-    new LifeStealAPI(this);
+    this.lifeStealAPI = new LifeStealAPI(this);
 
   }
 

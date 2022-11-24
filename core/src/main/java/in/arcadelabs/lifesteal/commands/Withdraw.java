@@ -62,11 +62,11 @@ public class Withdraw extends BaseCommand {
       this.disabledWorlds = this.lifeSteal.getConfig().getStringList("Disabled-Worlds.Heart-Withdraw");
     }
     if (!(this.disabledWorlds.contains(player.getWorld().getName()))) {
-      if (hearts >= this.lifeSteal.getUtils().getPlayerHearts(player)) {
+      if (hearts >= this.lifeSteal.getLifeStealAPI().getPlayerHearts(player)) {
         player.sendMessage(this.lifeSteal.getUtils().formatString(this.lifeSteal.getKey("Messages.NotEnoughHearts")));
       } else {
         if (!this.lifeSteal.getWithdrawCooldown().isOnCooldown(player.getUniqueId())) {
-          this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) - hearts);
+          this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, this.lifeSteal.getLifeStealAPI().getPlayerHearts(player) - hearts);
           this.heartItemManager = new HeartItemManager()
                   .setMode(Mode.valueOf(this.lifeSteal.getHeartConfig().getString("Hearts.Mode.OnWithdraw")))
                   .prepareIngedients()

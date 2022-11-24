@@ -64,7 +64,7 @@ public class SpiritFactory {
   public void addSpirit(final Player player) {
     if (this.spirits.contains(player)) return;
     this.spirits.add(player);
-    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
+    this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, this.lifeSteal.getConfig().getInt("Spirits.Hearts", 1));
     player.setGameMode(GameMode.valueOf(lifeSteal.getConfig().getString("Spirits.GameMode", "ADVENTURE")));
     player.setInvisible(this.lifeSteal.getConfig().getBoolean("Spirits.Invisible", true));
     player.setInvulnerable(this.lifeSteal.getConfig().getBoolean("Spirits.Invulnerable", true));
@@ -89,7 +89,7 @@ public class SpiritFactory {
   public void removeSpirit(final Player player) {
     if (!this.spirits.contains(player)) return;
     this.spirits.remove(player);
-    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getConfig().getInt("DefaultHealth", 20));
+    this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, this.lifeSteal.getConfig().getInt("DefaultHealth", 20));
     player.setInvisible(false);
     player.setInvulnerable(false);
     player.setGameMode(GameMode.SURVIVAL);

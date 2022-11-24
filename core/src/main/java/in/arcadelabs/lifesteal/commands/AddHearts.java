@@ -48,7 +48,7 @@ public class AddHearts extends BaseCommand {
   @CommandAlias("addhearts")
   public void onAddHearts(final CommandSender sender, final OnlinePlayer target, final int hearts) {
     Player player = target.player;
-    this.lifeSteal.getUtils().setPlayerHearts(player, this.lifeSteal.getUtils().getPlayerHearts(player) + hearts);
+    this.lifeSteal.getLifeStealAPI().setPlayerHearts(player, this.lifeSteal.getLifeStealAPI().getPlayerHearts(player) + hearts);
     player.setHealth(Math.min(player.getHealth() +
             hearts, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 
