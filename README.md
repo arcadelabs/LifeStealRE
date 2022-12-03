@@ -52,7 +52,7 @@ Original LifeSteal SMP : https://twitter.com/TheLifeStealSMP
   body. ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
 - [ ] Heart consume animations and particle effects (work in progress, don't expect proper
   functionality.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
-- [ ] Profile system (statistics etc.) ![GitHub labels](https://img.shields.io/github/labels/arcadelabs/LifeSteal/WIP)
+- [x] Profile system (statistics etc.)
 - [ ] And tons of other stuff that I'm gonna send screenshot of because me lazy...
   I blured some stuff out because they're upcoming more exciting features 😈
 
