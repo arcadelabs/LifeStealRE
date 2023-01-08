@@ -41,18 +41,32 @@ import in.arcadelabs.lifesteal.commands.RemoveHearts;
 import in.arcadelabs.lifesteal.commands.Revive;
 import in.arcadelabs.lifesteal.commands.SetHearts;
 import in.arcadelabs.lifesteal.commands.Withdraw;
-import in.arcadelabs.lifesteal.database.DatabaseHandler;
+import in.arcadelabs.lifesteal.database.DatabaseManager;
 import in.arcadelabs.lifesteal.database.profile.ProfileListener;
 import in.arcadelabs.lifesteal.database.profile.ProfileManager;
 import in.arcadelabs.lifesteal.database.profile.StatisticsManager;
 import in.arcadelabs.lifesteal.hearts.HeartItemManager;
 import in.arcadelabs.lifesteal.hearts.HeartRecipeManager;
-import in.arcadelabs.lifesteal.listeners.*;
+import in.arcadelabs.lifesteal.listeners.ArrowPickupEvent;
+import in.arcadelabs.lifesteal.listeners.HeartConsumeListener;
+import in.arcadelabs.lifesteal.listeners.HeartCraftListener;
+import in.arcadelabs.lifesteal.listeners.HeartPlaceListener;
+import in.arcadelabs.lifesteal.listeners.PlayerDamageListener;
+import in.arcadelabs.lifesteal.listeners.PlayerDeathListener;
+import in.arcadelabs.lifesteal.listeners.PlayerJoinListener;
+import in.arcadelabs.lifesteal.listeners.PlayerPotionEffectListener;
+import in.arcadelabs.lifesteal.listeners.PlayerResurrectListener;
+import in.arcadelabs.lifesteal.listeners.ServerReloadListener;
 import in.arcadelabs.lifesteal.utils.FancyStuff;
 import in.arcadelabs.lifesteal.utils.Interaction;
 import in.arcadelabs.lifesteal.utils.LogFilter;
 import in.arcadelabs.lifesteal.utils.SpiritFactory;
 import in.arcadelabs.lifesteal.utils.Utils;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.logging.Level;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -64,14 +78,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.logging.Level;
 
 @Getter
 public class LifeSteal {
@@ -79,7 +85,7 @@ public class LifeSteal {
   private LifeStealPlugin instance;
   private MiniMessage miniMessage;
   private PluginManager pluginManager;
-  private DatabaseHandler databaseHandler;
+  private DatabaseManager databaseManager;
   private ProfileManager profileManager;
   private Utils utils;
   private HeartRecipeManager heartRecipeManager;
@@ -157,20 +163,21 @@ public class LifeSteal {
   private void databaseInit() {
     try {
       disableDatabaseLogger(true);
-      this.databaseHandler = new DatabaseHandler(this.instance);
-      this.fancyStuff.setDatabaseMode(this.databaseHandler.isDbEnabled());
+      this.databaseManager = new DatabaseManager(this.instance);
+      this.fancyStuff.setDatabaseMode(this.databaseManager.isDbEnabled());
       this.fancyStuff.setDatabaseStatus(true);
     } catch (Exception e) {
       disableDatabaseLogger(false);
-      this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-      this.fancyStuff.setDatabaseMode(this.databaseHandler.isDbEnabled());
+      this.logger.log(Logger.Level.ERROR,
+          Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+      this.fancyStuff.setDatabaseMode(this.databaseManager.isDbEnabled());
       this.fancyStuff.setDatabaseStatus(false);
     }
   }
 
   private void profilesInit() {
     try {
-      this.profileManager = new ProfileManager();
+      this.profileManager = new ProfileManager(this);
       this.fancyStuff.setProfilesStatus(true);
     } catch (Exception e) {
       this.logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
@@ -318,22 +325,6 @@ public class LifeSteal {
     this.fancyStuff.setCursedHeartsStatus(this.heartItemManager.getCursedHearts().isEmpty());
 
     this.fancyStuff.consolePrint();
-
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        getDatabaseHandler().getHikariExecutor()
-                .execute(() -> getProfileManager().getProfileCache().values().forEach(profile -> {
-                  try {
-                    if (!getProfileManager().getProfileCache().isEmpty())
-                      getProfileManager().saveProfile(profile);
-                  } catch (SQLException e) {
-                    logger.log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
-                  }
-                }));
-      }
-    }.runTaskTimer(this.instance, 1L, 6000L);
-
     this.lifeStealAPI = new LifeStealAPI(this);
 
   }

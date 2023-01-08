@@ -21,17 +21,16 @@ package in.arcadelabs.lifesteal.database.profile;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import java.sql.SQLException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.sql.SQLException;
 
 public class ProfileListener implements Listener {
 
@@ -39,31 +38,39 @@ public class ProfileListener implements Listener {
   private final LifeSteal lifeSteal = LifeStealPlugin.getLifeSteal();
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void handleJoin(PlayerJoinEvent event) {
+  public void handleJoin(PlayerLoginEvent event) {
 
+    if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+      return;
+    }
     if (!(this.instance.getServer().getPluginManager().isPluginEnabled(this.instance))) {
       event.getPlayer().kick(Component.text("Server still loading, please join after some time",
-              TextColor.color(102, 0, 205)), PlayerKickEvent.Cause.TIMEOUT);
+          TextColor.color(102, 0, 205)), PlayerKickEvent.Cause.TIMEOUT);
     }
     try {
       this.lifeSteal.getProfileManager().getProfileCache()
-              .put(event.getPlayer().getUniqueId(),
-                      this.lifeSteal.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
+          .put(event.getPlayer().getUniqueId(),
+              this.lifeSteal.getProfileManager().getProfile(event.getPlayer().getUniqueId()));
     } catch (SQLException e) {
       event.getPlayer().kick(Component.text("FAILED TO LOAD YOUR ACCOUNT!",
-              TextColor.color(255, 0, 0)), PlayerKickEvent.Cause.TIMEOUT);
-      this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+          TextColor.color(255, 0, 0)), PlayerKickEvent.Cause.TIMEOUT);
+      this.lifeSteal.getLogger()
+          .log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE),
+              e.fillInStackTrace());
     }
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPlayerQuit(PlayerQuitEvent event) {
-    this.lifeSteal.getDatabaseHandler().getHikariExecutor().execute(() -> {
+    this.lifeSteal.getDatabaseManager().getHikariExecutor().execute(() -> {
       try {
         this.lifeSteal.getProfileManager().saveProfile(
-                this.lifeSteal.getProfileManager().getProfileCache().get(event.getPlayer().getUniqueId()));
+            this.lifeSteal.getProfileManager().getProfileCache()
+                .get(event.getPlayer().getUniqueId()));
       } catch (SQLException e) {
-        this.lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
+        this.lifeSteal.getLogger()
+            .log(Logger.Level.ERROR, Component.text(e.getMessage(), NamedTextColor.DARK_PURPLE),
+                e.fillInStackTrace());
       }
     });
   }

@@ -28,21 +28,19 @@ import com.zaxxer.hikari.HikariDataSource;
 import in.arcadelabs.labaide.libs.boostedyaml.YamlDocument;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
 import in.arcadelabs.lifesteal.database.profile.Profile;
-import lombok.Getter;
-
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import lombok.Getter;
 
 @Getter
-public class DatabaseHandler {
+public class DatabaseManager {
 
   private final HikariDataSource hikariDataSource;
-  private final Executor hikariExecutor = Executors.newFixedThreadPool(2);
+  private final Executor hikariExecutor = Executors.newFixedThreadPool(6);
   private Dao<Profile, UUID> profileDao;
   private ConnectionSource connectionSource;
 
@@ -50,14 +48,21 @@ public class DatabaseHandler {
   private int port;
   private boolean ssl, dbEnabled;
 
-  public DatabaseHandler(LifeStealPlugin lifeStealPlugin) {
+  public DatabaseManager(LifeStealPlugin lifeStealPlugin) {
     this.loadCredentials();
     HikariConfig hikariConfig = new HikariConfig();
 
     if (this.dbEnabled) {
-      hikariConfig.setJdbcUrl("jdbc:mysql://" + this.address + ":" + this.port + "/" + this.database);
+      hikariConfig.setJdbcUrl(
+          "jdbc:mysql://" + this.address + ":" + this.port + "/" + this.database);
     } else {
-      File database = new File(lifeStealPlugin.getDataFolder(), "database.db");
+      if (lifeStealPlugin.getDataFolder().listFiles(file -> file.getName().equals("database.db"))
+          != null) {
+        File oldFile = new File(lifeStealPlugin.getDataFolder(), "database.db");
+        oldFile.renameTo(new File(lifeStealPlugin.getDataFolder(), "statistics.db"));
+      }
+
+      File database = new File(lifeStealPlugin.getDataFolder(), "statistics.db");
       if (!database.exists()) {
         try {
           database.createNewFile();
@@ -72,14 +77,21 @@ public class DatabaseHandler {
     hikariConfig.addDataSourceProperty("characterEncoding", "utf8");
     hikariConfig.addDataSourceProperty("useUnicode", true);
     hikariConfig.addDataSourceProperty("useSSL", this.ssl);
+    hikariConfig.addDataSourceProperty("socketTimeout", TimeUnit.SECONDS.toMillis(30));
     hikariConfig.setMaximumPoolSize(10);
+    hikariConfig.setMaxLifetime(1800000);
+    hikariConfig.setMinimumIdle(10);
+    hikariConfig.setKeepaliveTime(0);
+    hikariConfig.setConnectionTimeout(5000);
     hikariConfig.setUsername(this.username);
     hikariConfig.setPassword(this.password);
     hikariConfig.setPoolName("LifeSteal-Pool");
-    this.hikariDataSource = new HikariDataSource(hikariConfig);
+    hikariConfig.setConnectionTestQuery("SELECT 1;");
 
+    this.hikariDataSource = new HikariDataSource(hikariConfig);
     try {
-      this.connectionSource = new DataSourceConnectionSource(this.hikariDataSource, hikariConfig.getJdbcUrl());
+      this.connectionSource = new DataSourceConnectionSource(this.hikariDataSource,
+          hikariConfig.getJdbcUrl());
       this.profileDao = DaoManager.createDao(this.connectionSource, Profile.class);
       TableUtils.createTableIfNotExists(this.connectionSource, Profile.class);
     } catch (Exception ex) {
@@ -99,7 +111,11 @@ public class DatabaseHandler {
   }
 
   public void disconnect() {
-    if (this.connectionSource != null) this.connectionSource.closeQuietly();
-    if (this.hikariDataSource != null) this.hikariDataSource.close();
+    if (this.connectionSource != null) {
+      this.connectionSource.closeQuietly();
+    }
+    if (this.hikariDataSource != null) {
+      this.hikariDataSource.close();
+    }
   }
 }

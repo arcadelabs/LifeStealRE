@@ -27,13 +27,12 @@ import in.arcadelabs.labaide.libs.aikar.acf.annotation.Subcommand;
 import in.arcadelabs.labaide.logger.Logger;
 import in.arcadelabs.lifesteal.LifeSteal;
 import in.arcadelabs.lifesteal.LifeStealPlugin;
+import java.io.IOException;
+import java.sql.SQLException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 @CommandAlias("lifesteal|ls")
 @CommandPermission("lifesteal.reload")
@@ -78,7 +77,7 @@ public class Reload extends BaseCommand {
           player.sendMessage(this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
         }
         case "Database" -> {
-          this.lifeSteal.getDatabaseHandler().getHikariExecutor()
+          this.lifeSteal.getDatabaseManager().getHikariExecutor()
                   .execute(() -> this.lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
                     try {
                       if (!this.lifeSteal.getProfileManager().getProfileCache().isEmpty())
@@ -114,7 +113,7 @@ public class Reload extends BaseCommand {
           this.lifeSteal.getLogger().log(Logger.Level.INFO, this.lifeSteal.getUtils().formatString("<gradient:#e01e37:#f52486>Hearts.yml reloaded.</gradient>"));
         }
         case "Database" -> {
-          this.lifeSteal.getDatabaseHandler().getHikariExecutor()
+          this.lifeSteal.getDatabaseManager().getHikariExecutor()
                   .execute(() -> this.lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
                     try {
                       if (!this.lifeSteal.getProfileManager().getProfileCache().isEmpty())

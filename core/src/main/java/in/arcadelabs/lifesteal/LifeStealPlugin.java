@@ -19,14 +19,13 @@
 package in.arcadelabs.lifesteal;
 
 import in.arcadelabs.labaide.logger.Logger;
+import java.sql.SQLException;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.sql.SQLException;
 
 @Getter
 public final class LifeStealPlugin extends JavaPlugin {
@@ -68,7 +67,7 @@ public final class LifeStealPlugin extends JavaPlugin {
   public void onDisable() {
 
     if (this.labaideExist) {
-      lifeSteal.getDatabaseHandler().getHikariExecutor()
+      lifeSteal.getDatabaseManager().getHikariExecutor()
               .execute(() -> lifeSteal.getProfileManager().getProfileCache().values().forEach(profile -> {
                 try {
                   if (!lifeSteal.getProfileManager().getProfileCache().isEmpty())
@@ -78,7 +77,7 @@ public final class LifeStealPlugin extends JavaPlugin {
                           NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
                 }
                 try {
-                  lifeSteal.getDatabaseHandler().disconnect();
+                  lifeSteal.getDatabaseManager().disconnect();
                 } catch (Exception e) {
                   lifeSteal.getLogger().log(Logger.Level.ERROR, Component.text(e.getMessage(),
                           NamedTextColor.DARK_PURPLE), e.fillInStackTrace());
